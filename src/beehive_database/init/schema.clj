@@ -20,14 +20,37 @@
                 :db/valueType          :db.type/float
                 :db/cardinality        :db.cardinality/one
                 :db/doc                "The Y Coordinate of a Building"
+                :db.install/_attribute :db.part/db}
+
+               {:db/id (d/tempid :db.part/db)
+                :db/ident              :building/hive
+                :db/isComponent        true
+                :db/valueType          :db.type/ref
+                :db/cardinality        :db.cardinality/one
+                :db/doc                "The hive of a building"
+                :db.install/_attribute :db.part/db}
+
+               {:db/id (d/tempid :db.part/db)
+                :db/ident              :building/shop
+                :db/isComponent        true
+                :db/valueType          :db.type/ref
+                :db/cardinality        :db.cardinality/many
+                :db/doc                "The shops of a building"
+                :db.install/_attribute :db.part/db}
+
+               {:db/id (d/tempid :db.part/db)
+                :db/ident              :building/customer
+                :db/isComponent        true
+                :db/valueType          :db.type/ref
+                :db/cardinality        :db.cardinality/many
+                :db/doc                "The customers of a building"
                 :db.install/_attribute :db.part/db}])
 
 (def hive [{:db/id (d/tempid :db.part/db)
-            :db/ident              :building/hive
-            :db/isComponent        true
-            :db/valueType          :db.type/ref
+            :db/ident              :hive/name
+            :db/valueType          :db.type/string
             :db/cardinality        :db.cardinality/one
-            :db/doc                "The hive of a building"
+            :db/doc                "The name of a hive"
             :db.install/_attribute :db.part/db}
 
            {:db/id (d/tempid :db.part/db)
@@ -38,14 +61,6 @@
             :db.install/_attribute :db.part/db}])
 
 (def shop [{:db/id (d/tempid :db.part/db)
-            :db/ident              :building/shop
-            :db/isComponent        true
-            :db/valueType          :db.type/ref
-            :db/cardinality        :db.cardinality/many
-            :db/doc                "The shops of a building"
-            :db.install/_attribute :db.part/db}
-
-           {:db/id (d/tempid :db.part/db)
             :db/ident              :shop/name
             :db/valueType          :db.type/string
             :db/cardinality        :db.cardinality/one
@@ -53,11 +68,10 @@
             :db.install/_attribute :db.part/db}])
 
 (def customer [{:db/id (d/tempid :db.part/db)
-                :db/ident              :building/customer
-                :db/isComponent        true
-                :db/valueType          :db.type/ref
-                :db/cardinality        :db.cardinality/many
-                :db/doc                "The customers of a building"
+                :db/ident              :customer/name
+                :db/valueType          :db.type/string
+                :db/cardinality        :db.cardinality/one
+                :db/doc                "The name of a customer"
                 :db.install/_attribute :db.part/db}])
 
 (def drone [{:db/id (d/tempid :db.part/db)
