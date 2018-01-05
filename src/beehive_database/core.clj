@@ -3,24 +3,17 @@
            [datomic.api :as d]
            [liberator.core :as l]
            [ring.middleware.params :as p]
-           [compojure.core :as c])
+           [compojure.core :as c]
+           [beehive-database.queries :as q]
+           [ring.middleware.json :as j])
   (:gen-class))
 
 
-(def uri "datomic:mem://hello")
 
-(d/create-database uri)
-
-(def conn
-  (d/connect uri))
-
-(defn init-schema [schema]
-  (doseq [i schema]
-    @(d/transact conn i)))
 
 (c/defroutes rest-routes
              (c/GET "/hives" [& ids] (l/resource :available-media-types ["application/json"]
-                                                 :handle-ok ids))
+                                                 :handle-ok (q/all-hives)))
              (c/GET "/hives/edges" [] (l/resource :available-media-types
                                                   :handle-ok))
              (c/GET "/hives/workload/:time" [time & ids] (l/resource :available-media-types
@@ -29,6 +22,12 @@
              (c/GET "/hops" [& ids] (l/resource))
              (c/GET "/routes" [& ids] (l/resource))
              (c/GET "/shops" [& ids] (l/resource))
+             (c/POST "/hives" [] (l/resource :allowed-methods [:post]
+                                             :available-media-types ["application/json"]
+                                             :post! (fn [ctx]
+                                                      (q/add-hive "abc" 40.3 42.5 "abcd" '[{:drone/name "accsac" :drone/status :status/IDLE}]))
+
+                                             :handle-ok "ok"))
              (c/POST "/routes" [] (l/resource :allowed-methods [:post]
                                               :available-media-types ["application/json"]
                                               :post! (fn [ctx]
@@ -40,17 +39,17 @@
              (c/PUT "/routes" [] (l/resource :allowed-methods [:put]
                                              :available-media-types ["application/json"]))
              (c/PUT "/hop" [] (l/resource :allowed-methods [:put]
-                                          :available-media-types ["application/json"])))
+                                          :available-media-types ["application/json"]))
+             (c/GET "/refresh" [] (l/resource :allowed-methods [:get]
+                                              :available-media-types ["text/html"]
+                                              :handle-ok "<html>refreshed</html>")))
 
 
 
 (def handler
   (-> rest-routes
+      j/wrap-json-body
+      j/wrap-json-response
       p/wrap-params))
 
-(defn init []
-  (init-schema s/tables))
-
-(defn destroy []
-  (d/delete-database uri))
 
