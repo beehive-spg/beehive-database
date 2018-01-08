@@ -1,15 +1,18 @@
 (ns beehive-database.core
-  (require [beehive-database.init.schema :as s]
-           [datomic.api :as d]
+  (require [beehive-database.datomic.actions.queries :as q]
+           [beehive-database.datomic.actions.transactions :as t]
+           [beehive-database.datomic.actions.data :as d]
+           [compojure.core :as c]
            [liberator.core :as l]
            [ring.middleware.params :as p]
-           [compojure.core :as c]
-           [beehive-database.queries :as q]
-           [ring.middleware.json :as j])
+           [ring.middleware.json :as j]
+           [clojure.data.json :as dj])
   (:gen-class))
 
-
-
+(defn- extract-json [ctx]
+  (dj/read-str
+    (slurp (get-in ctx [:request :body]))
+    :key-fn keyword))
 
 (c/defroutes rest-routes
              (c/GET "/hives" [& ids] (l/resource :available-media-types ["application/json"]
@@ -24,27 +27,40 @@
              (c/GET "/shops" [& ids] (l/resource))
              (c/POST "/hives" [] (l/resource :allowed-methods [:post]
                                              :available-media-types ["application/json"]
+                                             :processable? (fn [ctx]
+                                                             (let [data (extract-json ctx)]
+                                                               {::data data}))
                                              :post! (fn [ctx]
-                                                      (q/add-hive "abc" 40.3 42.5 "abcd" '[{:drone/name "accsac" :drone/status :status/IDLE}]))
-
-                                             :handle-ok "ok"))
+                                                      (let [data (::data ctx)]
+                                                        (t/add-hive
+                                                          (data :address)
+                                                          (data :xcoord)
+                                                          (data :ycoord)
+                                                          (data :name))))))
              (c/POST "/routes" [] (l/resource :allowed-methods [:post]
                                               :available-media-types ["application/json"]
                                               :post! (fn [ctx]
                                                        (let [body (slurp (get-in ctx [:request :body]))]
-                                                         {::ctx body}))))
-             (c/POST "/orders" [] (l/resource :allowed-methods [:post]
-                                              :available-media-types ["application/json"]
-                                              :post! (fn [ctx])))
+                                                         {::ctx body})))
+                                  (c/POST "/orders" [] (l/resource :allowed-methods [:post]
+                                                                   :available-media-types ["application/json"]
+                                                                   :post! (fn [ctx]))))
+             (c/POST "/assoc" [& ids] (l/resource :allowed-methods [:post]
+                                                  :available-media-types ["application/json"]
+                                                  :post! (fn [ctx]
+                                                           (let [data (extract-json ctx)]
+                                                             (t/assign-drone
+                                                               (data :hiveid)
+                                                               (data :droneid))))))
              (c/PUT "/routes" [] (l/resource :allowed-methods [:put]
                                              :available-media-types ["application/json"]))
              (c/PUT "/hop" [] (l/resource :allowed-methods [:put]
                                           :available-media-types ["application/json"]))
-             (c/GET "/refresh" [] (l/resource :allowed-methods [:get]
-                                              :available-media-types ["text/html"]
-                                              :handle-ok "<html>refreshed</html>")))
-
-
+             (c/POST "/refresh" [] (l/resource :allowed-methods [:post]
+                                               :available-media-types ["text/html"]
+                                               :post! (fn [ctx]
+                                                        (d/refresh))
+                                               :handle-ok "<html>refreshed</html>")))
 
 (def handler
   (-> rest-routes

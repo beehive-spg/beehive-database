@@ -12,9 +12,7 @@
                  [ring/ring-core "1.6.3"]
                  [ring/ring-json "0.4.0"]]
   :plugins [[lein-ring "0.12.2"]]
-  :ring {:handler beehive-database.core/handler
-         :init beehive-database.core/init
-         :destroy beehive-database.core/destroy}
+  :ring {:handler beehive-database.core/handler}
   :main ^:skip-aot beehive-database.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
