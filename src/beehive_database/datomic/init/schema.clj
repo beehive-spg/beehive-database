@@ -130,6 +130,7 @@
 (def route [{:db/id                 (d/tempid :db.part/db)
              :db/ident              :route/hops
              :db/valueType          :db.type/ref
+             :db/isComponent        true
              :db/cardinality        :db.cardinality/many
              :db/doc                "The hops of a route"
              :db.install/_attribute :db.part/db}])
