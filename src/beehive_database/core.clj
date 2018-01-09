@@ -16,7 +16,7 @@
 
 (c/defroutes rest-routes
              (c/GET "/hives" [& ids] (l/resource :available-media-types ["application/json"]
-                                                 :handle-ok (q/all-hives ids)))
+                                                 :handle-ok (q/all-hives)))
 
              (c/GET "/hives/edges" [] (l/resource :available-media-types
                                                   :handle-ok))
