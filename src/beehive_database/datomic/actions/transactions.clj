@@ -57,6 +57,33 @@
                [{:db/id      droneid
                  :drone/hive hiveid}]))
 
+(defn add-prediction [value hiveid]
+  @(d/transact conn
+               [{:prediction/value value
+                 :prediction/hive  hiveid}]))
+
+(defn add-hop [drone start end]
+  @(d/transact conn
+               [{:hop/drone drone
+                 :hop/start start
+                 :hop/end   end}]))
+
+(defn add-route [hops]
+  @(d/transact conn
+               [{:route/hops hops}]))
+
+(defn add-order
+  ([shopid customerid routeid]
+   @(d/transact conn
+                [{:order/shop     shopid
+                  :order/customer customerid
+                  :order/route    routeid}]))
+  ([shopid customerid hops]
+   @(d/transact conn
+                [{:order/shop     shopid
+                  :order/customer customerid
+                  :order/route    {:route/hops hops}}])))
+
 (defn init-schema [schema]
   (doseq [i schema]
     @(d/transact conn i)))
