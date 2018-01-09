@@ -84,6 +84,10 @@
                   :order/customer customerid
                   :order/route    {:route/hops hops}}])))
 
+(defn delete [id]
+  @(d/transact conn
+               [[:db.fn/retractEntity id]]))
+
 (defn init-schema [schema]
   (doseq [i schema]
     @(d/transact conn i)))
