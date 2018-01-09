@@ -52,6 +52,13 @@
             :db/valueType          :db.type/string
             :db/cardinality        :db.cardinality/one
             :db/doc                "The name of a hive"
+            :db.install/_attribute :db.part/db}
+
+           {:db/id                 (d/tempid :db.part/db)
+            :db/ident              :hive/reachable
+            :db/valueType          :db.type/ref
+            :db/cardinality        :db.cardinality/many
+            :db/doc                "The reachable hives of a hive"
             :db.install/_attribute :db.part/db}])
 
 (def shop [{:db/id                 (d/tempid :db.part/db)
@@ -73,6 +80,13 @@
              :db/valueType          :db.type/string
              :db/cardinality        :db.cardinality/one
              :db/doc                "The name of a drone"
+             :db.install/_attribute :db.part/db}
+
+            {:db/id                 (d/tempid :db.part/db)
+             :db/ident              :drone/range
+             :db/valueType          :db.type/long
+             :db/cardinality        :db.cardinality/one
+             :db/doc                "The range of a drone"
              :db.install/_attribute :db.part/db}
 
             {:db/id          (d/tempid :db.part/db)

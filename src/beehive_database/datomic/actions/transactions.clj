@@ -22,6 +22,19 @@
                 [{:db/id         buildingid
                   :building/hive {:hive/name name}}])))
 
+(defn refresh-reachable []
+  (let [hives (q/all-hives)]
+    @(d/transact conn
+                 (mapv #(identity {:db/id          (:db/id (:building/hive (first %)))
+                                   :hive/reachable (mapv (fn [x]
+                                                           (identity {:db/id x}))
+                                                         (q/get-reachable
+                                                           (:building/xcoord (first %))
+                                                           (:building/ycoord (first %))))})
+                       hives))))
+
+
+
 (defn add-shop
   ([address x y name]
    @(d/transact conn
@@ -46,9 +59,10 @@
                 [{:db/id             buildingid
                   :building/customer [{:customer/name name}]}])))
 
-(defn add-drone [hiveid name status]
+(defn add-drone [hiveid name range status]
   @(d/transact conn
                [{:drone/name   name
+                 :drone/range  range
                  :drone/status status
                  :drone/hive   hiveid}]))
 
@@ -94,3 +108,4 @@
     @(d/transact conn i)))
 
 (init-schema s/tables)
+
