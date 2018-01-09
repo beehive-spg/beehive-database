@@ -3,7 +3,8 @@
            [beehive-database.datomic.init.schema :as s]
            [beehive-database.datomic.actions.data :refer :all]))
 
-(defn all-hives []
+(defn all-hives [ids]
   (into () (d/q '[:find (pull ?e [*])
+                  :in $ [?ids]
                   :where
-                  [?e :building/address _]] @db)))
+                  [?e :db/id ?ids]] @db ids)))
