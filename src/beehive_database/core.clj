@@ -16,15 +16,22 @@
 
 (c/defroutes rest-routes
              (c/GET "/hives" [& ids] (l/resource :available-media-types ["application/json"]
-                                                 :handle-ok (q/all-hives)))
+                                                 :handle-ok (q/all-hives ids)))
+
              (c/GET "/hives/edges" [] (l/resource :available-media-types
                                                   :handle-ok))
+
              (c/GET "/hives/workload/:time" [time & ids] (l/resource :available-media-types
                                                                      :handle-ok))
+
              (c/GET "/hives/reachable/:id1/:id2" [id1 id2] (l/resource))
+
              (c/GET "/hops" [& ids] (l/resource))
+
              (c/GET "/routes" [& ids] (l/resource))
+
              (c/GET "/shops" [& ids] (l/resource))
+
              (c/POST "/hives" [] (l/resource :allowed-methods [:post]
                                              :available-media-types ["application/json"]
                                              :processable? (fn [ctx]
@@ -37,14 +44,17 @@
                                                           (data :xcoord)
                                                           (data :ycoord)
                                                           (data :name))))))
+
              (c/POST "/routes" [] (l/resource :allowed-methods [:post]
                                               :available-media-types ["application/json"]
                                               :post! (fn [ctx]
                                                        (let [body (slurp (get-in ctx [:request :body]))]
-                                                         {::ctx body})))
-                                  (c/POST "/orders" [] (l/resource :allowed-methods [:post]
-                                                                   :available-media-types ["application/json"]
-                                                                   :post! (fn [ctx]))))
+                                                         {::ctx body}))))
+
+             (c/POST "/orders" [] (l/resource :allowed-methods [:post]
+                                              :available-media-types ["application/json"]
+                                              :post! (fn [ctx])))
+
              (c/POST "/assoc" [& ids] (l/resource :allowed-methods [:post]
                                                   :available-media-types ["application/json"]
                                                   :post! (fn [ctx]
@@ -52,10 +62,13 @@
                                                              (t/assign-drone
                                                                (data :hiveid)
                                                                (data :droneid))))))
+
              (c/PUT "/routes" [] (l/resource :allowed-methods [:put]
                                              :available-media-types ["application/json"]))
+
              (c/PUT "/hop" [] (l/resource :allowed-methods [:put]
                                           :available-media-types ["application/json"]))
+
              (c/POST "/refresh" [] (l/resource :allowed-methods [:post]
                                                :available-media-types ["text/html"]
                                                :post! (fn [ctx]

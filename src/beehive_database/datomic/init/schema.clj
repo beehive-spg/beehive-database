@@ -133,7 +133,19 @@
              :db/isComponent        true
              :db/cardinality        :db.cardinality/many
              :db/doc                "The hops of a route"
-             :db.install/_attribute :db.part/db}])
+             :db.install/_attribute :db.part/db}
+
+            {:db/id                 (d/tempid :db.part/db)
+             :db/ident              :route/origin
+             :db/valueType          :db.type/ref
+             :db/isComponent        true
+             :db/cardinality        :db.cardinality/many
+             :db/doc                "The status of a route"
+             :db.install/_attribute :db.part/db}
+
+            {:db/ident :origin/GUI}
+            {:db/ident :origin/GENERATED}])
+
 
 (def order [{:db/id                 (d/tempid :db.part/db)
              :db/ident              :order/shop

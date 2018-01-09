@@ -68,9 +68,10 @@
                  :hop/start start
                  :hop/end   end}]))
 
-(defn add-route [hops]
+(defn add-route [hops origin]
   @(d/transact conn
-               [{:route/hops hops}]))
+               [{:route/hops   hops
+                 :route/origin origin}]))
 
 (defn add-order
   ([shopid customerid routeid]
@@ -78,7 +79,7 @@
                 [{:order/shop     shopid
                   :order/customer customerid
                   :order/route    routeid}]))
-  ([shopid customerid hops]
+  ([shopid customerid hops origin]
    @(d/transact conn
                 [{:order/shop     shopid
                   :order/customer customerid
