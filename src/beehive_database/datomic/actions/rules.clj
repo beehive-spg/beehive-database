@@ -7,6 +7,7 @@
    :building/ycoord
    :building/hive])
 
+
 (def shop-fields
   [:db/id
    :building/address
@@ -26,7 +27,7 @@
    :drone/hive
    :drone/name
    :drone/range
-   :drone/status])
+   {:drone/status [:db/ident]}])
 
 (def prediction-fields
   [:db/id

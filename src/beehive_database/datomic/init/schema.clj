@@ -154,7 +154,7 @@
              :db/valueType          :db.type/ref
              :db/isComponent        true
              :db/cardinality        :db.cardinality/many
-             :db/doc                "The status of a route"
+             :db/doc                "The origin of a route"
              :db.install/_attribute :db.part/db}
 
             {:db/ident :origin/GUI}

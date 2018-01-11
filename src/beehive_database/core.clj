@@ -110,16 +110,6 @@
                  :available-media-types ["application/json"]
                  :post! (fn [ctx])))
 
-             (c/POST "/assoc" [& ids]
-               (l/resource
-                 :allowed-methods [:post]
-                 :available-media-types ["application/json"]
-                 :post! (fn [ctx]
-                          (let [data (extract-json ctx)]
-                            (t/assign-drone
-                              (data :hiveid)
-                              (data :droneid))))))
-
              (c/PUT "/routes" []
                (l/resource
                  :allowed-methods [:put]
@@ -136,7 +126,14 @@
                  :available-media-types ["text/html"]
                  :post! (fn [ctx]
                           (d/refresh))
-                 :handle-ok "<html>refreshed</html>")))
+                 :handle-ok "<html>refreshed</html>"))
+
+             (c/DELETE "/delete/:id" [id]
+               :allowed-methods [:delete]
+               :available-media-types ["application/json"]
+               :delete! (fn [ctx]
+                          (t/delete (read-string id)))))
+
 
 (def handler
   (-> rest-routes
