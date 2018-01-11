@@ -31,13 +31,39 @@
                  :handle-ok (str (q/is-reachable (read-string id1) (read-string id2)))))
 
              (c/GET "/hops" [& ids]
-               (l/resource))
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/all-hops)))
 
              (c/GET "/routes" [& ids]
-               (l/resource))
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/all-routes)))
+
+             (c/GET "/orders" [& ids]
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/all-orders)))
+
+             (c/GET "/predictions" [& ids]
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/all-predictions)))
+
+             (c/GET "/drones" [& ids]
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/all-drones)))
 
              (c/GET "/shops" [& ids]
-               (l/resource))
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/all-shops)))
+
+             (c/GET "/customers" [& ids]
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/all-customers)))
 
              (c/POST "/hives" []
                (l/resource
