@@ -108,4 +108,5 @@
     @(d/transact conn i)))
 
 (init-schema s/tables)
+(beehive-database.datomic.actions.data/refresh)
 
