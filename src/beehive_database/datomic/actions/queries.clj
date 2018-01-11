@@ -2,23 +2,93 @@
   (require [datomic.api :as d]
            [beehive-database.datomic.init.schema :as s]
            [beehive-database.util :as u]
+           [beehive-database.datomic.actions.rules :as r]
            [beehive-database.datomic.actions.data :refer :all]))
 
 (defn all-hives
   ([]
-   (d/q '[:find (pull ?e [:db/id
-                          :building/address
-                          :building/xcoord
-                          :building/ycoord
-                          :building/hive])
+   (d/q '[:find (pull ?e r/hive-fields)
           :where
           [?e :building/hive _]] @db))
   ([& ids]
-   (d/q '[:find (pull ?ids [:db/id
-                            :building/address
-                            :building/xcoord
-                            :building/ycoord
-                            :building/hive])
+   (d/q '[:find (pull ?ids r/hive-fields)
+          :in $ [?ids ...]
+          :where
+          [?ids]] @db ids)))
+
+(defn all-shops
+  ([]
+   (d/q '[:find (pull ?e r/shop-fields)
+          :where
+          [?e :building/shop _]] @db))
+  ([& ids]
+   (d/q '[:find (pull ?ids r/shop-fields)
+          :in $ [?ids ...]
+          :where
+          [?ids]] @db ids)))
+
+(defn all-customers
+  ([]
+   (d/q '[:find (pull ?e r/customer-fields)
+          :where
+          [?e :building/customer _]] @db))
+  ([& ids]
+   (d/q '[:find (pull ?ids r/customer-fields)
+          :in $ [?ids ...]
+          :where
+          [?ids]] @db ids)))
+
+(defn all-drones
+  ([]
+   (d/q '[:find (pull ?e r/drone-fields)
+          :where
+          [?e :drone/name _]] @db))
+  ([& ids]
+   (d/q '[:find (pull ?ids r/drone-fields)
+          :in $ [?ids ...]
+          :where
+          [?ids]] @db ids)))
+
+(defn all-predictions
+  ([]
+   (d/q '[:find (pull ?e r/prediction-fields)
+          :where
+          [?e :prediction/value _]] @db))
+  ([& ids]
+   (d/q '[:find (pull ?ids r/prediction-fields)
+          :in $ [?ids ...]
+          :where
+          [?ids]] @db ids)))
+
+(defn all-hops
+  ([]
+   (d/q '[:find (pull ?e r/hop-fields)
+          :where
+          [?e :hop/drone _]] @db))
+  ([& ids]
+   (d/q '[:find (pull ?ids r/hop-fields)
+          :in $ [?ids ...]
+          :where
+          [?ids]] @db ids)))
+
+(defn all-routes
+  ([]
+   (d/q '[:find (pull ?e r/route-fields)
+          :where
+          [?e :route/hops _]] @db))
+  ([& ids]
+   (d/q '[:find (pull ?ids r/route-fields)
+          :in $ [?ids ...]
+          :where
+          [?ids]] @db ids)))
+
+(defn all-orders
+  ([
+    (d/q '[:find (pull ?e r/order-fields)
+           :where
+           [?e :order/customer _]] @db)])
+  ([& ids]
+   (d/q '[:find (pull ?ids r/order-fields)
           :in $ [?ids ...]
           :where
           [?ids]] @db ids)))
