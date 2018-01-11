@@ -18,3 +18,10 @@
 
 (def memo-distance
   (memoize distance))
+
+(defn reachable [p1 p2 range]
+  (let [distance (distance p1 p2)]
+    (< distance range)))
+
+(def memo-reachable
+  (memoize reachable))

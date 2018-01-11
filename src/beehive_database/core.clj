@@ -20,17 +20,15 @@
                  :available-media-types ["application/json"]
                  :handle-ok (q/all-hives)))
 
-             (c/GET "/hives/edges" []
+             (c/GET "/hives/workload/:time" [time & ids]
                (l/resource
-                 :available-media-types
+                 :available-media-types ["application/json"]
                  :handle-ok))
 
-             (c/GET "/hives/workload/:time" [time & ids]
-               (l/resource :available-media-types
-                           :handle-ok))
-
              (c/GET "/hives/reachable/:id1/:id2" [id1 id2]
-               (l/resource))
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (str (q/is-reachable (read-string id1) (read-string id2)))))
 
              (c/GET "/hops" [& ids]
                (l/resource))
@@ -55,6 +53,22 @@
                               (data :xcoord)
                               (data :ycoord)
                               (data :name))))))
+
+             (c/POST "/drones" []
+               (l/resource
+                 :allowed-methods [:post]
+                 :available-media-types ["application/json"]
+                 :processable? (fn [ctx]
+                                 (let [data (extract-json ctx)]
+                                   (println data)
+                                   {::data data}))
+                 :post! (fn [ctx]
+                          (let [data (::data ctx)]
+                            (t/add-drone
+                              (data :hiveid)
+                              (data :name)
+                              (data :range)
+                              (data :status))))))
 
              (c/POST "/routes" []
                (l/resource

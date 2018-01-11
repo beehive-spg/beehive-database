@@ -13,15 +13,15 @@
                           :building/hive])
           :where
           [?e :building/hive _]] @db))
-  ([ids]
-   (d/q '[:find (pull ?e [:db/id
-                          :building/address
-                          :building/xcoord
-                          :building/ycoord
-                          :building/hive])
+  ([& ids]
+   (d/q '[:find (pull ?ids [:db/id
+                            :building/address
+                            :building/xcoord
+                            :building/ycoord
+                            :building/hive])
           :in $ [?ids ...]
           :where
-          [?e :db/id ?ids]] @db ids)))
+          [?ids]] @db ids)))
 
 (defn get-max-range []
   (first (first (d/q '[:find (max ?e)
@@ -39,3 +39,9 @@
             (/ max-range 1000))
         hives))))
 
+(defn is-reachable [id1 id2]
+  (let [[hive1 hive2] (all-hives id1 id2)]
+    (u/reachable
+      [(:building/xcoord (first hive1)) (:building/ycoord (first hive2))]
+      [(:building/xcoord (first hive2)) (:building/ycoord (first hive2))]
+      (get-max-range))))
