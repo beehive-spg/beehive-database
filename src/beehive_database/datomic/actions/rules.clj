@@ -42,7 +42,7 @@
 
 (def route-fields
   [:db/id
-   :route/origin
+   {:route/origin [:db/ident]}
    :route/hops])
 
 (def order-fields
@@ -50,3 +50,23 @@
    :order/shop
    :order/customer
    :order/route])
+
+(def fields
+  {:hive       hive-fields
+   :shop       shop-fields
+   :customer   customer-fields
+   :drone      drone-fields
+   :prediction prediction-fields
+   :hop        hop-fields
+   :route      route-fields
+   :order      order-fields})
+
+(def queries
+  {:hive       [:building/hive]
+   :shop       [:building/shop]
+   :customer   [:building/shop]
+   :drone      [:drone/name]
+   :prediction [:prediction]
+   :hop        [:hop/start]
+   :route      [:route/origin]
+   :order      [:order/customer]})

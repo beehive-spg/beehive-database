@@ -18,7 +18,7 @@
              (c/GET "/hives" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all-hives)))
+                 :handle-ok (q/get-all :hive ids)))
 
              (c/GET "/hives/workload/:time" [time & ids]
                (l/resource
@@ -33,37 +33,37 @@
              (c/GET "/hops" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all-hops)))
+                 :handle-ok (q/get-all :hop ids)))
 
              (c/GET "/routes" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all-routes)))
+                 :handle-ok (q/get-all :route ids)))
 
              (c/GET "/orders" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all-orders)))
+                 :handle-ok (q/get-all :order ids)))
 
              (c/GET "/predictions" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all-predictions)))
+                 :handle-ok (q/get-all :prediction ids)))
 
              (c/GET "/drones" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all-drones)))
+                 :handle-ok (q/get-all :drone ids)))
 
              (c/GET "/shops" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all-shops)))
+                 :handle-ok (q/get-all :shop ids)))
 
              (c/GET "/customers" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all-customers)))
+                 :handle-ok (q/get-all :customer ids)))
 
              (c/POST "/hives" []
                (l/resource
