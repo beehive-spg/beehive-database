@@ -18,7 +18,7 @@
              (c/GET "/hives" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :hive ids)))
+                 :handle-ok (q/get-all :hive ids (d/db))))
 
              (c/GET "/hives/workload/:time" [time & ids]
                (l/resource
@@ -28,42 +28,42 @@
              (c/GET "/hives/reachable/:id1/:id2" [id1 id2]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (str (q/is-reachable (read-string id1) (read-string id2)))))
+                 :handle-ok (str (q/is-reachable (read-string id1) (read-string id2) (d/db)))))
 
              (c/GET "/hops" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :hop ids)))
+                 :handle-ok (q/get-all :hop ids (d/db))))
 
              (c/GET "/routes" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :route ids)))
+                 :handle-ok (q/get-all :route ids (d/db))))
 
              (c/GET "/orders" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :order ids)))
+                 :handle-ok (q/get-all :order ids (d/db))))
 
              (c/GET "/predictions" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :prediction ids)))
+                 :handle-ok (q/get-all :prediction ids (d/db))))
 
              (c/GET "/drones" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :drone ids)))
+                 :handle-ok (q/get-all :drone ids (d/db))))
 
              (c/GET "/shops" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :shop ids)))
+                 :handle-ok (q/get-all :shop ids (d/db))))
 
              (c/GET "/customers" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :customer ids)))
+                 :handle-ok (q/get-all :customer ids (d/db))))
 
              (c/POST "/hives" []
                (l/resource
@@ -119,14 +119,6 @@
                (l/resource
                  :allowed-methods [:put]
                  :available-media-types ["application/json"]))
-
-             (c/POST "/refresh" []
-               (l/resource
-                 :allowed-methods [:post]
-                 :available-media-types ["text/html"]
-                 :post! (fn [ctx]
-                          (d/refresh))
-                 :handle-ok "<html>refreshed</html>"))
 
              (c/DELETE "/delete/:id" [id]
                :allowed-methods [:delete]

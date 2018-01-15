@@ -8,8 +8,5 @@
 (def conn
   (d/connect uri))
 
-(def db
-  (atom (d/db conn)))
-
-(defn refresh []
-  (reset! db (d/db conn)))
+(defn db []
+  (d/db conn))

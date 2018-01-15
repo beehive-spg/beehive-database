@@ -12,27 +12,21 @@
 
 (defn add-hive
   ([address x y name]
-   @(d/transact conn
-                [{:building/address address
-                  :building/xcoord  x
-                  :building/ycoord  y
-                  :building/hive    {:hive/name name}}]))
+   (let [id #db/id[:db.part/user -100]
+         tx @(d/transact conn [{:db/id            id
+                                :building/address address
+                                :building/xcoord  x
+                                :building/ycoord  y
+                                :building/hive    {:hive/name name}}])
+         real-id (d/resolve-tempid (:db-after tx) (:tempids tx) (d/tempid :db.part/user -100))]
+     @(d/transact conn [[:connections real-id]])))
   ([buildingid name]
    @(d/transact conn
                 [{:db/id         buildingid
-                  :building/hive {:hive/name name}}])))
+                  :building/hive {:hive/name name}}
+                 [:connections buildingid]])))
 
-(defn refresh-reachable []
-  (let [hives (q/all-hives)]
-    @(d/transact conn
-                 (mapv #(identity {:db/id          (:db/id (:building/hive (first %)))
-                                   :hive/reachable (mapv (fn [x]
-                                                           (identity {:db/id x}))
-                                                         (q/get-reachable
-                                                           (:building/xcoord (first %))
-                                                           (:building/ycoord (first %))))})
-                       hives))))
-
+(defn add-hive1 [address x y name])
 
 
 (defn add-shop
@@ -108,5 +102,4 @@
     @(d/transact conn i)))
 
 (init-schema s/tables)
-(beehive-database.datomic.actions.data/refresh)
 

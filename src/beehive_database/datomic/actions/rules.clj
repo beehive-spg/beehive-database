@@ -51,6 +51,12 @@
    :order/customer
    :order/route])
 
+(def connection-fields
+  [:db/id
+   :connection/start
+   :connection/end
+   :connection/distance])
+
 (def fields
   {:hive       hive-fields
    :shop       shop-fields
@@ -59,14 +65,16 @@
    :prediction prediction-fields
    :hop        hop-fields
    :route      route-fields
-   :order      order-fields})
+   :order      order-fields
+   :connection connection-fields})
 
 (def queries
   {:hive       [:building/hive]
    :shop       [:building/shop]
-   :customer   [:building/shop]
+   :customer   [:building/customer]
    :drone      [:drone/name]
    :prediction [:prediction]
    :hop        [:hop/start]
    :route      [:route/origin]
-   :order      [:order/customer]})
+   :order      [:order/customer]
+   :connection [:connection/start]})

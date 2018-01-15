@@ -25,3 +25,6 @@
 
 (def memo-reachable
   (memoize reachable))
+
+(defn get-pos [hive]
+  [(:building/xcoord hive) (:building/ycoord hive)])

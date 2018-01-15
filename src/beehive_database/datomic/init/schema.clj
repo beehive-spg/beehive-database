@@ -52,13 +52,6 @@
             :db/valueType          :db.type/string
             :db/cardinality        :db.cardinality/one
             :db/doc                "The name of a hive"
-            :db.install/_attribute :db.part/db}
-
-           {:db/id                 (d/tempid :db.part/db)
-            :db/ident              :hive/reachable
-            :db/valueType          :db.type/ref
-            :db/cardinality        :db.cardinality/many
-            :db/doc                "The reachable hives of a hive"
             :db.install/_attribute :db.part/db}])
 
 (def shop [{:db/id                 (d/tempid :db.part/db)
@@ -152,7 +145,6 @@
             {:db/id                 (d/tempid :db.part/db)
              :db/ident              :route/origin
              :db/valueType          :db.type/ref
-             :db/isComponent        true
              :db/cardinality        :db.cardinality/many
              :db/doc                "The origin of a route"
              :db.install/_attribute :db.part/db}
@@ -167,12 +159,14 @@
              :db/cardinality        :db.cardinality/one
              :db/doc                "The shop of an order"
              :db.install/_attribute :db.part/db}
+
             {:db/id                 (d/tempid :db.part/db)
              :db/ident              :order/customer
              :db/valueType          :db.type/ref
              :db/cardinality        :db.cardinality/one
              :db/doc                "The customer of an order"
              :db.install/_attribute :db.part/db}
+
             {:db/id                 (d/tempid :db.part/db)
              :db/ident              :order/route
              :db/valueType          :db.type/ref
@@ -180,4 +174,34 @@
              :db/doc                "The route of an order"
              :db.install/_attribute :db.part/db}])
 
-(def tables [building hive shop customer drone prediction hop route order])
+(def connection [{:db/id          (d/tempid :db.part/db)
+                  :db/ident       :connection/start
+                  :db/valueType   :db.type/ref
+                  :db/cardinality :db.cardinality/one
+                  :db/doc         "The start of a connection"}
+
+                 {:db/id          (d/tempid :db.part/db)
+                  :db/ident       :connection/end
+                  :db/valueType   :db.type/ref
+                  :db/cardinality :db.cardinality/one
+                  :db/doc         "The end of a connection"}
+
+                 {:db/id          (d/tempid :db.part/db)
+                  :db/ident       :connection/distance
+                  :db/valueType   :db.type/float
+                  :db/cardinality :db.cardinality/one
+                  :db/doc         "The distance of a connection"}])
+
+(def fns [{:db/id    (d/tempid :db.part/db)
+           :db/ident :connections
+           :db/fn    #db/fn {:lang   "clojure"
+                             :params [db hive]
+                             :code   (mapv
+                                       (fn [x]
+                                         {:db/id            (datomic.api/tempid :db.part/user)
+                                          :connection/start hive
+                                          :connection/end   x})
+                                       (beehive-database.datomic.actions.queries/get-reachable hive db))}}])
+
+
+(def tables [building hive shop customer drone prediction hop route order connection fns])

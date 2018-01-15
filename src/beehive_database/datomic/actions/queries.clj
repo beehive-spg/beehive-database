@@ -5,34 +5,38 @@
            [beehive-database.datomic.actions.rules :as r]
            [beehive-database.datomic.actions.data :refer :all]))
 
-(defn get-all [table ids]
+(defn get-all [table ids db]
   (if (empty? ids)
-    (d/q '[:find  (pull ?e subquery)
-           :in    $ subquery [?ref ...]
-           :where [?e ?ref _]] @db (get r/fields table) (get r/queries table))
+    (d/q '[:find (pull ?e subquery)
+           :in $ subquery [?ref ...]
+           :where [?e ?ref _]]
+         db
+         (get r/fields table)
+         (get r/queries table))
     (d/q '[:find (pull ?e subquery)
            :in $ subquery [?ref ...] [?ids ...]
-           :where [?e ?ref ?ids]] @db (get r/fields table) (get r/queries table) ids)))
+           :where [?e ?ref _] [?ids]]
+         db
+         (get r/fields table)
+         (get r/queries table)
+         ids)))
 
-(defn get-max-range []
+(defn get-max-range [db]
   (first (first (d/q '[:find (max ?e)
                        :where
-                       [_ :drone/range ?e]] @db))))
+                       [_ :drone/range ?e]] db))))
 
-(defn get-reachable [x y]
-  (let [hives (get-all :hive [])
-        max-range (get-max-range)]
+(defn is-reachable [p1 p2 db]
+  (u/reachable p1 p2 (get-max-range db)))
+
+(defn get-reachable [hiveid db]
+  (let [hives (get-all :hive [] db)
+        hive (get-all :hive [hiveid] db)]
     (map
       #(:db/id (first %))
       (filter
-        #(< (u/distance [x y]
-                        [(:building/xcoord (first %)) (:building/ycoord (first %))])
-            (/ max-range 1000))
+        #(is-reachable
+           (u/get-pos (first (first hive)))
+           (u/get-pos (first %))
+           db)
         hives))))
-
-(defn is-reachable [id1 id2]
-  (let [[hive1 hive2] (get-all :hive [id1 id2])]
-    (u/reachable
-      [(:building/xcoord (first hive1)) (:building/ycoord (first hive2))]
-      [(:building/xcoord (first hive2)) (:building/ycoord (first hive2))]
-      (get-max-range))))
