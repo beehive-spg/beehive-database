@@ -24,22 +24,6 @@
                             (let [data (::data ctx)]
                               (post-fn data)))})
 
-(l/defresource hives []
-               (post-default
-                 #(t/add-hive
-                    (:address %)
-                    (:xcoord %)
-                    (:ycoord %)
-                    (:name %))))
-
-(l/defresource hives []
-               (post-default
-                 #(t/add-hive
-                    (:address %)
-                    (:xcoord %)
-                    (:ycoord %)
-                    (:name %))))
-
 (c/defroutes rest-routes
              (c/GET "/hives" [& ids]
                (l/resource
