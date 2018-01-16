@@ -26,7 +26,7 @@
   [:db/id
    :drone/hive
    :drone/name
-   :drone/range
+   :drone/type
    {:drone/status [:db/ident]}])
 
 (def prediction-fields
@@ -57,6 +57,14 @@
    :connection/end
    :connection/distance])
 
+(def drone-type-fields
+  [:db/id
+   :dronetype/name
+   :dronetype/range
+   :dronetype/speed
+   :dronetype/chargetime
+   :dronetype/default])
+
 (def fields
   {:hive       hive-fields
    :shop       shop-fields
@@ -66,7 +74,8 @@
    :hop        hop-fields
    :route      route-fields
    :order      order-fields
-   :connection connection-fields})
+   :connection connection-fields
+   :dronetype  drone-type-fields})
 
 (def queries
   {:hive       [:building/hive]
@@ -77,4 +86,5 @@
    :hop        [:hop/start]
    :route      [:route/origin]
    :order      [:order/customer]
-   :connection [:connection/start]})
+   :connection [:connection/start]
+   :dronetype  [:dronetype/name]})

@@ -21,6 +21,12 @@
          (get r/queries table)
          ids)))
 
+(defn get-default-drone-type [db]
+  (d/q '[:find (pull ?e subquery)
+         :in $ subquery
+         :where [?e :dronetype/default true]]
+       db (get r/fields :dronetype)))
+
 (defn get-max-range [db]
   (first (first (d/q '[:find (max ?e)
                        :where
@@ -30,7 +36,9 @@
   (u/reachable p1 p2 (get-max-range db)))
 
 (defn get-reachable [hiveid db]
-  (let [hives (get-all :hive [] db)
+  (let [hives (remove
+                #(= (:db/id (first %)) hiveid)
+                (get-all :hive [] db))
         hive (get-all :hive [hiveid] db)]
     (map
       #(:db/id (first %))

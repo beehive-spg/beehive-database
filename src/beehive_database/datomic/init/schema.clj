@@ -75,18 +75,17 @@
              :db/doc                "The name of a drone"
              :db.install/_attribute :db.part/db}
 
-            {:db/id                 (d/tempid :db.part/db)
-             :db/ident              :drone/range
-             :db/valueType          :db.type/long
-             :db/cardinality        :db.cardinality/one
-             :db/doc                "The range of a drone"
-             :db.install/_attribute :db.part/db}
-
             {:db/id          (d/tempid :db.part/db)
              :db/ident       :drone/status
              :db/valueType   :db.type/ref
              :db/cardinality :db.cardinality/one
-             :db/doc         "Status of the drone"}
+             :db/doc         "The status of a drone"}
+
+            {:db/id          (d/tempid :db.part/db)
+             :db/ident       :drone/type
+             :db/valueType   :db.type/ref
+             :db/cardinality :db.cardinality/one
+             :db/doc         "The type of a drone"}
 
             {:db/id                 (d/tempid :db.part/db)
              :db/ident              :drone/hive
@@ -192,16 +191,50 @@
                   :db/cardinality :db.cardinality/one
                   :db/doc         "The distance of a connection"}])
 
+(def drone-types [{:db/id                 (d/tempid :db.part/db)
+                   :db/ident              :dronetype/range
+                   :db/valueType          :db.type/long
+                   :db/cardinality        :db.cardinality/one
+                   :db/doc                "The range of a drone type"
+                   :db.install/_attribute :db.part/db}
+
+                  {:db/id                 (d/tempid :db.part/db)
+                   :db/ident              :dronetype/name
+                   :db/valueType          :db.type/string
+                   :db/cardinality        :db.cardinality/one
+                   :db/doc                "The name of a drone type"
+                   :db.install/_attribute :db.part/db}
+
+                  {:db/id                 (d/tempid :db.part/db)
+                   :db/ident              :dronetype/speed
+                   :db/valueType          :db.type/long
+                   :db/cardinality        :db.cardinality/one
+                   :db/doc                "The speed of a drone type"
+                   :db.install/_attribute :db.part/db}
+
+                  {:db/id                 (d/tempid :db.part/db)
+                   :db/ident              :dronetype/chargetime
+                   :db/valueType          :db.type/long
+                   :db/cardinality        :db.cardinality/one
+                   :db/doc                "The charging time of a drone type"
+                   :db.install/_attribute :db.part/db}
+
+                  {:db/id          (d/tempid :db.part/db)
+                   :db/ident       :dronetype/default
+                   :db/valueType   :db.type/boolean
+                   :db/cardinality :db.cardinality/one
+                   :db/doc         "Whether or not the drone type is the default type"}])
+
 (def fns [{:db/id    (d/tempid :db.part/db)
            :db/ident :connections
            :db/fn    #db/fn {:lang   "clojure"
                              :params [db hive]
                              :code   (mapv
                                        (fn [x]
-                                         {:db/id            (datomic.api/tempid :db.part/user)
+                                         {:db/id            (d/tempid :db.part/user)
                                           :connection/start hive
                                           :connection/end   x})
                                        (beehive-database.datomic.actions.queries/get-reachable hive db))}}])
 
 
-(def tables [building hive shop customer drone prediction hop route order connection fns])
+(def tables [building hive shop customer drone prediction hop route order connection drone-types fns])

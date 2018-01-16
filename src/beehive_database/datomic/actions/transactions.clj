@@ -26,9 +26,6 @@
                   :building/hive {:hive/name name}}
                  [:connections buildingid]])))
 
-(defn add-hive1 [address x y name])
-
-
 (defn add-shop
   ([address x y name]
    @(d/transact conn
@@ -53,10 +50,12 @@
                 [{:db/id             buildingid
                   :building/customer [{:customer/name name}]}])))
 
-(defn add-drone [hiveid name range status]
+(defn add-drone [hiveid name type status]
   @(d/transact conn
                [{:drone/name   name
-                 :drone/range  range
+                 :drone/type   (if (nil? type)
+                                 (:db/id (first (first (q/get-default-drone-type (d/db conn)))))
+                                 type)
                  :drone/status status
                  :drone/hive   hiveid}]))
 
@@ -92,6 +91,14 @@
                 [{:order/shop     shopid
                   :order/customer customerid
                   :order/route    {:route/hops hops}}])))
+
+(defn add-drone-type [name range speed chargetime default]
+  @(d/transact conn
+               [{:dronetype/name       name
+                 :dronetype/range      range
+                 :dronetype/speed      speed
+                 :dronetype/chargetime chargetime
+                 :dronetype/default    default}]))
 
 (defn delete [id]
   @(d/transact conn
