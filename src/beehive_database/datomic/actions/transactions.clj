@@ -1,8 +1,8 @@
 (ns beehive-database.datomic.actions.transactions
-  (require [datomic.api :as d]
-           [beehive-database.datomic.actions.data :refer :all]
-           [beehive-database.datomic.init.schema :as s]
-           [beehive-database.datomic.actions.queries :as q]))
+  (:require [datomic.api :as d]
+            [beehive-database.datomic.actions.data :refer :all]
+            [beehive-database.datomic.init.schema :as s]
+            [beehive-database.datomic.actions.queries :as q]))
 
 (defn add-building [address x y]
   @(d/transact conn

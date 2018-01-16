@@ -1,9 +1,9 @@
 (ns beehive-database.datomic.actions.queries
-  (require [datomic.api :as d]
-           [beehive-database.datomic.init.schema :as s]
-           [beehive-database.util :as u]
-           [beehive-database.datomic.actions.rules :as r]
-           [beehive-database.datomic.actions.data :refer :all]))
+  (:require [datomic.api :as d]
+            [beehive-database.datomic.init.schema :as s]
+            [beehive-database.util :as u]
+            [beehive-database.datomic.actions.rules :as r]
+            [beehive-database.datomic.actions.data :refer :all]))
 
 (defn get-all [table ids db]
   (if (empty? ids)

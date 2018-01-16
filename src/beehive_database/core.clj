@@ -1,12 +1,12 @@
 (ns beehive-database.core
-  (require [beehive-database.datomic.actions.queries :as q]
-           [beehive-database.datomic.actions.transactions :as t]
-           [beehive-database.datomic.actions.data :as d]
-           [compojure.core :as c]
-           [liberator.core :as l]
-           [ring.middleware.params :as p]
-           [ring.middleware.json :as j]
-           [clojure.data.json :as dj])
+  (:require [beehive-database.datomic.actions.queries :as q]
+            [beehive-database.datomic.actions.transactions :as t]
+            [beehive-database.datomic.actions.data :as d]
+            [compojure.core :as c]
+            [liberator.core :as l]
+            [ring.middleware.params :as p]
+            [ring.middleware.json :as j]
+            [clojure.data.json :as dj])
   (:gen-class))
 
 (defn- extract-json [ctx]

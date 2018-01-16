@@ -1,5 +1,5 @@
 (ns beehive-database.datomic.init.schema
-  (require [datomic.api :as d]))
+  (:require [datomic.api :as d]))
 
 (def building [{:db/id                 (d/tempid :db.part/db)
                 :db/ident              :building/address
