@@ -1,5 +1,6 @@
 (ns beehive-database.datomic.init.schema
-  (:require [datomic.api :as d]))
+  (:require [datomic.api :as d]
+            [beehive-database.util :as u]))
 
 (def building [{:db/id                 (d/tempid :db.part/db)
                 :db/ident              :building/address
@@ -131,7 +132,25 @@
            :db/valueType          :db.type/ref
            :db/cardinality        :db.cardinality/one
            :db/doc                "The end of a hop"
-           :db.install/_attribute :db.part/db}])
+           :db.install/_attribute :db.part/db}
+
+          {:db/id          (d/tempid :db.part/db)
+           :db/ident       :hop/starttime
+           :db/valueType   :db.type/instant
+           :db/cardinality :db.cardinality/one
+           :db/doc         "The starting time of a hop"}
+
+          {:db/id          (d/tempid :db.part/db)
+           :db/ident       :hop/endtime
+           :db/valueType   :db.type/instant
+           :db/cardinality :db.cardinality/one
+           :db/doc         "The ending time of a hop"}
+
+          {:db/id          (d/tempid :db.part/db)
+           :db/ident       :hop/distance
+           :db/valueType   :db.type/instant
+           :db/cardinality :db.cardinality/one
+           :db/doc         "The distance of a hop"}])
 
 (def route [{:db/id                 (d/tempid :db.part/db)
              :db/ident              :route/hops
@@ -150,7 +169,6 @@
 
             {:db/ident :origin/GUI}
             {:db/ident :origin/GENERATED}])
-
 
 (def order [{:db/id                 (d/tempid :db.part/db)
              :db/ident              :order/shop
@@ -234,7 +252,19 @@
                                          {:db/id            (d/tempid :db.part/user)
                                           :connection/start hive
                                           :connection/end   x})
-                                       (beehive-database.datomic.actions.queries/get-reachable hive db))}}])
+                                       (beehive-database.datomic.actions.queries/get-reachable hive db))}
+
+           {:db/id    (d/tempid :db.part/db)
+            :db/ident :mkroute
+            :db/fn    #db/fn {:lang   "clojure"
+                              :params [db drone start end]
+                              :code   [{:db/id         (d/tempid :db.part/user)
+                                        :hop/drone     drone
+                                        :hop/start     start
+                                        :hop/end       end
+                                        :hop/distance  (u/distance (u/get-pos start) (u/get-pos end))
+                                        :hop/starttime 3
+                                        :hop/endtime   3}]}}}])
 
 
 (def tables [building hive shop customer drone prediction hop route order connection drone-types fns])

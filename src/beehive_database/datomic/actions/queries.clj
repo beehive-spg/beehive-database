@@ -28,9 +28,11 @@
        db (get r/fields :dronetype)))
 
 (defn get-max-range [db]
-  (first (first (d/q '[:find (max ?e)
-                       :where
-                       [_ :drone/range ?e]] db))))
+  (first
+    (first
+      (d/q '[:find (max ?e)
+             :where
+             [_ :dronetype/range ?e]] db))))
 
 (defn is-reachable [p1 p2 db]
   (u/reachable p1 p2 (get-max-range db)))

@@ -13,11 +13,12 @@
 (defn add-hive
   ([address x y name]
    (let [id #db/id[:db.part/user -100]
-         tx @(d/transact conn [{:db/id            id
-                                :building/address address
-                                :building/xcoord  x
-                                :building/ycoord  y
-                                :building/hive    {:hive/name name}}])
+         tx @(d/transact conn
+                         [{:db/id            id
+                           :building/address address
+                           :building/xcoord  x
+                           :building/ycoord  y
+                           :building/hive    {:hive/name name}}])
          real-id (d/resolve-tempid (:db-after tx) (:tempids tx) (d/tempid :db.part/user -100))]
      @(d/transact conn [[:connections real-id]])))
   ([buildingid name]
@@ -37,6 +38,7 @@
    @(d/transact conn
                 [{:db/id         buildingid
                   :building/shop [{:shop/name name}]}])))
+
 
 (defn add-customer
   ([address x y name]
