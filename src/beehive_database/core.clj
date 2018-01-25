@@ -6,7 +6,8 @@
             [liberator.core :as l]
             [ring.middleware.params :as p]
             [ring.middleware.json :as j]
-            [clojure.data.json :as dj])
+            [clojure.data.json :as dj]
+            [clojure.spec.alpha :as s])
   (:gen-class))
 
 (defn- extract-json [ctx]
@@ -14,12 +15,15 @@
     (slurp (get-in ctx [:request :body]))
     :key-fn keyword))
 
-(defn post-default [post-fn]
+(defn post-default [post-fn spec]
   {:allowed-methods       [:post]
    :available-media-types ["application/json"]
    :processable?          (fn [ctx]
-                            (let [data (extract-json ctx)]
-                              {::data data}))
+                            (let [data (extract-json ctx)
+                                  valid (s/conform spec data)]
+                              (if (= valid ::s/invalid)
+                                false
+                                {::data data})))
    :post!                 (fn [ctx]
                             (let [data (::data ctx)]
                               (post-fn data)))})
@@ -91,7 +95,9 @@
                       (:address %)
                       (:xcoord %)
                       (:ycoord %)
-                      (:name %)))))
+                      (:name %))
+                   :hivespec/hive)))
+
 
              (c/POST "/drones" []
                (l/resource
@@ -100,14 +106,16 @@
                       (:hiveid %)
                       (:name %)
                       (:range %)
-                      (:status %)))))
+                      (:status %))
+                   ::drone)))
 
              (c/POST "/routes" []
                (l/resource
                  (post-default
                    #(t/add-route
                       (:hops %)
-                      (:origin %)))))
+                      (:origin %))
+                   ::route)))
 
              (c/POST "/orders" []
                (l/resource
@@ -115,7 +123,8 @@
                    #(t/add-order
                       (:shop %)
                       (:customer %)
-                      (:route %)))))
+                      (:route %))
+                   ::order)))
 
              (c/POST "/building" []
                (l/resource
@@ -123,7 +132,8 @@
                    #(t/add-building
                       (:address %)
                       (:xcoord %)
-                      (:ycoord %)))))
+                      (:ycoord %))
+                   ::building)))
 
              (c/POST "/shop" []
                (l/resource
@@ -132,7 +142,8 @@
                       (:address %)
                       (:xcoord %)
                       (:ycoord %)
-                      (:name %)))))
+                      (:name %))
+                   ::shop)))
 
              (c/POST "/customer" []
                (l/resource
@@ -141,7 +152,8 @@
                       (:address %)
                       (:xcoord %)
                       (:ycoord %)
-                      (:name %)))))
+                      (:name %))
+                   ::customer)))
 
              (c/POST "/hop" []
                (l/resource
@@ -149,7 +161,8 @@
                    #(t/add-hop
                       (:drone %)
                       (:start %)
-                      (:end %)))))
+                      (:end %))
+                   ::hop)))
 
              (c/POST "/dronetype" []
                (l/resource
@@ -159,7 +172,8 @@
                       (:range %)
                       (:speed %)
                       (:chargetime %)
-                      (:default %)))))
+                      (:default %))
+                   ::dronetype)))
 
              (c/PUT "/routes" []
                (l/resource
