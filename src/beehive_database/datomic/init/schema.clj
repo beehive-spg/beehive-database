@@ -252,19 +252,19 @@
                                          {:db/id            (d/tempid :db.part/user)
                                           :connection/start hive
                                           :connection/end   x})
-                                       (beehive-database.datomic.actions.queries/get-reachable hive db))}
+                                       (beehive-database.datomic.actions.queries/get-reachable hive db))}}
 
-           {:db/id    (d/tempid :db.part/db)
-            :db/ident :mkroute
-            :db/fn    #db/fn {:lang   "clojure"
-                              :params [db drone start end]
-                              :code   [{:db/id         (d/tempid :db.part/user)
-                                        :hop/drone     drone
-                                        :hop/start     start
-                                        :hop/end       end
-                                        :hop/distance  (u/distance (u/get-pos start) (u/get-pos end))
-                                        :hop/starttime 3
-                                        :hop/endtime   3}]}}}])
+          {:db/id    (d/tempid :db.part/db)
+           :db/ident :mkroute
+           :db/fn    #db/fn {:lang   "clojure"
+                             :params [db drone start end]
+                             :code   [{:db/id         (d/tempid :db.part/user)
+                                       :hop/drone     drone
+                                       :hop/start     start
+                                       :hop/end       end
+                                       :hop/distance  (u/distance (u/get-pos start) (u/get-pos end))
+                                       :hop/starttime 3
+                                       :hop/endtime   3}]}}])
 
 
 (def tables [building hive shop customer drone prediction hop route order connection drone-types fns])
