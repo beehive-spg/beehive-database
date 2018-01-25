@@ -96,8 +96,7 @@
                       (:xcoord %)
                       (:ycoord %)
                       (:name %))
-                   :hivespec/hive)))
-
+                   :validation/hive)))
 
              (c/POST "/drones" []
                (l/resource
@@ -107,7 +106,7 @@
                       (:name %)
                       (:range %)
                       (:status %))
-                   ::drone)))
+                   :validation/drone)))
 
              (c/POST "/routes" []
                (l/resource
@@ -115,16 +114,16 @@
                    #(t/add-route
                       (:hops %)
                       (:origin %))
-                   ::route)))
+                   :validation/route)))
 
              (c/POST "/orders" []
                (l/resource
                  (post-default
                    #(t/add-order
-                      (:shop %)
-                      (:customer %)
+                      (:shopid %)
+                      (:customerid %)
                       (:route %))
-                   ::order)))
+                   :validation/order)))
 
              (c/POST "/building" []
                (l/resource
@@ -133,7 +132,7 @@
                       (:address %)
                       (:xcoord %)
                       (:ycoord %))
-                   ::building)))
+                   :validation/building)))
 
              (c/POST "/shop" []
                (l/resource
@@ -143,7 +142,7 @@
                       (:xcoord %)
                       (:ycoord %)
                       (:name %))
-                   ::shop)))
+                   :validation/shop)))
 
              (c/POST "/customer" []
                (l/resource
@@ -153,16 +152,16 @@
                       (:xcoord %)
                       (:ycoord %)
                       (:name %))
-                   ::customer)))
+                   :validation/customer)))
 
              (c/POST "/hop" []
                (l/resource
                  (post-default
                    #(t/add-hop
-                      (:drone %)
+                      (:droneid %)
                       (:start %)
                       (:end %))
-                   ::hop)))
+                   :validation/hop)))
 
              (c/POST "/dronetype" []
                (l/resource
@@ -173,7 +172,7 @@
                       (:speed %)
                       (:chargetime %)
                       (:default %))
-                   ::dronetype)))
+                   :validation/ronetype)))
 
              (c/PUT "/routes" []
                (l/resource
