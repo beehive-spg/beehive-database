@@ -172,7 +172,7 @@
                       (:speed %)
                       (:chargetime %)
                       (:default %))
-                   :validation/ronetype)))
+                   :validation/dronetype)))
 
              (c/PUT "/routes" []
                (l/resource
