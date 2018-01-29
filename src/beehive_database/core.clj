@@ -29,6 +29,10 @@
                               (post-fn data)))})
 
 (c/defroutes rest-routes
+             (c/GET "/" []
+               (l/resource
+                 :available-media-types ["text/html"]
+                 :handle-ok "<html>We use drones</html>"))
              (c/GET "/hives" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
