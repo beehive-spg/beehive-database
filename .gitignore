@@ -1,5 +1,7 @@
 
 # Created by https://www.gitignore.io/api/clojure,windows,intellij
+### Docker ###
+.env
 
 ### Clojure ###
 pom.xml

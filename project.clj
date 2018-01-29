@@ -4,7 +4,8 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :repositories {"my.datomic.com" {:url   "https://my.datomic.com/repo"
-                                   :creds :gpg}}
+                                   :username :env/USERNAME
+                                   :password :env/PASSWORD}}
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [com.datomic/datomic-pro "0.9.5656"]
                  [liberator "0.15.1"]
