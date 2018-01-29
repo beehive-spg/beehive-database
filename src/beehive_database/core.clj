@@ -92,6 +92,11 @@
                  :available-media-types ["application/json"]
                  :handle-ok (q/get-all :dronetype ids (d/db))))
 
+             (c/GET "/reachable" [& ids]
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/get-all :connection ids (d/db))))
+
              (c/POST "/hives" []
                (l/resource
                  (post-default
@@ -202,3 +207,4 @@
       p/wrap-params))
 
 
+(defn init [])

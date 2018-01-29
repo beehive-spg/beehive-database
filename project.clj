@@ -15,6 +15,7 @@
   :plugins [[lein-ring "0.12.2"]]
   :ring {:handler beehive-database.core/handler}
   :main ^:skip-aot beehive-database.core
-  :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :target-path "target/%s")
+  ;;:profiles {:uberjar {:aot :all}}
+
 

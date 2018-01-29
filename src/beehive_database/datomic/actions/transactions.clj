@@ -109,5 +109,12 @@
 
 (add-drone-type "large" 5000 15 1800 true)
 
-@(d/transact conn
-             (read-string (slurp "data.edn")))
+(def init-data (slurp (clojure.java.io/resource "beehive-database/data.edn")))
+
+(doseq [hive (clojure.edn/read-string init-data)]
+   (add-hive
+     (:building/address hive)
+     (:building/xcoord hive)
+     (:building/ycoord hive)
+     (:hive/name
+       (:building/hive hive))))
