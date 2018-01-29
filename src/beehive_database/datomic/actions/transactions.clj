@@ -61,11 +61,6 @@
                  :drone/status status
                  :drone/hive   hiveid}]))
 
-(defn assign-drone [hiveid droneid]
-  @(d/transact conn
-               [{:db/id      droneid
-                 :drone/hive hiveid}]))
-
 (defn add-prediction [value hiveid]
   @(d/transact conn
                [{:prediction/value value
@@ -112,3 +107,7 @@
 
 (init-schema s/tables)
 
+(add-drone-type "large" 5000 15 1800 true)
+
+@(d/transact conn
+             (read-string (slurp "data.edn")))
