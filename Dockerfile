@@ -1,9 +1,26 @@
-FROM clojure:lein-2.8.1-alpine
+FROM clojure:lein-2.8.1-alpine as build
 
 WORKDIR /app
 
+ARG username
+ARG password
+
+ENV USERNAME=$username
+ENV PASSWORD=$password
+
 COPY ./project.clj /app
 COPY ./src /app/src
-COPY ./test /app/test
+COPY ./resources /app/resources
 
-ENTRYPOINT lein ring server
+RUN lein ring uberjar
+
+RUN mkdir /export && \
+	cp /app/target/uberjar/beehive-database-*-standalone.jar /export/database.jar
+
+
+
+FROM java:8-jre-alpine
+
+COPY --from=build /export .
+
+ENTRYPOINT java -jar database.jar
