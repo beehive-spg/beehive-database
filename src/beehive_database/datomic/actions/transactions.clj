@@ -109,5 +109,5 @@
 
 (add-drone-type "large" 5000 15 1800 true)
 
-@(d/transact conn
-             (read-string (slurp "data.edn")))
+(doseq [hive (clojure.edn/read-string (slurp "data.edn"))]
+   (add-hive (:building/address hive) (:building/xcoord hive) (:building/ycoord hive) (:hive/name (:building/hive hive))))
