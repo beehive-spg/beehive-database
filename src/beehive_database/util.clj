@@ -10,7 +10,8 @@
   ([p1 p2 radius]
    (let [[lat1 long1] (degrees->radians p1)
          [lat2 long2] (degrees->radians p2)]
-     (* radius
+     (* 1000
+        radius
         (Math/acos (+ (* (Math/sin lat1) (Math/sin lat2))
                       (* (Math/cos lat1)
                          (Math/cos lat2)

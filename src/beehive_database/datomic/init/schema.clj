@@ -249,9 +249,15 @@
                              :params [db hive]
                              :code   (mapv
                                        (fn [x]
-                                         {:db/id            (d/tempid :db.part/user)
-                                          :connection/start hive
-                                          :connection/end   x})
+                                         {:db/id               (d/tempid :db.part/user)
+                                          :connection/start    hive
+                                          :connection/end      (:db/id x)
+                                          :connection/distance (beehive-database.util/distance
+                                                                 (beehive-database.util/get-pos
+                                                                   (first
+                                                                     (first
+                                                                       (beehive-database.datomic.actions.queries/get-one hive db))))
+                                                                 (beehive-database.util/get-pos x))})
                                        (beehive-database.datomic.actions.queries/get-reachable hive db))}}
 
           {:db/id    (d/tempid :db.part/db)

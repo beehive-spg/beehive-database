@@ -21,6 +21,13 @@
          (get r/queries table)
          ids)))
 
+(defn get-one [id db]
+  (d/q '[:find (pull ?id [*])
+         :in $ ?id
+         :where [?id]]
+       db
+       id))
+
 (defn get-default-drone-type [db]
   (d/q '[:find (pull ?e subquery)
          :in $ subquery
@@ -43,7 +50,7 @@
                 (get-all :hive [] db))
         hive (get-all :hive [hiveid] db)]
     (map
-      #(:db/id (first %))
+      first
       (filter
         #(is-reachable
            (u/get-pos (first (first hive)))
