@@ -2,6 +2,7 @@
   (:require [beehive-database.datomic.actions.queries :as q]
             [beehive-database.datomic.actions.transactions :as t]
             [beehive-database.datomic.actions.data :as d]
+            [beehive-database.datomic.validation.spec :refer :all]
             [compojure.core :as c]
             [liberator.core :as l]
             [ring.middleware.params :as p]
