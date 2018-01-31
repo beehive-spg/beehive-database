@@ -17,6 +17,7 @@
 
 (defn post-default [post-fn spec]
   {:allowed-methods       [:post]
+
    :available-media-types ["application/json"]
    :processable?          (fn [ctx]
                             (let [data (extract-json ctx)
@@ -210,7 +211,6 @@
 
 (def handler
   (-> rest-routes
-      j/wrap-json-body
       j/wrap-json-response
       p/wrap-params))
 
