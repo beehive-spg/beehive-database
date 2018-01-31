@@ -13,7 +13,6 @@ COPY ./src ./src
 COPY ./resources ./resources
 
 RUN lein ring uberjar
-#RUN chmod +x ./target/uberjar/beehive-database-*-standalone.jar
 
 ENTRYPOINT java -jar ./target/uberjar/beehive-database-*-standalone.jar
 
