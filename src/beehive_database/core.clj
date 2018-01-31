@@ -18,7 +18,6 @@
 
 (defn post-default [post-fn spec]
   {:allowed-methods       [:post]
-
    :available-media-types ["application/json"]
    :processable?          (fn [ctx]
                             (let [data (extract-json ctx)
@@ -35,6 +34,12 @@
                (l/resource
                  :available-media-types ["text/html"]
                  :handle-ok "<html>We use drones</html>"))
+
+             (c/GET "/one/:id" [id]
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/get-one (read-string id) (d/db))))
+
              (c/GET "/hives" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
