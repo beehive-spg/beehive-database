@@ -20,8 +20,8 @@
    :available-media-types ["application/json"]
    :processable?          (fn [ctx]
                             (let [data (extract-json ctx)
-                                  valid (s/conform spec data)]
-                              (if (= valid ::s/invalid)
+                                  valid (s/valid? spec data)]
+                              (if (not valid)
                                 false
                                 {::data data})))
    :post!                 (fn [ctx]
@@ -182,6 +182,14 @@
                       (:chargetime %)
                       (:default %))
                    :validation/dronetype)))
+
+             (c/POST "/tryroute" []
+               (l/resource
+                 (post-default
+                   #(q/get-route
+                      (:hops %)
+                      (:time %))
+                   :validation/tryroute)))
 
              (c/PUT "/routes" []
                (l/resource

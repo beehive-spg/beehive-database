@@ -13,7 +13,7 @@
 (s/def :validation/end int?)
 (s/def :validation/route int?)
 (s/def :validation/range float?)
-(s/def :validation/status keyword?)
+(s/def :validation/status string?)
 (s/def :validation/hops seq?)
 (s/def :validation/origin keyword?)
 (s/def :validation/speed float?)
@@ -21,28 +21,31 @@
 (s/def :validation/default boolean?)
 
 (s/def :validation/hive
-  (s/keys :req [:validation/address :validation/xcoord :validation/ycoord :validation/name]))
+  (s/keys :req-un [:validation/address :validation/xcoord :validation/ycoord :validation/name]))
 
 (s/def :validation/drone
-  (s/keys :req [:validation/hiveid :validation/name :validation/range :validation/status]))
+  (s/keys :req-un [:validation/hiveid :validation/name :validation/range :validation/status]))
 
 (s/def :validation/route
-  (s/keys :req [:validation/hops :validation/origin]))
+  (s/keys :req-un [:validation/hops :validation/origin]))
 
 (s/def :validation/order
-  (s/keys :req [:validation/shopid :validation/customerid :validation/route]))
+  (s/keys :req-un [:validation/shopid :validation/customerid :validation/route]))
 
 (s/def :validation/building
-  (s/keys :req [:validation/address :validation/xcoord :validation/ycoord]))
+  (s/keys :req-un [:validation/address :validation/xcoord :validation/ycoord]))
 
 (s/def :validation/shop
-  (s/keys :req [:validation/address :validation/xcoord :validation/ycoord :validation/name]))
+  (s/keys :req-un [:validation/address :validation/xcoord :validation/ycoord :validation/name]))
 
 (s/def :validation/customer
-  (s/keys :req [:validation/address :validation/xcoord :validation/ycoord :validation/name]))
+  (s/keys :req-un [:validation/address :validation/xcoord :validation/ycoord :validation/name]))
 
 (s/def :validation/hop
-  (s/keys :req [:validation/droneid :validation/start :validation/end]))
+  (s/keys :req-un [:validation/droneid :validation/start :validation/end]))
 
 (s/def :validation/dronetype
-  (s/keys :req [:validation/name :validation/range :validation/speed :validation/chargetime :validation/default]))
+  (s/keys :req-un [:validation/name :validation/range :validation/speed :validation/chargetime :validation/default]))
+
+(s/def :validation/tryroute
+  (s/keys :req-un [:validation/hops]))
