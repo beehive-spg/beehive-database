@@ -13,13 +13,15 @@
          db
          (get r/fields table)
          (get r/queries table))
-    (d/q '[:find [(pull ?e subquery) ...]
+    (d/q '[:find [(pull ?ids subquery) ...]
            :in $ subquery [?ref ...] [?ids ...]
-           :where [?e ?ref _] [?ids]]
+           :where [?ids ?ref _] [?ids]]
          db
          (get r/fields table)
          (get r/queries table)
-         ids)))
+         (mapv
+           read-string
+           (vals ids)))))
 
 (defn drones-for-hive [hiveid db]
   (d/q '[:find [(pull ?e subquery) ...]
