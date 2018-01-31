@@ -135,7 +135,7 @@
                       (:route %))
                    :validation/order)))
 
-             (c/POST "/building" []
+             (c/POST "/buildings" []
                (l/resource
                  (post-default
                    #(t/add-building
@@ -144,7 +144,7 @@
                       (:ycoord %))
                    :validation/building)))
 
-             (c/POST "/shop" []
+             (c/POST "/shops" []
                (l/resource
                  (post-default
                    #(t/add-shop
@@ -154,7 +154,7 @@
                       (:name %))
                    :validation/shop)))
 
-             (c/POST "/customer" []
+             (c/POST "/customers" []
                (l/resource
                  (post-default
                    #(t/add-customer
@@ -164,7 +164,7 @@
                       (:name %))
                    :validation/customer)))
 
-             (c/POST "/hop" []
+             (c/POST "/hops" []
                (l/resource
                  (post-default
                    #(t/add-hop
@@ -173,7 +173,7 @@
                       (:end %))
                    :validation/hop)))
 
-             (c/POST "/dronetype" []
+             (c/POST "/dronetypes" []
                (l/resource
                  (post-default
                    #(t/add-drone-type
@@ -197,7 +197,7 @@
                  :allowed-methods [:put]
                  :available-media-types ["application/json"]))
 
-             (c/PUT "/hop" []
+             (c/PUT "/hops" []
                (l/resource
                  :allowed-methods [:put]
                  :available-media-types ["application/json"]))
