@@ -115,7 +115,7 @@
                    #(t/add-drone
                       (:hiveid %)
                       (:name %)
-                      (:range %)
+                      (:dronetype %)
                       (:status %))
                    :validation/drone)))
 
