@@ -56,7 +56,7 @@
   @(d/transact conn
                [{:drone/name   name
                  :drone/type   (if (nil? type)
-                                 (:db/id (first (first (q/get-default-drone-type (d/db conn)))))
+                                 (:db/id (q/get-default-drone-type (d/db conn)))
                                  type)
                  :drone/status status
                  :drone/hive   hiveid}]))
@@ -112,9 +112,9 @@
 (def init-data (slurp (clojure.java.io/resource "beehive-database/data.edn")))
 
 (doseq [hive (clojure.edn/read-string init-data)]
-   (add-hive
-     (:building/address hive)
-     (:building/xcoord hive)
-     (:building/ycoord hive)
-     (:hive/name
-       (:building/hive hive))))
+  (add-hive
+    (:building/address hive)
+    (:building/xcoord hive)
+    (:building/ycoord hive)
+    (:hive/name
+      (:building/hive hive))))
