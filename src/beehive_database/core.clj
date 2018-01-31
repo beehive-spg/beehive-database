@@ -11,10 +11,16 @@
             [clojure.spec.alpha :as s])
   (:gen-class))
 
+(defn- json-value-fn [k v]
+  (if (clojure.string/starts-with? v ":")
+    (keyword (subs v 1))
+    v))
+
 (defn- extract-json [ctx]
   (dj/read-str
     (slurp (get-in ctx [:request :body]))
-    :key-fn keyword))
+    :key-fn keyword
+    :value-fn json-value-fn))
 
 (defn post-default [post-fn spec]
   {:allowed-methods       [:post]

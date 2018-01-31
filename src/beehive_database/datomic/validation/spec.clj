@@ -13,7 +13,7 @@
 (s/def :validation/end int?)
 (s/def :validation/route int?)
 (s/def :validation/range float?)
-(s/def :validation/status string?)
+(s/def :validation/status keyword?)
 (s/def :validation/hops seq?)
 (s/def :validation/origin keyword?)
 (s/def :validation/speed float?)
@@ -24,7 +24,8 @@
   (s/keys :req-un [:validation/address :validation/xcoord :validation/ycoord :validation/name]))
 
 (s/def :validation/drone
-  (s/keys :req-un [:validation/hiveid :validation/name :validation/range :validation/status]))
+  (s/keys :req-un [:validation/hiveid :validation/name :validation/status]
+          :opt-un [:validation/type]))
 
 (s/def :validation/route
   (s/keys :req-un [:validation/hops :validation/origin]))
