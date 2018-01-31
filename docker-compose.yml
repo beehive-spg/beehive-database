@@ -2,7 +2,6 @@ version: '3.1'
 
 services:
     beehive-database:
-        image: beehive-database
+        image: beehive-database:latest
         ports:
             - '4321:3000'
-        env_file: .env
