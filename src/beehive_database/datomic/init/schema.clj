@@ -254,9 +254,9 @@
                                           :connection/end      (:db/id x)
                                           :connection/distance (beehive-database.util/distance
                                                                  (beehive-database.util/get-pos
-                                                                   (beehive-database.datomic.actions.queries/get-one hive db))
+                                                                   (beehive-database.datomic.actions.queries/one hive db))
                                                                  (beehive-database.util/get-pos x))})
-                                       (beehive-database.datomic.actions.queries/get-reachable hive db))}}
+                                       (beehive-database.datomic.actions.queries/reachable hive db))}}
 
           {:db/id    (d/tempid :db.part/db)
            :db/ident :mkroute

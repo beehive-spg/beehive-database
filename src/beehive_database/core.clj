@@ -44,12 +44,12 @@
              (c/GET "/one/:id" [id]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-one (read-string id) (d/db))))
+                 :handle-ok (q/one (read-string id) (d/db))))
 
              (c/GET "/hives" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :hive ids (d/db))))
+                 :handle-ok (q/all :hive ids (d/db))))
 
              (c/GET "/hives/workload/:time" [time & ids]
                (l/resource
@@ -68,47 +68,54 @@
              (c/GET "/hops" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :hop ids (d/db))))
+                 :handle-ok (q/all :hop ids (d/db))))
 
              (c/GET "/routes" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :route ids (d/db))))
+                 :handle-ok (q/all :route ids (d/db))))
 
              (c/GET "/orders" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :order ids (d/db))))
+                 :handle-ok (q/all :order ids (d/db))))
 
              (c/GET "/predictions" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :prediction ids (d/db))))
+                 :handle-ok (q/all :prediction ids (d/db))))
 
              (c/GET "/drones" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :drone ids (d/db))))
+                 :handle-ok (q/all :drone ids (d/db))))
+
+             (c/GET "/drones/hive/:id" [id]
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/drones-for-hive
+                              (read-string id)
+                              (d/db))))
 
              (c/GET "/shops" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :shop ids (d/db))))
+                 :handle-ok (q/all :shop ids (d/db))))
 
              (c/GET "/customers" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :customer ids (d/db))))
+                 :handle-ok (q/all :customer ids (d/db))))
 
              (c/GET "/types" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :dronetype ids (d/db))))
+                 :handle-ok (q/all :dronetype ids (d/db))))
 
              (c/GET "/reachable" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/get-all :connection ids (d/db))))
+                 :handle-ok (q/all :connection ids (d/db))))
 
              (c/POST "/hives" []
                (l/resource

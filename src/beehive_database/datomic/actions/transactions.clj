@@ -56,7 +56,7 @@
   @(d/transact conn
                [{:drone/name   name
                  :drone/type   (if (nil? type)
-                                 (:db/id (q/get-default-drone-type (d/db conn)))
+                                 (:db/id (q/default-drone-type (d/db conn)))
                                  type)
                  :drone/status status
                  :drone/hive   hiveid}]))
