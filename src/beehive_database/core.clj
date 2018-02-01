@@ -32,8 +32,16 @@
                                 false
                                 {::data data})))
    :post!                 (fn [ctx]
-                            (let [data (::data ctx)]
-                              (post-fn data)))})
+                            (let [data (::data ctx)
+                                  tx (post-fn data)]
+                              {::id (datomic.api/resolve-tempid
+                                      (:db-after tx)
+                                      (:tempids tx)
+                                      (datomic.api/tempid
+                                        :db.part/user
+                                        -100))}))
+   :post-redirect?        (fn [ctx]
+                            {:location (str "/one/" (::id ctx))})})
 
 (c/defroutes rest-routes
              (c/GET "/" []

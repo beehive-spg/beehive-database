@@ -4,23 +4,28 @@
             [beehive-database.datomic.init.schema :as s]
             [beehive-database.datomic.actions.queries :as q]))
 
+(defn transact [conn data]
+  (let [id #db/id[:db.part/user -100]]
+    @(d/transact conn [(assoc (first data) :db/id id)])))
+
+
 (defn add-building [address x y]
-  @(d/transact conn
-               [{:building/address address
-                 :building/xcoord  x
-                 :building/ycoord  y}]))
+  (transact conn
+            [{:building/address address
+              :building/xcoord  x
+              :building/ycoord  y}]))
 
 (defn add-hive
   ([address x y name]
-   (let [id #db/id[:db.part/user -100]
-         tx @(d/transact conn
-                         [{:db/id            id
-                           :building/address address
-                           :building/xcoord  x
-                           :building/ycoord  y
-                           :building/hive    {:hive/name name}}])
-         real-id (d/resolve-tempid (:db-after tx) (:tempids tx) (d/tempid :db.part/user -100))]
-     @(d/transact conn [[:connections real-id]])))
+   (let [tx (transact conn
+                      [{:building/address address
+                        :building/xcoord  x
+                        :building/ycoord  y
+                        :building/hive    {:hive/name name}}])
+         real-id (d/resolve-tempid (:db-after tx) (:tempids tx) (d/tempid :db.part/user -100))
+         tx2 @(d/transact conn [[:connections real-id]])]
+     tx))
+
   ([buildingid name]
    @(d/transact conn
                 [{:db/id         buildingid
@@ -29,11 +34,11 @@
 
 (defn add-shop
   ([address x y name]
-   @(d/transact conn
-                [{:building/address address
-                  :building/xcoord  x
-                  :building/ycoord  y
-                  :building/shop    {:shop/name name}}]))
+   (transact conn
+             [{:building/address address
+               :building/xcoord  x
+               :building/ycoord  y
+               :building/shop    {:shop/name name}}]))
   ([buildingid name]
    @(d/transact conn
                 [{:db/id         buildingid
@@ -42,47 +47,47 @@
 
 (defn add-customer
   ([address x y name]
-   @(d/transact conn
-                [{:building/address  address
-                  :building/xcoord   x
-                  :building/ycoord   y
-                  :building/customer {:customer/name name}}]))
+   (transact conn
+             [{:building/address  address
+               :building/xcoord   x
+               :building/ycoord   y
+               :building/customer {:customer/name name}}]))
   ([buildingid name]
    @(d/transact conn
                 [{:db/id             buildingid
                   :building/customer [{:customer/name name}]}])))
 
 (defn add-drone [hiveid name type status]
-  @(d/transact conn
-               [{:drone/name   name
-                 :drone/type   (if (nil? type)
-                                 (:db/id (q/default-drone-type (d/db conn)))
-                                 type)
-                 :drone/status status
-                 :drone/hive   hiveid}]))
+  (transact conn
+            [{:drone/name   name
+              :drone/type   (if (nil? type)
+                              (:db/id (q/default-drone-type (d/db conn)))
+                              type)
+              :drone/status status
+              :drone/hive   hiveid}]))
 
 (defn add-prediction [value hiveid]
-  @(d/transact conn
-               [{:prediction/value value
-                 :prediction/hive  hiveid}]))
+  (transact conn
+            [{:prediction/value value
+              :prediction/hive  hiveid}]))
 
 (defn add-hop [drone start end]
-  @(d/transact conn
-               [{:hop/drone drone
-                 :hop/start start
-                 :hop/end   end}]))
+  (transact conn
+            [{:hop/drone drone
+              :hop/start start
+              :hop/end   end}]))
 
 (defn add-route [hops origin]
-  @(d/transact conn
-               [{:route/hops   hops
-                 :route/origin origin}]))
+  (transact conn
+            [{:route/hops   hops
+              :route/origin origin}]))
 
 (defn add-order
   ([shopid customerid routeid]
-   @(d/transact conn
-                [{:order/shop     shopid
-                  :order/customer customerid
-                  :order/route    routeid}]))
+   (transact conn
+             [{:order/shop     shopid
+               :order/customer customerid
+               :order/route    routeid}]))
   ([shopid customerid hops origin]
    @(d/transact conn
                 [{:order/shop     shopid
@@ -90,15 +95,15 @@
                   :order/route    {:route/hops hops}}])))
 
 (defn add-drone-type [name range speed chargetime default]
-  @(d/transact conn
-               [{:dronetype/name       name
-                 :dronetype/range      range
-                 :dronetype/speed      speed
-                 :dronetype/chargetime chargetime
-                 :dronetype/default    default}]))
+  (transact conn
+            [{:dronetype/name       name
+              :dronetype/range      range
+              :dronetype/speed      speed
+              :dronetype/chargetime chargetime
+              :dronetype/default    default}]))
 
 (defn delete [id]
-  @(d/transact conn
+  @(transact conn
                [[:db.fn/retractEntity id]]))
 
 (defn init-schema [schema]
