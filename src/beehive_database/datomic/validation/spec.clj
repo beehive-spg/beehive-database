@@ -14,7 +14,7 @@
 (s/def :validation/route int?)
 (s/def :validation/range float?)
 (s/def :validation/status keyword?)
-(s/def :validation/hops seq?)
+(s/def :validation/hops coll?)
 (s/def :validation/origin keyword?)
 (s/def :validation/speed float?)
 (s/def :validation/chargetime float?)
