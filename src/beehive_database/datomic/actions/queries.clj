@@ -24,12 +24,21 @@
            (vals ids)))))
 
 (defn drones-for-hive [hiveid db]
-  (d/q '[:find [(pull ?e subquery) ...]
-         :in $ subquery ?hiveid
+  (d/q '[:find [(pull ?e [:db/id
+                          :drone/name
+                          :drone/type
+                          :drone/status]) ...]
+         :in $ ?hiveid
          :where [?e :drone/hive ?hiveid]]
        db
-       (get r/fields :drone)
        hiveid))
+
+(defn hops-for-drones [droneids db]
+  (d/q '[:find [(pull ?hops [*]) ...]
+         :in $ [?droneids ...]
+         :where [?hops :hop/drone ?droneids]]
+       db
+       droneids))
 
 (defn one [id db]
   (d/q '[:find (pull ?id [*]) .
@@ -45,11 +54,9 @@
        db (get r/fields :dronetype)))
 
 (defn max-range [db]
-  (first
-    (first
-      (d/q '[:find (max ?e)
-             :where
-             [_ :dronetype/range ?e]] db))))
+  (d/q '[:find (max ?e) .
+         :where
+         [_ :dronetype/range ?e]] db))
 
 (defn is-reachable [p1 p2 db]
   (u/reachable p1 p2 (max-range db)))
@@ -66,4 +73,34 @@
          db)
       buildings)))
 
-(defn get-route [hops time])
+(defn route [hops time db])
+
+(defn available-drones [hiveid time db]                     ;;not tested
+  (let [drones (drones-for-hive hiveid db)
+        droneids (map #(:db/id %) drones)
+        hops (hops-for-drones droneids db)]
+    (-
+      (count drones)
+      (count
+        (distinct
+          (map
+            #(:hop/drone %)
+            (filter
+              #(=
+                 -1
+                 (compare
+                   time
+                   (:hop/endtime %))
+                 hops))))))))
+
+(defn workload [hiveid time db]                             ;;not tested
+  (let [maxdrones (count (drones-for-hive hiveid db))
+        available (available-drones hiveid time db)
+        workload (*
+                   100
+                   (/
+                     (-
+                       maxdrones
+                       available-drones)
+                     maxdrones))]
+    workload))

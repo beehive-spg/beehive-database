@@ -11,7 +11,7 @@
             [clojure.spec.alpha :as s])
   (:gen-class))
 
-(defn- json-value-fn [k v]
+(defn json-value-fn [k v]
   (if (clojure.string/starts-with? v ":")
     (keyword (subs v 1))
     v))
@@ -206,9 +206,10 @@
              (c/POST "/tryroute" []
                (l/resource
                  (post-default
-                   #(q/get-route
+                   #(q/route
                       (:hops %)
-                      (:time %))
+                      (:time %)
+                      (d/db))
                    :validation/tryroute)))
 
              (c/PUT "/routes" []
