@@ -57,6 +57,17 @@
          :where
          [_ :dronetype/range ?e]] db))
 
+(defn distributions [time1 time2 db]
+  (d/q '[:find [(pull ?route subquery) ...]
+         :in $ ?time1 ?time2 subquery
+         :where
+         [?route :route/origin :origin/DISTRIBUTION]
+         [?hop :hop/route ?route]
+         [?hop :hop/starttime ?starttime]
+         (or-join [?starttime ?time1 ?time2]
+                  (and [(> ?starttime ?time1)]
+                       [(< ?starttime ?time2)]))] db time1 time2 (get r/fields :route)))
+
 (defn is-reachable [p1 p2 db]
   (u/reachable p1 p2 (max-range db)))
 

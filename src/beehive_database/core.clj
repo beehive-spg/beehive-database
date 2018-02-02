@@ -84,6 +84,14 @@
                  :available-media-types ["application/json"]
                  :handle-ok (q/all :route ids (d/db))))
 
+             (c/GET "/routes/distributions/:time1/:time2" [time1 time2]
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/distributions
+                              (read-string time1)
+                              (read-string time2)
+                              (d/db))))
+
              (c/GET "/orders" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
