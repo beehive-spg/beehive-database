@@ -20,6 +20,7 @@
 (s/def :validation/chargetime float?)
 (s/def :validation/default boolean?)
 (s/def :validation/time number?)
+(s/def :validation/source keyword?)
 
 (s/def :validation/hive
   (s/keys :req-un [:validation/address :validation/xcoord :validation/ycoord :validation/name]))
@@ -32,7 +33,7 @@
   (s/keys :req-un [:validation/hops :validation/origin :validation/time]))
 
 (s/def :validation/order
-  (s/keys :req-un [:validation/shopid :validation/customerid :validation/route]))
+  (s/keys :req-un [:validation/shopid :validation/customerid :validation/route :validation/source]))
 
 (s/def :validation/building
   (s/keys :req-un [:validation/address :validation/xcoord :validation/ycoord]))

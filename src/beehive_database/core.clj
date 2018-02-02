@@ -161,7 +161,8 @@
                    #(t/add-order
                       (:shopid %)
                       (:customerid %)
-                      (:route %))
+                      (:route %)
+                      (:source %))
                    :validation/order)))
 
              (c/POST "/buildings" []

@@ -85,16 +85,12 @@
 
 
 (defn add-order
-  ([shopid customerid routeid]
-   (transact conn
-             [{:order/shop     shopid
-               :order/customer customerid
-               :order/route    routeid}]))
-  ([shopid customerid hops origin]
-   @(d/transact conn
-                [{:order/shop     shopid
-                  :order/customer customerid
-                  :order/route    {:route/hops hops}}])))
+  [shopid customerid routeid source]
+  (transact conn
+            [{:order/shop     shopid
+              :order/customer customerid
+              :order/route    routeid
+              :order/source   source}]))
 
 (defn add-drone-type [name range speed chargetime default]
   (transact conn

@@ -161,12 +161,12 @@
 (def route [{:db/id                 (d/tempid :db.part/db)
              :db/ident              :route/origin
              :db/valueType          :db.type/ref
-             :db/cardinality        :db.cardinality/many
+             :db/cardinality        :db.cardinality/one
              :db/doc                "The origin of a route"
              :db.install/_attribute :db.part/db}
 
-            {:db/ident :origin/GUI}
-            {:db/ident :origin/GENERATED}])
+            {:db/ident :origin/ORDER}
+            {:db/ident :origin/DISTRIBUTION}])
 
 (def order [{:db/id                 (d/tempid :db.part/db)
              :db/ident              :order/shop
@@ -187,7 +187,16 @@
              :db/valueType          :db.type/ref
              :db/cardinality        :db.cardinality/one
              :db/doc                "The route of an order"
-             :db.install/_attribute :db.part/db}])
+             :db.install/_attribute :db.part/db}
+
+            {:db/id          (d/tempid :db.part/db)
+             :db/ident       :order/source
+             :db/valueType   :db.type/ref
+             :db/cardinality :db.cardinality/one
+             :db/doc         "The source of an order"}
+            
+            {:db/ident :source/GUI}
+            {:db/ident :source/GENERATED}])
 
 (def connection [{:db/id          (d/tempid :db.part/db)
                   :db/ident       :connection/start

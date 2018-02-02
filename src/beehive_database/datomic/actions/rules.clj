@@ -55,7 +55,8 @@
   [:db/id
    :order/shop
    :order/customer
-   :order/route])
+   :order/route
+   {:order/source [:db/ident]}])
 
 (def connection-fields
   [:db/id
