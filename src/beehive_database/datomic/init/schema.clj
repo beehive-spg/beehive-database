@@ -136,31 +136,29 @@
 
           {:db/id          (d/tempid :db.part/db)
            :db/ident       :hop/starttime
-           :db/valueType   :db.type/instant
+           :db/valueType   :db.type/long
            :db/cardinality :db.cardinality/one
            :db/doc         "The starting time of a hop"}
 
           {:db/id          (d/tempid :db.part/db)
            :db/ident       :hop/endtime
-           :db/valueType   :db.type/instant
+           :db/valueType   :db.type/long
            :db/cardinality :db.cardinality/one
            :db/doc         "The ending time of a hop"}
 
           {:db/id          (d/tempid :db.part/db)
            :db/ident       :hop/distance
-           :db/valueType   :db.type/instant
+           :db/valueType   :db.type/float
            :db/cardinality :db.cardinality/one
-           :db/doc         "The distance of a hop"}])
+           :db/doc         "The distance of a hop"}
+
+          {:db/id          (d/tempid :db.part/db)
+           :db/ident       :hop/route
+           :db/valueType   :db.type/ref
+           :db/cardinality :db.cardinality/one
+           :db/doc         "The route of a hop"}])
 
 (def route [{:db/id                 (d/tempid :db.part/db)
-             :db/ident              :route/hops
-             :db/valueType          :db.type/ref
-             :db/isComponent        true
-             :db/cardinality        :db.cardinality/many
-             :db/doc                "The hops of a route"
-             :db.install/_attribute :db.part/db}
-
-            {:db/id                 (d/tempid :db.part/db)
              :db/ident              :route/origin
              :db/valueType          :db.type/ref
              :db/cardinality        :db.cardinality/many
@@ -253,22 +251,59 @@
                                           :connection/start    hive
                                           :connection/end      (:db/id x)
                                           :connection/distance (beehive-database.util/distance
-                                                                 (beehive-database.util/get-pos
+                                                                 (beehive-database.util/position
                                                                    (beehive-database.datomic.actions.queries/one hive db))
-                                                                 (beehive-database.util/get-pos x))})
+                                                                 (beehive-database.util/position x))})
                                        (beehive-database.datomic.actions.queries/reachable hive db))}}
 
           {:db/id    (d/tempid :db.part/db)
            :db/ident :mkroute
            :db/fn    #db/fn {:lang   "clojure"
-                             :params [db drone start end]
-                             :code   [{:db/id         (d/tempid :db.part/user)
-                                       :hop/drone     drone
-                                       :hop/start     start
-                                       :hop/end       end
-                                       :hop/distance  (u/distance (u/get-pos start) (u/get-pos end))
-                                       :hop/starttime 3
-                                       :hop/endtime   3}]}}])
+                             :params [db hops routeid time]
+                             :code   (let [speed (:dronetype/speed (beehive-database.datomic.actions.queries/default-drone-type db))]
+                                       (loop [result []
+                                              lhops hops
+                                              starttime time]
+                                         (let [endtime (long (+
+                                                               starttime
+                                                               (beehive-database.util/travel-time
+                                                                 (beehive-database.util/position (beehive-database.datomic.actions.queries/one (:from (first hops)) db))
+                                                                 (beehive-database.util/position (beehive-database.datomic.actions.queries/one (:to (first hops)) db))
+                                                                 speed)))]
+                                           (if (empty? lhops)
+                                             result
+                                             (recur (conj result {:hop/route     routeid
+                                                                  :hop/start     (:from (first lhops))
+                                                                  :hop/end       (:to (first lhops))
+                                                                  :hop/starttime starttime
+                                                                  :hop/endtime   endtime})
+                                                    (drop 1 lhops)
+                                                    (+ endtime 3000))))))}}])
+
+
+(defn dbfun [db hops routeid time]
+  (let [speed (:dronetype/speed (beehive-database.datomic.actions.queries/default-drone-type db))]
+    (loop [result []
+           lhops hops
+           starttime time]
+      (let [endtime (long (+
+                            starttime
+                            (beehive-database.util/travel-time
+                              (beehive-database.util/position (beehive-database.datomic.actions.queries/one (:from (first hops)) db))
+                              (beehive-database.util/position (beehive-database.datomic.actions.queries/one (:to (first hops)) db))
+                              speed)))]
+        (if (empty? lhops)
+          result
+          (recur (conj result {:hop/route     routeid
+                               :hop/start     (:from (first lhops))
+                               :hop/end       (:to (first lhops))
+                               :hop/starttime starttime
+                               :hop/endtime   endtime})
+                 (drop 1 lhops)
+                 (+ endtime 3000)))))))
+
+
+
 
 
 (def tables [building hive shop customer drone prediction hop route order connection drone-types fns])

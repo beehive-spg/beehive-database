@@ -8,7 +8,8 @@
             [ring.middleware.params :as p]
             [ring.middleware.json :as j]
             [clojure.data.json :as dj]
-            [clojure.spec.alpha :as s])
+            [clojure.spec.alpha :as s]
+            [clojure.data.json :as json])
   (:gen-class))
 
 (defn json-value-fn [k v]
@@ -150,7 +151,8 @@
                  (post-default
                    #(t/add-route
                       (:hops %)
-                      (:origin %))
+                      (:origin %)
+                      (:time %))
                    :validation/route)))
 
              (c/POST "/orders" []

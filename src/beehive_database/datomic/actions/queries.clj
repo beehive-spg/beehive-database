@@ -1,6 +1,5 @@
 (ns beehive-database.datomic.actions.queries
   (:require [datomic.api :as d]
-            [beehive-database.datomic.init.schema :as s]
             [beehive-database.util :as u]
             [beehive-database.datomic.actions.rules :as r]
             [beehive-database.datomic.actions.data :refer :all]))
@@ -68,8 +67,8 @@
         building (one buildingid db)]
     (filter
       #(is-reachable
-         (u/get-pos building)
-         (u/get-pos %)
+         (u/position building)
+         (u/position %)
          db)
       buildings)))
 

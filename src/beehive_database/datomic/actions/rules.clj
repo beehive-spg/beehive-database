@@ -26,7 +26,7 @@
   [:db/id
    :drone/hive
    :drone/name
-   :drone/type
+   {:drone/type [:dronetype/name]}
    {:drone/status [:db/ident]}])
 
 (def prediction-fields
@@ -36,9 +36,11 @@
 
 (def hop-fields
   [:db/id
-   :hop/drone
    :hop/start
-   :hop/end])
+   :hop/end
+   :hop/starttime
+   :hop/endtime
+   :hop/route])
 
 (def route-fields
   [:db/id

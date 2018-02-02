@@ -27,5 +27,12 @@
 (def memo-reachable
   (memoize reachable))
 
-(defn get-pos [hive]
-  [(:building/xcoord hive) (:building/ycoord hive)])
+(defn position [building]
+  [(:building/xcoord building) (:building/ycoord building)])
+
+(defn travel-time [p1 p2 speed]
+  (/
+    (distance
+      p1
+      p2)
+    speed))

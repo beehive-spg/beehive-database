@@ -77,10 +77,12 @@
               :hop/start start
               :hop/end   end}]))
 
-(defn add-route [hops origin]
-  (transact conn
-            [{:route/hops   hops
-              :route/origin origin}]))
+(defn add-route [hops origin time]
+  (let [tx (transact conn [{:route/origin origin}])
+        real-id (d/resolve-tempid (:db-after tx) (:tempids tx) (d/tempid :db.part/user -100))]
+    (do @(d/transact conn [[:mkroute hops real-id time]])
+        tx)))
+
 
 (defn add-order
   ([shopid customerid routeid]
@@ -104,7 +106,7 @@
 
 (defn delete [id]
   @(transact conn
-               [[:db.fn/retractEntity id]]))
+             [[:db.fn/retractEntity id]]))
 
 (defn init-schema [schema]
   (doseq [i schema]

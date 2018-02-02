@@ -19,6 +19,7 @@
 (s/def :validation/speed float?)
 (s/def :validation/chargetime float?)
 (s/def :validation/default boolean?)
+(s/def :validation/time number?)
 
 (s/def :validation/hive
   (s/keys :req-un [:validation/address :validation/xcoord :validation/ycoord :validation/name]))
@@ -28,7 +29,7 @@
           :opt-un [:validation/type]))
 
 (s/def :validation/route
-  (s/keys :req-un [:validation/hops :validation/origin]))
+  (s/keys :req-un [:validation/hops :validation/origin :validation/time]))
 
 (s/def :validation/order
   (s/keys :req-un [:validation/shopid :validation/customerid :validation/route]))
