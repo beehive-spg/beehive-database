@@ -45,7 +45,11 @@
 (def route-fields
   [:db/id
    {:route/origin [:db/ident]}
-   :route/hops])
+   {:hop/_route [:db/id
+                 :hop/start
+                 :hop/end
+                 :hop/starttime
+                 :hop/endtime]}])
 
 (def order-fields
   [:db/id
