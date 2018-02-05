@@ -139,6 +139,11 @@
                  :available-media-types ["application/json"]
                  :handle-ok (q/incoming-hops-after (read-string hiveid) (read-string time) (d/db))))
 
+             (c/GET "/outgoing/:hiveid/:time" [hiveid time]
+               (l/resource
+                 :available-media-types ["application/json"]
+                 :handle-ok (q/incoming-hops-after (read-string hiveid) (read-string time) (d/db))))
+
              (c/POST "/hives" []
                (l/resource
                  (post-default
