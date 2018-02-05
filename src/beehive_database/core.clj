@@ -23,7 +23,7 @@
     :key-fn keyword
     :value-fn json-value-fn))
 
-(defn post-default [post-fn spec]
+(defn post-default [post-fn spec redirect-subroute]
   {:allowed-methods       [:post]
    :available-media-types ["application/json"]
    :processable?          (fn [ctx]
@@ -42,7 +42,7 @@
                                         :db.part/user
                                         -100))}))
    :post-redirect?        (fn [ctx]
-                            {:location (str "/one/" (::id ctx))})})
+                            {:location (str "/one/" redirect-subroute "/" (::id ctx))})})
 
 (c/defroutes rest-routes
              (c/GET "/" []
@@ -50,15 +50,15 @@
                  :available-media-types ["text/html"]
                  :handle-ok "<html>We use drones</html>"))
 
-             (c/GET "/one/:id" [id]
+             (c/GET "/one/:subquery/:id" [subquery id]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/one (read-string id) (d/db))))
+                 :handle-ok (q/one (keyword (read-string subquery)) (read-string id) (d/db))))
 
              (c/GET "/hives" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all :hive ids (d/db))))
+                 :handle-ok (q/all :hives ids (d/db))))
 
              (c/GET "/hives/workload/:time" [time & ids]
                (l/resource
@@ -77,12 +77,12 @@
              (c/GET "/hops" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all :hop ids (d/db))))
+                 :handle-ok (q/all :hops ids (d/db))))
 
              (c/GET "/routes" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all :route ids (d/db))))
+                 :handle-ok (q/all :routes ids (d/db))))
 
              (c/GET "/routes/distributions/:time1/:time2" [time1 time2]
                (l/resource
@@ -95,17 +95,17 @@
              (c/GET "/orders" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all :order ids (d/db))))
+                 :handle-ok (q/all :orders ids (d/db))))
 
              (c/GET "/predictions" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all :prediction ids (d/db))))
+                 :handle-ok (q/all :predictions ids (d/db))))
 
              (c/GET "/drones" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all :drone ids (d/db))))
+                 :handle-ok (q/all :drones ids (d/db))))
 
              (c/GET "/drones/hive/:id" [id]
                (l/resource
@@ -117,12 +117,12 @@
              (c/GET "/shops" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all :shop ids (d/db))))
+                 :handle-ok (q/all :shops ids (d/db))))
 
              (c/GET "/customers" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all :customer ids (d/db))))
+                 :handle-ok (q/all :customers ids (d/db))))
 
              (c/GET "/types" [& ids]
                (l/resource
@@ -132,7 +132,7 @@
              (c/GET "/reachable" [& ids]
                (l/resource
                  :available-media-types ["application/json"]
-                 :handle-ok (q/all :connection ids (d/db))))
+                 :handle-ok (q/all :connections ids (d/db))))
 
              (c/POST "/hives" []
                (l/resource
@@ -142,7 +142,8 @@
                       (:xcoord %)
                       (:ycoord %)
                       (:name %))
-                   :validation/hive)))
+                   :validation/hive
+                   "hives")))
 
              (c/POST "/drones" []
                (l/resource
@@ -152,7 +153,8 @@
                       (:name %)
                       (:dronetype %)
                       (:status %))
-                   :validation/drone)))
+                   :validation/drone
+                   "drones")))
 
              (c/POST "/routes" []
                (l/resource
@@ -161,7 +163,8 @@
                       (:hops %)
                       (:origin %)
                       (:time %))
-                   :validation/route)))
+                   :validation/route
+                   "routes")))
 
              (c/POST "/orders" []
                (l/resource
@@ -171,7 +174,8 @@
                       (:customerid %)
                       (:route %)
                       (:source %))
-                   :validation/order)))
+                   :validation/order
+                   "orders")))
 
              (c/POST "/buildings" []
                (l/resource
@@ -180,7 +184,8 @@
                       (:address %)
                       (:xcoord %)
                       (:ycoord %))
-                   :validation/building)))
+                   :validation/building
+                   "buildings")))
 
              (c/POST "/shops" []
                (l/resource
@@ -190,7 +195,8 @@
                       (:xcoord %)
                       (:ycoord %)
                       (:name %))
-                   :validation/shop)))
+                   :validation/shop
+                   "shops")))
 
              (c/POST "/customers" []
                (l/resource
@@ -200,7 +206,8 @@
                       (:xcoord %)
                       (:ycoord %)
                       (:name %))
-                   :validation/customer)))
+                   :validation/customer
+                   "customers")))
 
              (c/POST "/hops" []
                (l/resource
@@ -209,7 +216,8 @@
                       (:droneid %)
                       (:start %)
                       (:end %))
-                   :validation/hop)))
+                   :validation/hop
+                   "hops")))
 
              (c/POST "/dronetypes" []
                (l/resource
@@ -220,7 +228,8 @@
                       (:speed %)
                       (:chargetime %)
                       (:default %))
-                   :validation/dronetype)))
+                   :validation/dronetype
+                   "dronetypes")))
 
              (c/POST "/tryroute" []
                (l/resource
@@ -229,7 +238,8 @@
                       (:hops %)
                       (:time %)
                       (d/db))
-                   :validation/tryroute)))
+                   :validation/tryroute
+                   "tryroute")))
 
              (c/PUT "/routes" []
                (l/resource

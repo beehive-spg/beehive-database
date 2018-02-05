@@ -261,7 +261,7 @@
                                           :connection/end      (:db/id x)
                                           :connection/distance (beehive-database.util/distance
                                                                  (beehive-database.util/position
-                                                                   (beehive-database.datomic.actions.queries/one hive db))
+                                                                   (beehive-database.datomic.actions.queries/one :hives hive db))
                                                                  (beehive-database.util/position x))})
                                        (beehive-database.datomic.actions.queries/reachable hive db))}}
 
@@ -276,8 +276,8 @@
                                          (let [endtime (long (+
                                                                starttime
                                                                (beehive-database.util/travel-time
-                                                                 (beehive-database.util/position (beehive-database.datomic.actions.queries/one (:from (first hops)) db))
-                                                                 (beehive-database.util/position (beehive-database.datomic.actions.queries/one (:to (first hops)) db))
+                                                                 (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:from (first hops)) db))
+                                                                 (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:to (first hops)) db))
                                                                  speed)))]
                                            (if (empty? lhops)
                                              result
@@ -298,8 +298,8 @@
       (let [endtime (long (+
                             starttime
                             (beehive-database.util/travel-time
-                              (beehive-database.util/position (beehive-database.datomic.actions.queries/one (:from (first hops)) db))
-                              (beehive-database.util/position (beehive-database.datomic.actions.queries/one (:to (first hops)) db))
+                              (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:from (first hops)) db))
+                              (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:to (first hops)) db))
                               speed)))]
         (if (empty? lhops)
           result

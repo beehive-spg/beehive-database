@@ -73,25 +73,25 @@
    :dronetype/default])
 
 (def fields
-  {:hive       hive-fields
-   :shop       shop-fields
-   :customer   customer-fields
-   :drone      drone-fields
-   :prediction prediction-fields
-   :hop        hop-fields
-   :route      route-fields
-   :order      order-fields
-   :connection connection-fields
-   :dronetype  drone-type-fields})
+  {:hives       hive-fields
+   :shops       shop-fields
+   :customers   customer-fields
+   :drones      drone-fields
+   :predictions prediction-fields
+   :hops        hop-fields
+   :routes      route-fields
+   :orders      order-fields
+   :connections connection-fields
+   :dronetypes  drone-type-fields})
 
 (def queries
-  {:hive       [:building/hive]
-   :shop       [:building/shop]
-   :customer   [:building/customer]
-   :drone      [:drone/name]
-   :prediction [:prediction]
-   :hop        [:hop/start]
-   :route      [:route/origin]
-   :order      [:order/customer]
-   :connection [:connection/start]
-   :dronetype  [:dronetype/name]})
+  {:hives       [:building/hive]
+   :shops       [:building/shop]
+   :customers   [:building/customer]
+   :drones      [:drone/name]
+   :predictions [:prediction]
+   :hops        [:hop/start]
+   :routes      [:route/origin]
+   :orders      [:order/customer]
+   :connections [:connection/start]
+   :dronetypes  [:dronetype/name]})

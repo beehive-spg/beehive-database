@@ -39,18 +39,19 @@
        db
        droneids))
 
-(defn one [id db]
-  (d/q '[:find (pull ?id [*]) .
-         :in $ ?id
+(defn one [table id db]
+  (d/q '[:find (pull ?id subquery) .
+         :in $ ?id subquery
          :where [?id]]
        db
-       id))
+       id
+       (or (get r/fields table) '[*])))
 
 (defn default-drone-type [db]
   (d/q '[:find (pull ?e subquery) .
          :in $ subquery
          :where [?e :dronetype/default true]]
-       db (get r/fields :dronetype)))
+       db (get r/fields :dronetypes)))
 
 (defn max-range [db]
   (d/q '[:find (max ?e) .
@@ -66,7 +67,7 @@
          [?hop :hop/starttime ?starttime]
          (or-join [?starttime ?time1 ?time2]
                   (and [(> ?starttime ?time1)]
-                       [(< ?starttime ?time2)]))] db time1 time2 (get r/fields :route)))
+                       [(< ?starttime ?time2)]))] db time1 time2 (get r/fields :routes)))
 
 (defn is-reachable [p1 p2 db]
   (u/reachable p1 p2 (max-range db)))
@@ -74,8 +75,8 @@
 (defn reachable [buildingid db]
   (let [buildings (remove
                     #(= (:db/id %) buildingid)
-                    (all :hive [] db))
-        building (one buildingid db)]
+                    (all :hives [] db))
+        building (one :hives buildingid db)]
     (filter
       #(is-reachable
          (u/position building)
