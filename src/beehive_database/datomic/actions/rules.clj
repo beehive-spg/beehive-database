@@ -5,7 +5,9 @@
    :building/address
    :building/xcoord
    :building/ycoord
-   :building/hive])
+   {:building/hive [:db/id
+                    :hive/name
+                    :hive/demand]}])
 
 
 (def shop-fields
