@@ -112,6 +112,6 @@
                    (/
                      (-
                        maxdrones
-                       available-drones)
+                       available)
                      maxdrones))]
     workload))
