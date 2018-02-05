@@ -21,7 +21,8 @@
                       [{:building/address address
                         :building/xcoord  x
                         :building/ycoord  y
-                        :building/hive    {:hive/name name}}])
+                        :building/hive    {:hive/name   name
+                                           :hive/demand -1}}])
          real-id (d/resolve-tempid (:db-after tx) (:tempids tx) (d/tempid :db.part/user -100))
          tx2 @(d/transact conn [[:connections real-id]])]
      tx))
@@ -103,6 +104,11 @@
 (defn delete [id]
   @(transact conn
              [[:db.fn/retractEntity id]]))
+
+(defn set-demand [hiveid demand]
+  @(d/transact conn
+               [{:db/id hiveid
+                 :hive/demand demand}]))
 
 (defn init-schema [schema]
   (doseq [i schema]

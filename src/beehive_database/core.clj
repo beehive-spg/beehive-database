@@ -261,6 +261,13 @@
                  :allowed-methods [:put]
                  :available-media-types ["application/json"]))
 
+             (c/PUT "/demand/:hiveid/:demand" [hiveid demand]
+               (l/resource
+                 :allowed-methods [:put]
+                 :available-media-types ["application/json"]
+                 :put! (fn [ctx]
+                         (t/set-demand (read-string hiveid) (read-string demand)))))
+
              (c/DELETE "/delete/:id" [id]
                :allowed-methods [:delete]
                :available-media-types ["application/json"]

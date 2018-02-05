@@ -53,7 +53,15 @@
             :db/valueType          :db.type/string
             :db/cardinality        :db.cardinality/one
             :db/doc                "The name of a hive"
+            :db.install/_attribute :db.part/db}
+
+           {:db/id                 (d/tempid :db.part/db)
+            :db/ident              :hive/demand
+            :db/valueType          :db.type/long
+            :db/cardinality        :db.cardinality/one
+            :db/doc                "The demand of a hive"
             :db.install/_attribute :db.part/db}])
+
 
 (def shop [{:db/id                 (d/tempid :db.part/db)
             :db/ident              :shop/name
@@ -194,7 +202,7 @@
              :db/valueType   :db.type/ref
              :db/cardinality :db.cardinality/one
              :db/doc         "The source of an order"}
-            
+
             {:db/ident :source/GUI}
             {:db/ident :source/GENERATED}])
 
