@@ -69,6 +69,15 @@
                   (and [(> ?starttime ?time1)]
                        [(< ?starttime ?time2)]))] db time1 time2 (get r/fields :routes)))
 
+(defn incoming-hops-after [hiveid time db]
+  (d/q '[:find [(pull ?hop subquery) ...]
+         :in $ ?hiveid ?time subquery
+         :where [?hop :hop/end ?hiveid] [?hop :hop/endtime ?endtime] [(< ?time ?endtime)]]
+       db
+       hiveid
+       time
+       (get r/fields :hops)))
+
 (defn is-reachable [p1 p2 db]
   (u/reachable p1 p2 (max-range db)))
 
