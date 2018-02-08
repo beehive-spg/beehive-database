@@ -14,5 +14,5 @@ COPY ./resources ./resources
 
 RUN lein uberjar
 
-ENTRYPOINT java -jar ./target/uberjar/beehive-database-*-standalone.jar
+ENTRYPOINT java -jar ./target/beehive-database-*-standalone.jar
 
