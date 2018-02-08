@@ -1,12 +1,12 @@
 (ns beehive-database.datomic.actions.transactions
-  (:require [datomic.api :as datomic]
+  (:require [datomic.api :as d]
             [beehive-database.datomic.actions.data :refer :all]
             [beehive-database.datomic.init.schema :as schema]
             [beehive-database.datomic.actions.queries :as queries]))
 
 (defn transact [conn data]
   (let [id #db/id[:db.part/user -100]]
-    @(datomic/transact conn [(assoc (first data) :db/id id)])))
+    @(d/transact conn [(assoc (first data) :db/id id)])))
 
 
 (defn add-building [address x y]
@@ -23,15 +23,15 @@
                         :building/ycoord  y
                         :building/hive    {:hive/name   name
                                            :hive/demand -1}}])
-         real-id (datomic/resolve-tempid (:db-after tx) (:tempids tx) (datomic/tempid :db.part/user -100))
-         tx2 @(datomic/transact conn [[:connections real-id]])]
+         real-id (d/resolve-tempid (:db-after tx) (:tempids tx) (d/tempid :db.part/user -100))
+         tx2 @(d/transact conn [[:connections real-id]])]
      tx))
 
   ([buildingid name]
-   @(datomic/transact conn
-                      [{:db/id         buildingid
-                        :building/hive {:hive/name name}}
-                       [:connections buildingid]])))
+   @(d/transact conn
+                [{:db/id         buildingid
+                  :building/hive {:hive/name name}}
+                 [:connections buildingid]])))
 
 (defn add-shop
   ([address x y name]
@@ -41,9 +41,9 @@
                :building/ycoord  y
                :building/shop    {:shop/name name}}]))
   ([buildingid name]
-   @(datomic/transact conn
-                      [{:db/id         buildingid
-                        :building/shop [{:shop/name name}]}])))
+   @(d/transact conn
+                [{:db/id         buildingid
+                  :building/shop [{:shop/name name}]}])))
 
 
 (defn add-customer
@@ -54,15 +54,15 @@
                :building/ycoord   y
                :building/customer {:customer/name name}}]))
   ([buildingid name]
-   @(datomic/transact conn
-                      [{:db/id             buildingid
-                        :building/customer [{:customer/name name}]}])))
+   @(d/transact conn
+                [{:db/id             buildingid
+                  :building/customer [{:customer/name name}]}])))
 
 (defn add-drone [hiveid name type status]
   (transact conn
             [{:drone/name   name
               :drone/type   (if (nil? type)
-                              (:db/id (queries/default-drone-type (datomic/db conn)))
+                              (:db/id (queries/default-drone-type (d/db conn)))
                               type)
               :drone/status status
               :drone/hive   hiveid}]))
@@ -80,8 +80,8 @@
 
 (defn add-route [hops origin time]
   (let [tx (transact conn [{:route/origin origin}])
-        real-id (datomic/resolve-tempid (:db-after tx) (:tempids tx) (datomic/tempid :db.part/user -100))]
-    (do @(datomic/transact conn [[:mkroute hops real-id time]])
+        real-id (d/resolve-tempid (:db-after tx) (:tempids tx) (d/tempid :db.part/user -100))]
+    (do @(d/transact conn [[:mkroute hops real-id time]])
         tx)))
 
 
@@ -106,6 +106,6 @@
              [[:db.fn/retractEntity id]]))
 
 (defn set-demand [hiveid demand]
-  @(datomic/transact conn
-                     [{:db/id       hiveid
-                       :hive/demand demand}]))
+  @(d/transact conn
+               [{:db/id       hiveid
+                 :hive/demand demand}]))

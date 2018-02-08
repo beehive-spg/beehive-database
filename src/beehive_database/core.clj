@@ -5,7 +5,7 @@
             [beehive-database.datomic.init.schema :as schema]
             [beehive-database.datomic.validation.spec :refer :all]
             [datomic-schema.schema :as datomic-schema]
-            [datomic.api :as datomic]
+            [datomic.api :as d]
             [compojure.core :as compojure]
             [liberator.core :as liberator]
             [ring.middleware.params :as params]
@@ -278,18 +278,19 @@
                                   (transactions/delete (read-string id)))))
 
 (defn- init-schema []
-  @(datomic/transact data/conn (datomic-schema/generate-schema schema/dbschema)))
+  @(d/transact data/conn (datomic-schema/generate-schema schema/dbschema)))
 
 (defn- init-data []
   (let [data (slurp (clojure.java.io/resource "beehive-database/data.edn"))]
+    (transactions/add-drone-type "large" 5000 15 1800 true)
     (doseq [hive (clojure.edn/read-string data)]
       (transactions/add-hive
         (:building/address hive)
         (:building/xcoord hive)
         (:building/ycoord hive)
         (:hive/name
-          (:building/hive hive))))
-    (transactions/add-drone-type "large" 5000 15 1800 true)))
+          (:building/hive hive))))))
+
 
 
 (defn- init []

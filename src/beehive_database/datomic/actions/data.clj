@@ -1,12 +1,12 @@
 (ns beehive-database.datomic.actions.data
-  (:require [datomic.api :as datomic]))
+  (:require [datomic.api :as d]))
 
 (def uri "datomic:mem://beehive")
 
-(datomic/create-database uri)
+(d/create-database uri)
 
 (def conn
-  (datomic/connect uri))
+  (d/connect uri))
 
 (defn db []
-  (datomic/db conn))
+  (d/db conn))

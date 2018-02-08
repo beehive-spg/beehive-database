@@ -1,5 +1,5 @@
 (ns beehive-database.datomic.init.schema
-  (:require [datomic.api :as datomic]
+  (:require [datomic.api :as d]
             [beehive-database.util :as util]
             [datomic-schema.schema :as datomic-schema]))
 
@@ -67,7 +67,7 @@
    (datomic-schema/dbfn connections [db hive] :db.part/user
                         (mapv
                          (fn [x]
-                           {:db/id               (datomic/tempid :db.part/user)
+                           {:db/id               (datomic.api/tempid :db.part/user)
                             :connection/start    hive
                             :connection/end      (:db/id x)
                             :connection/distance (beehive-database.util/distance
