@@ -282,11 +282,11 @@
                                               lhops hops
                                               starttime time]
                                          (let [endtime (long (+
-                                                               (* 1000 starttime)
-                                                               (beehive-database.util/travel-time
-                                                                 (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:from (first hops)) db))
-                                                                 (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:to (first hops)) db))
-                                                                 speed)))]
+                                                               starttime
+                                                               (* 1000 (beehive-database.util/travel-time
+                                                                         (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:from (first hops)) db))
+                                                                         (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:to (first hops)) db))
+                                                                         speed))))]
                                            (if (empty? lhops)
                                              result
                                              (recur (conj result {:hop/route     routeid
