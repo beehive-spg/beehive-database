@@ -14,10 +14,8 @@
                  [ring/ring-jetty-adapter "1.6.3"]
                  [ring/ring-json "0.4.0"]
                  [datomic-schema "1.3.0"]]
-  :profiles {:uberjar {:main beehive-database.core}}
+  :profiles {:uberjar {:aot :all
+                       :main beehive-database.core}}
   :main beehive-database.core)
-;;:main ^:skip-aot beehive-database.core
-:target-path "target/%s"
-;;:profiles {:uberjar {:aot :all}}
 
 
