@@ -302,6 +302,9 @@
       ring-json/wrap-json-response
       params/wrap-params))
 
+(def port 3000)
+
 (defn -main []
   (init)
-  (jetty/run-jetty handler {:port 3000}))
+  (println (str "Starting server on port " port))
+  (jetty/run-jetty handler {:port port}))
