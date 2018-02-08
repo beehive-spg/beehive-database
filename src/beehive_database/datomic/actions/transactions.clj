@@ -109,17 +109,3 @@
   @(d/transact conn
                [{:db/id       hiveid
                  :hive/demand demand}]))
-
-@(d/transact conn (datomic-schema.schema/generate-schema s/dbschema))
-
-(add-drone-type "large" 5000 15 1800 true)
-
-(def init-data (slurp (clojure.java.io/resource "beehive-database/data.edn")))
-
-(doseq [hive (clojure.edn/read-string init-data)]
-  (add-hive
-    (:building/address hive)
-    (:building/xcoord hive)
-    (:building/ycoord hive)
-    (:hive/name
-      (:building/hive hive))))

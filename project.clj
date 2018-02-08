@@ -3,7 +3,7 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
-  :repositories {"my.datomic.com" {:url   "https://my.datomic.com/repo"
+  :repositories {"my.datomic.com" {:url      "https://my.datomic.com/repo"
                                    :username :env/USERNAME
                                    :password :env/PASSWORD}}
   :dependencies [[org.clojure/clojure "1.9.0"]
@@ -11,12 +11,13 @@
                  [liberator "0.15.1"]
                  [compojure "1.6.0"]
                  [ring/ring-core "1.6.3"]
+                 [ring/ring-jetty-adapter "1.6.3"]
                  [ring/ring-json "0.4.0"]
                  [datomic-schema "1.3.0"]]
-  :plugins [[lein-ring "0.12.2"]]
-  :ring {:handler beehive-database.core/handler}
-  ;;:main ^:skip-aot beehive-database.core
-  :target-path "target/%s")
-  ;;:profiles {:uberjar {:aot :all}}
+  :profiles {:uberjar {:main beehive-database.core}}
+  :main beehive-database.core)
+;;:main ^:skip-aot beehive-database.core
+:target-path "target/%s"
+;;:profiles {:uberjar {:aot :all}}
 
 

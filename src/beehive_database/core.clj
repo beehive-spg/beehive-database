@@ -9,7 +9,8 @@
             [ring.middleware.json :as j]
             [clojure.data.json :as dj]
             [clojure.spec.alpha :as s]
-            [clojure.data.json :as json])
+            [clojure.data.json :as json]
+            [ring.adapter.jetty :as jetty])
   (:gen-class))
 
 (defn json-value-fn [k v]
@@ -274,10 +275,30 @@
                :delete! (fn [ctx]
                           (t/delete (read-string id)))))
 
+(defn- init-schema []
+  @(datomic.api/transact d/conn (datomic-schema.schema/generate-schema beehive-database.datomic.init.schema/dbschema)))
+
+(defn- init-data []
+  (let [data (slurp (clojure.java.io/resource "beehive-database/data.edn"))]
+    (doseq [hive (clojure.edn/read-string data)]
+      (t/add-hive
+        (:building/address hive)
+        (:building/xcoord hive)
+        (:building/ycoord hive)
+        (:hive/name
+          (:building/hive hive))))
+    (t/add-drone-type "large" 5000 15 1800 true)))
+
+
+(defn- init []
+  (init-schema)
+  (init-data))
 
 (def handler
   (-> rest-routes
       j/wrap-json-response
       p/wrap-params))
 
-(defn init [])
+(defn -main []
+  (init)
+  (jetty/run-jetty handler {:port 3000}))

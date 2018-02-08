@@ -12,7 +12,7 @@ COPY ./project.clj .
 COPY ./src ./src
 COPY ./resources ./resources
 
-RUN lein ring uberjar
+RUN lein uberjar
 
 ENTRYPOINT java -jar ./target/uberjar/beehive-database-*-standalone.jar
 
