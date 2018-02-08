@@ -11,7 +11,8 @@
                  [liberator "0.15.1"]
                  [compojure "1.6.0"]
                  [ring/ring-core "1.6.3"]
-                 [ring/ring-json "0.4.0"]]
+                 [ring/ring-json "0.4.0"]
+                 [datomic-schema "1.3.0"]]
   :plugins [[lein-ring "0.12.2"]]
   :ring {:handler beehive-database.core/handler}
   ;;:main ^:skip-aot beehive-database.core

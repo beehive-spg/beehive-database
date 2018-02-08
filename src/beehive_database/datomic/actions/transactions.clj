@@ -107,14 +107,10 @@
 
 (defn set-demand [hiveid demand]
   @(d/transact conn
-               [{:db/id hiveid
+               [{:db/id       hiveid
                  :hive/demand demand}]))
 
-(defn init-schema [schema]
-  (doseq [i schema]
-    @(d/transact conn i)))
-
-(init-schema s/tables)
+@(d/transact conn (datomic-schema.schema/generate-schema s/dbschema))
 
 (add-drone-type "large" 5000 15 1800 true)
 
