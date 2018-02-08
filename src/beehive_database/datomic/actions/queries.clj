@@ -1,7 +1,7 @@
 (ns beehive-database.datomic.actions.queries
   (:require [datomic.api :as d]
-            [beehive-database.util :as u]
-            [beehive-database.datomic.actions.rules :as r]
+            [beehive-database.util :as util]
+            [beehive-database.datomic.actions.rules :as rules]
             [beehive-database.datomic.actions.data :refer :all]))
 
 (defn all [table ids db]
@@ -10,14 +10,14 @@
            :in $ subquery [?ref ...]
            :where [?e ?ref _]]
          db
-         (get r/fields table)
-         (get r/queries table))
+         (get rules/fields table)
+         (get rules/queries table))
     (d/q '[:find [(pull ?ids subquery) ...]
            :in $ subquery [?ref ...] [?ids ...]
            :where [?ids ?ref _] [?ids]]
          db
-         (get r/fields table)
-         (get r/queries table)
+         (get rules/fields table)
+         (get rules/queries table)
          (mapv
            read-string
            (vals ids)))))
@@ -45,13 +45,13 @@
          :where [?id]]
        db
        id
-       (or (get r/fields table) '[*])))
+       (or (get rules/fields table) '[*])))
 
 (defn default-drone-type [db]
   (d/q '[:find (pull ?e subquery) .
          :in $ subquery
          :where [?e :dronetype/default true]]
-       db (get r/fields :dronetypes)))
+       db (get rules/fields :dronetypes)))
 
 (defn max-range [db]
   (d/q '[:find (max ?e) .
@@ -67,7 +67,7 @@
          [?hop :hop/starttime ?starttime]
          (or-join [?starttime ?time1 ?time2]
                   (and [(> ?starttime ?time1)]
-                       [(< ?starttime ?time2)]))] db time1 time2 (get r/fields :routes)))
+                       [(< ?starttime ?time2)]))] db time1 time2 (get rules/fields :routes)))
 
 (defn incoming-hops-after [hiveid time db]
   (d/q '[:find [(pull ?hop subquery) ...]
@@ -76,7 +76,7 @@
        db
        hiveid
        time
-       (get r/fields :hops)))
+       (get rules/fields :hops)))
 
 (defn outgoing-hops-after [hiveid time db]
   (d/q '[:find [(pull ?hop subquery) ...]
@@ -85,10 +85,10 @@
        db
        hiveid
        time
-       (get r/fields :hops)))
+       (get rules/fields :hops)))
 
 (defn is-reachable [p1 p2 db]
-  (u/reachable p1 p2 (max-range db)))
+  (util/reachable p1 p2 (max-range db)))
 
 (defn reachable [buildingid db]
   (let [buildings (remove
@@ -97,8 +97,8 @@
         building (one :hives buildingid db)]
     (filter
       #(is-reachable
-         (u/position building)
-         (u/position %)
+         (util/position building)
+         (util/position %)
          db)
       buildings)))
 

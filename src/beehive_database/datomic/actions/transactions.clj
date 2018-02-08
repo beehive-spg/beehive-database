@@ -1,8 +1,8 @@
 (ns beehive-database.datomic.actions.transactions
   (:require [datomic.api :as d]
             [beehive-database.datomic.actions.data :refer :all]
-            [beehive-database.datomic.init.schema :as s]
-            [beehive-database.datomic.actions.queries :as q]))
+            [beehive-database.datomic.init.schema :as schema]
+            [beehive-database.datomic.actions.queries :as queries]))
 
 (defn transact [conn data]
   (let [id #db/id[:db.part/user -100]]
@@ -62,7 +62,7 @@
   (transact conn
             [{:drone/name   name
               :drone/type   (if (nil? type)
-                              (:db/id (q/default-drone-type (d/db conn)))
+                              (:db/id (queries/default-drone-type (d/db conn)))
                               type)
               :drone/status status
               :drone/hive   hiveid}]))
@@ -107,23 +107,5 @@
 
 (defn set-demand [hiveid demand]
   @(d/transact conn
-               [{:db/id hiveid
+               [{:db/id       hiveid
                  :hive/demand demand}]))
-
-(defn init-schema [schema]
-  (doseq [i schema]
-    @(d/transact conn i)))
-
-(init-schema s/tables)
-
-(add-drone-type "large" 5000 15 1800 true)
-
-(def init-data (slurp (clojure.java.io/resource "beehive-database/data.edn")))
-
-(doseq [hive (clojure.edn/read-string init-data)]
-  (add-hive
-    (:building/address hive)
-    (:building/xcoord hive)
-    (:building/ycoord hive)
-    (:hive/name
-      (:building/hive hive))))
