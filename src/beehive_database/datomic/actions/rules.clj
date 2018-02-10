@@ -15,14 +15,16 @@
    :building/address
    :building/xcoord
    :building/ycoord
-   :building/shop])
+   {:building/shop [:db/id
+                    :shop/name]}])
 
 (def customer-fields
   [:db/id
    :building/address
    :building/xcoord
    :building/ycoord
-   :building/customer])
+   {:building/customer [:db/id
+                        :customer/name]}])
 
 (def drone-fields
   [:db/id

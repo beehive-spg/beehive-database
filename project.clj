@@ -8,12 +8,10 @@
                                    :password :env/PASSWORD}}
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [com.datomic/datomic-pro "0.9.5656"]
-                 [liberator "0.15.1"]
-                 [compojure "1.6.0"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-jetty-adapter "1.6.3"]
-                 [ring/ring-json "0.4.0"]
-                 [datomic-schema "1.3.0"]]
+                 [datomic-schema "1.3.0"]
+                 [metosin/compojure-api "2.0.0-SNAPSHOT"]]
   :profiles {:uberjar {:aot :all
                        :main beehive-database.core}}
   :main beehive-database.core)

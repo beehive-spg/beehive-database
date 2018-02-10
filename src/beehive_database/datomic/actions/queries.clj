@@ -18,9 +18,7 @@
          db
          (get rules/fields table)
          (get rules/queries table)
-         (mapv
-           read-string
-           (vals ids)))))
+         ids)))
 
 (defn drones-for-hive [hiveid db]
   (d/q '[:find [(pull ?e [:db/id
