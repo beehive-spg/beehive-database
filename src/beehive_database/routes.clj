@@ -271,6 +271,11 @@
 
     (context "/api" []
       :tags ["Api"]
+      (GET "/delete/:id" []
+        :path-params [id :- Long]
+        :summary "Deletes entity with specified id"
+        (transactions/delete id)
+        (no-content))
       (GET "/reachable" []
         :query-params [{ids :- [Long] nil}]
         :summary "Returns all/selected connections"
