@@ -46,11 +46,11 @@
 (s/defschema Route
   {:db/id        Long
    :route/origin {:db/ident s/Keyword}
-   :hop/_route   {:db/id         Long
-                  :hop/start     {:db/id Long}
-                  :hop/end       {:db/id Long}
-                  :hop/starttime Long
-                  :hop/endtime   Long}})
+   :hop/_route   [{:db/id         Long
+                   :hop/start     {:db/id Long}
+                   :hop/end       {:db/id Long}
+                   :hop/starttime Long
+                   :hop/endtime   Long}]})
 
 (s/defschema Order
   {:db/id          Long
