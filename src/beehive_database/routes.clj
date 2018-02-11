@@ -4,7 +4,8 @@
             [schema.core :as s]
             [beehive-database.datomic.actions.queries :as queries]
             [beehive-database.datomic.actions.data :as data]
-            [beehive-database.datomic.actions.transactions :as transactions]))
+            [beehive-database.datomic.actions.transactions :as transactions]
+            [beehive-database.util :as util]))
 
 ;; Error 400 Schema
 
@@ -273,4 +274,12 @@
       (GET "/reachable" []
         :query-params [{ids :- [Long] nil}]
         :summary "Returns all/selected connections"
-        (ok (queries/all :connections ids (data/db)))))))
+        (ok (queries/all :connections ids (data/db))))
+      (GET "/reachable/:building1/:building2" []
+        :path-params [building1 :- Long, building2 :- Long]
+        :summary "Returns whether or not the buildings can reach each other using the default drone type"
+        :return Boolean
+        (ok (queries/is-reachable
+              (util/position (queries/one :buildings building1 (data/db)))
+              (util/position (queries/one :buildings building2 (data/db)))
+              (data/db)))))))

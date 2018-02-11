@@ -9,7 +9,6 @@
                     :hive/name
                     :hive/demand]}])
 
-
 (def shop-fields
   [:db/id
    :building/address
@@ -25,6 +24,19 @@
    :building/ycoord
    {:building/customer [:db/id
                         :customer/name]}])
+
+(def building-fields
+  [:db/id
+   :building/address
+   :building/xcoord
+   :building/ycoord
+   {:building/hive [:db/id
+                    :hive/name
+                    :hive/demand]}
+   {:building/customer [:db/id
+                        :customer/name]}
+   {:building/shop [:db/id
+                    :shop/name]}])
 
 (def drone-fields
   [:db/id
@@ -80,6 +92,7 @@
   {:hives       hive-fields
    :shops       shop-fields
    :customers   customer-fields
+   :buildings   building-fields
    :drones      drone-fields
    :predictions prediction-fields
    :hops        hop-fields
