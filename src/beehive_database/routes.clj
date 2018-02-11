@@ -287,4 +287,13 @@
         (ok (queries/is-reachable
               (util/position (queries/one :buildings building1 (data/db)))
               (util/position (queries/one :buildings building2 (data/db)))
-              (data/db)))))))
+              (data/db))))
+      (context "/hops" []
+        (GET "/incoming/:hiveid/:time" []
+          :path-params [hiveid :- Long, time :- Long]
+          :summary "Returns incoming hops of specified hive after specified time"
+          (ok (queries/incoming-hops-after hiveid time (data/db))))
+        (GET "/incoming/:hiveid/:time" []
+          :path-params [hiveid :- Long, time :- Long]
+          :summary "Returns outgoing hops of specified hive after specified time"
+          (ok (queries/outgoing-hops-after hiveid time (data/db))))))))
