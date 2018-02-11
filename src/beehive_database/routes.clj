@@ -147,6 +147,7 @@
       (GET "/:id/drones" []
         :path-params [id :- Long]
         :summary "Returns the drones associated with a hive"
+        :return [Drone]
         (ok (queries/drones-for-hive id (data/db))))
       (GET "/incoming/:id/:time" []
         :path-params [id :- Long, time :- Long]
@@ -297,4 +298,5 @@
       (GET "/distributions/:time1/:time2" []
         :path-params [time1 :- Long, time2 :- Long]
         :summary "Returns all distributions that took place between the specified times"
+        :return [Route]
         (ok (queries/distributions time1 time2 (data/db)))))))
