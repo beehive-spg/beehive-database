@@ -5,7 +5,8 @@
             [beehive-database.datomic.actions.queries :as queries]
             [beehive-database.datomic.actions.data :as data]
             [beehive-database.datomic.actions.transactions :as transactions]
-            [beehive-database.util :as util]))
+            [beehive-database.util :as util])
+  (:gen-class))
 
 ;; Error 400 Schema
 
@@ -143,6 +144,18 @@
         :return [Hive]
         :summary "Returns all/selected hives"
         (ok (queries/all :hives ids (data/db))))
+      (GET "/:id/drones" []
+        :path-params [id :- Long]
+        :summary "Returns the drones associated with a hive"
+        (ok (queries/drones-for-hive id (data/db))))
+      (GET "/incoming/:id/:time" []
+        :path-params [id :- Long, time :- Long]
+        :summary "Returns incoming hops of specified hive after specified time"
+        (ok (queries/incoming-hops-after id time (data/db))))
+      (GET "/outgoing/:id/:time" []
+        :path-params [id :- Long, time :- Long]
+        :summary "Returns outgoing hops of specified hive after specified time"
+        (ok (queries/outgoing-hops-after id time (data/db))))
       (POST "/" []
         :return Hive
         :body [post-hive PostHive]
@@ -152,7 +165,6 @@
                                         (:ycoord post-hive)
                                         (:name post-hive))]
           (created (str "/one/hives/" id) (queries/one :hives id (data/db))))))
-
 
     (context "/shops" []
       :tags ["Shops"]
@@ -171,7 +183,6 @@
                                         (:name post-shop))]
           (created (str "/one/hives/" id) (queries/one :shops id (data/db))))))
 
-
     (context "/customers" []
       :tags ["Customers"]
       (GET "/" []
@@ -189,7 +200,6 @@
                                             (:name post-customer))]
           (created (str "/one/hives/" id) (queries/one :customers id (data/db))))))
 
-
     (context "/routes" []
       :tags ["Routes"]
       (GET "/" []
@@ -205,7 +215,6 @@
                                          (:origin post-route)
                                          (:time post-route))]
           (created (str "/one/hives/" id) (queries/one :routes id (data/db))))))
-
 
     (context "/orders" []
       :tags ["Orders"]
@@ -224,7 +233,6 @@
                                          (:source post-order))]
           (created (str "/one/hives/" id) (queries/one :orders id (data/db))))))
 
-
     (context "/drones" []
       :tags ["Drones"]
       (GET "/" []
@@ -241,7 +249,6 @@
                                          (:dronetype post-drone)
                                          (:status post-drone))]
           (created (str "/one/hives/" id) (queries/one :drones id (data/db))))))
-
 
     (context "/types" []
       :tags ["Types"]
@@ -260,7 +267,6 @@
                                               (:chargetime post-dronetype)
                                               (:default post-dronetype))]
           (created (str "/one/hives/" id) (queries/one :dronetypes id (data/db))))))
-
 
     (context "/one" []
       :tags ["One"]
@@ -288,12 +294,7 @@
               (util/position (queries/one :buildings building1 (data/db)))
               (util/position (queries/one :buildings building2 (data/db)))
               (data/db))))
-      (context "/hops" []
-        (GET "/incoming/:hiveid/:time" []
-          :path-params [hiveid :- Long, time :- Long]
-          :summary "Returns incoming hops of specified hive after specified time"
-          (ok (queries/incoming-hops-after hiveid time (data/db))))
-        (GET "/outgoing/:hiveid/:time" []
-          :path-params [hiveid :- Long, time :- Long]
-          :summary "Returns outgoing hops of specified hive after specified time"
-          (ok (queries/outgoing-hops-after hiveid time (data/db))))))))
+      (GET "/distributions/:time1/:time2" []
+        :path-params [time1 :- Long, time2 :- Long]
+        :summary "Returns all distributions that took place between the specified times"
+        (ok (queries/distributions time1 time2 (data/db)))))))
