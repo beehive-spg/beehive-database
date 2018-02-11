@@ -32,16 +32,16 @@
    :building/address s/Str
    :building/xcoord  Float
    :building/ycoord  Float
-   :building/shop    {:db/id     Long
-                      :shop/name s/Str}})
+   :building/shop    [{:db/id     Long
+                       :shop/name s/Str}]})
 
 (s/defschema Customer
   {:db/id             Long
    :building/address  s/Str
    :building/xcoord   Float
    :building/ycoord   Float
-   :building/customer {:db/id         Long
-                       :customer/name s/Str}})
+   :building/customer [{:db/id         Long
+                        :customer/name s/Str}]})
 
 (s/defschema Route
   {:db/id        Long
