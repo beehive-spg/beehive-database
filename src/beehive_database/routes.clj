@@ -293,7 +293,7 @@
           :path-params [hiveid :- Long, time :- Long]
           :summary "Returns incoming hops of specified hive after specified time"
           (ok (queries/incoming-hops-after hiveid time (data/db))))
-        (GET "/incoming/:hiveid/:time" []
+        (GET "/outgoing/:hiveid/:time" []
           :path-params [hiveid :- Long, time :- Long]
           :summary "Returns outgoing hops of specified hive after specified time"
           (ok (queries/outgoing-hops-after hiveid time (data/db))))))))
