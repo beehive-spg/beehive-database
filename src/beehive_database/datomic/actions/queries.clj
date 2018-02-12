@@ -60,7 +60,7 @@
   (d/q '[:find [(pull ?route subquery) ...]
          :in $ ?time1 ?time2 subquery
          :where
-         [?route :route/origin :origin/DISTRIBUTION]
+         [?route :route/origin :route.origin/DISTRIBUTION]
          [?hop :hop/route ?route]
          [?hop :hop/starttime ?starttime]
          (or-join [?starttime ?time1 ?time2]
@@ -88,10 +88,10 @@
 (defn order-with-route [routeid db]
   (d/q '[:find (pull ?order subquery) .
          :in $ ?routeid subquery
-         :where [?order :order/route ?routeid]
-         db
+         :where [?order :order/route ?routeid]]
+        db
          routeid
-         (get rules/fields :orders)]))
+         (get rules/fields :orders)))
 
 (defn is-reachable [p1 p2 db]
   (util/reachable p1 p2 (max-range db)))
