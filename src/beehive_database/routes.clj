@@ -228,6 +228,11 @@
         :return [Order]
         :summary "Returns all/selected orders"
         (ok (queries/all :orders ids (data/db))))
+      (GET "/:routeid" []
+        :path-params [routeid :- Long]
+        :return Order
+        :summary "Returns the order with the specified route"
+        (ok (queries/order-with-route routeid (data/db))))
       (POST "/" []
         :responses {201 {:schema      Order
                          :description "Hive was created"}}

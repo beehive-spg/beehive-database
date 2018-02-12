@@ -8,10 +8,10 @@
             [beehive-database.routes :as routes])
   (:gen-class))
 
-; TODO: Missing routes: hive-reachable, distributions(time), drones for hive, incoming/outgoing, delete
-
 (defn- init-schema []
-  @(d/transact data/conn (datomic-schema/generate-schema schema/dbschema)))
+  @(d/transact data/conn (concat
+                           (datomic-schema/generate-parts schema/parts)
+                           (datomic-schema/generate-schema schema/dbschema))))
 
 (defn- init-data []
   (let [data (slurp (clojure.java.io/resource "beehive-database/data.edn"))]

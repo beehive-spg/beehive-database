@@ -27,7 +27,7 @@
    (datomic-schema/schema drone
                           (datomic-schema/fields
                            [name :string]
-                           [status :enum ["IDLE" "FLYING" "CHARGING"]]
+                           [status :enum [:idle :flying :charging]]
                            [type :ref]
                            [hive :ref]))
    (datomic-schema/schema prediction
@@ -45,13 +45,13 @@
                            [route :ref]))
    (datomic-schema/schema route
                           (datomic-schema/fields
-                           [origin :enum ["ORDER" "DISTRIBUTION"]]))
+                           [origin :enum [:order :distribution]]))
    (datomic-schema/schema order
                           (datomic-schema/fields
                            [shop :ref]
                            [customer :ref]
                            [route :ref]
-                           [source :enum ["GUI" "GENERATED"]]))
+                           [source :enum [:gui :generated]]))
    (datomic-schema/schema connection
                           (datomic-schema/fields
                            [start :ref]

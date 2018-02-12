@@ -85,6 +85,14 @@
        time
        (get rules/fields :hops)))
 
+(defn order-with-route [routeid db]
+  (d/q '[:find (pull ?order subquery) .
+         :in $ ?routeid subquery
+         :where [?order :order/route ?routeid]
+         db
+         routeid
+         (get rules/fields :orders)]))
+
 (defn is-reachable [p1 p2 db]
   (util/reachable p1 p2 (max-range db)))
 
@@ -99,35 +107,3 @@
          (util/position %)
          db)
       buildings)))
-
-(defn route [hops time db])
-
-(defn available-drones [hiveid time db]                     ;;not tested
-  (let [drones (drones-for-hive hiveid db)
-        droneids (map #(:db/id %) drones)
-        hops (hops-for-drones droneids db)]
-    (-
-      (count drones)
-      (count
-        (distinct
-          (map
-            #(:hop/drone %)
-            (filter
-              #(=
-                 -1
-                 (compare
-                   time
-                   (:hop/endtime %))
-                 hops))))))))
-
-(defn workload [hiveid time db]                             ;;not tested
-  (let [maxdrones (count (drones-for-hive hiveid db))
-        available (available-drones hiveid time db)
-        workload (*
-                   100
-                   (/
-                     (-
-                       maxdrones
-                       available)
-                     maxdrones))]
-    workload))
