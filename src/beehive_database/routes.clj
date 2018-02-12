@@ -56,9 +56,9 @@
 
 (s/defschema Order
   {:db/id          Long
-   :order/shop     Long
-   :order/customer Long
-   :order/route    Long
+   :order/shop     {:db/id Long}
+   :order/customer {:db/id Long}
+   :order/route    {:db/id Long}
    :order/source   {:db/ident s/Keyword}})
 
 (s/defschema Drone
