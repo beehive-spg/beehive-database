@@ -158,8 +158,9 @@
         :summary "Returns outgoing hops of specified hive after specified time"
         (ok (queries/outgoing-hops-after id time (data/db))))
       (POST "/" []
-        :return Hive
         :body [post-hive PostHive]
+        :responses {201 {:schema      Hive
+                         :description "Hive was created"}}
         :summary "Saves a hive to the database"
         (let [id (transactions/add-hive (:address post-hive)
                                         (:xcoord post-hive)
@@ -175,7 +176,8 @@
         :summary "Returns all/selected shops"
         (ok (queries/all :shops ids (data/db))))
       (POST "/" []
-        :return Shop
+        :responses {201 {:schema      Shop
+                         :description "Hive was created"}}
         :body [post-shop PostShop]
         :summary "Saves a shop to the database"
         (let [id (transactions/add-shop (:address post-shop)
@@ -192,7 +194,8 @@
         :summary "Returns all/selected customers"
         (ok (queries/all :customers ids (data/db))))
       (POST "/" []
-        :return Customer
+        :responses {201 {:schema      Customer
+                         :description "Hive was created"}}
         :body [post-customer PostCustomer]
         :summary "Saves a customer to the database"
         (let [id (transactions/add-customer (:address post-customer)
@@ -209,7 +212,8 @@
         :summary "Returns all/selected routes"
         (ok (queries/all :routes ids (data/db))))
       (POST "/" []
-        :return Route
+        :responses {201 {:schema      Route
+                         :description "Hive was created"}}
         :body [post-route PostRoute]
         :summary "Saves a route to the database"
         (let [id (transactions/add-route (:hops post-route)
@@ -225,7 +229,8 @@
         :summary "Returns all/selected orders"
         (ok (queries/all :orders ids (data/db))))
       (POST "/" []
-        :return Order
+        :responses {201 {:schema      Order
+                         :description "Hive was created"}}
         :body [post-order PostOrder]
         :summary "Saves an order to the database"
         (let [id (transactions/add-order (:shopid post-order)
@@ -242,7 +247,8 @@
         :summary "Returns all/selected drones"
         (ok (queries/all :drones ids (data/db))))
       (POST "/" []
-        :return Drone
+        :responses {201 {:schema      Drone
+                         :description "Hive was created"}}
         :body [post-drone PostDrone]
         :summary "Saves a drone to the database"
         (let [id (transactions/add-drone (:hiveid post-drone)
@@ -258,8 +264,9 @@
         :return [Dronetype]
         :summary "Returns all/selected drone types"
         (ok (queries/all :dronetypes ids (data/db))))
-      (POST "/" [Dronetype]
-        :return Hive
+      (POST "/" []
+        :responses {201 {:schema      Dronetype
+                         :description "Hive was created"}}
         :body [post-dronetype PostDronetype]
         :summary "Saves a drone type to the database"
         (let [id (transactions/add-drone-type (:name post-dronetype)
@@ -279,6 +286,7 @@
     (context "/api" []
       :tags ["Api"]
       (GET "/delete/:id" []
+        :responses {204 {:description "Object deleted, no response content"}}
         :path-params [id :- Long]
         :summary "Deletes entity with specified id"
         (transactions/delete id)
