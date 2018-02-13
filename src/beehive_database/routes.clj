@@ -297,9 +297,10 @@
         (transactions/delete id)
         (no-content))
       (GET "/reachable" []
-        :query-params [{ids :- [Long] nil}]
+        :query-params [{ids :- [Long] nil}, {customerid :- Long nil}, {shopid :- Long nil}]
         :summary "Returns all/selected connections"
-        (ok (queries/all :connections ids (data/db))))
+        (println customerid shopid)
+        (ok (queries/connections-with-shop-cust ids shopid customerid (data/db))))
       (GET "/reachable/:building1/:building2" []
         :path-params [building1 :- Long, building2 :- Long]
         :summary "Returns whether or not the buildings can reach each other using the default drone type"

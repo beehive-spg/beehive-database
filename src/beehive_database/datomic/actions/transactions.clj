@@ -1,7 +1,6 @@
 (ns beehive-database.datomic.actions.transactions
   (:require [datomic.api :as d]
             [beehive-database.datomic.actions.data :refer :all]
-            [beehive-database.datomic.init.schema :as schema]
             [beehive-database.datomic.actions.queries :as queries]))
 
 (defn transact->id [conn data]

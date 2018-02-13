@@ -2,7 +2,9 @@
   (:require [datomic.api :as d]
             [beehive-database.util :as util]
             [beehive-database.datomic.actions.rules :as rules]
-            [beehive-database.datomic.actions.data :refer :all]))
+            [beehive-database.datomic.actions.data :refer :all]
+            [datomic-schema.schema :as datomic-schema]))
+
 
 (defn all [table ids db]
   (if (empty? ids)
@@ -89,9 +91,22 @@
   (d/q '[:find (pull ?order subquery) .
          :in $ ?routeid subquery
          :where [?order :order/route ?routeid]]
-        db
-         routeid
-         (get rules/fields :orders)))
+       db
+       routeid
+       (get rules/fields :orders)))
+
+(defn conns [hiveids db]
+  (if (nil? hiveids)
+    (all :connections hiveids db)
+    (d/q '[:find [(pull ?conn subquery) ...]
+           :in $ [?hiveids ...] subquery
+           :where (or-join [?conn ?hiveids]
+                           [?conn :connection/start ?hiveids]
+                           [?conn :connection/end ?hiveids])]
+         db
+         hiveids
+         (get rules/fields :connections))))
+
 
 (defn is-reachable [p1 p2 db]
   (util/reachable p1 p2 (max-range db)))
@@ -107,3 +122,53 @@
          (util/position %)
          db)
       buildings)))
+
+(datomic-schema/defdbfn connections [db hiveid] :db.part/user
+                        (mapv
+                          (fn [x]
+                            {:db/id               (datomic.api/tempid :db.part/user)
+                             :connection/start    hiveid
+                             :connection/end      (:db/id x)
+                             :connection/distance (beehive-database.util/distance
+                                                    (beehive-database.util/position
+                                                      (beehive-database.datomic.actions.queries/one :buildings hiveid db))
+                                                    (beehive-database.util/position x))})
+                          (beehive-database.datomic.actions.queries/reachable hiveid db)))
+
+(datomic-schema/defdbfn mkroute [db hops routeid time] :db.part/user
+                        (let [speed (:dronetype/speed (beehive-database.datomic.actions.queries/default-drone-type db))]
+                          (loop [result []
+                                 lhops hops
+                                 starttime time]
+                            (let [endtime (long (+
+                                                  starttime
+                                                  (* 1000 (beehive-database.util/travel-time
+                                                            (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:from (first hops)) db))
+                                                            (beehive-database.util/position (beehive-database.datomic.actions.queries/one :hives (:to (first hops)) db))
+                                                            speed))))]
+                              (if (empty? lhops)
+                                result
+                                (recur (conj result {:hop/route     routeid
+                                                     :hop/start     (:from (first lhops))
+                                                     :hop/end       (:to (first lhops))
+                                                     :hop/starttime starttime
+                                                     :hop/endtime   endtime})
+                                       (drop 1 lhops)
+                                       (+ endtime 3000)))))))
+
+(defn connections-with-shop-cust [hiveids shopid custid db]
+  (let [conns (conns hiveids db)]
+    (-> conns
+        (concat (if (not (nil? shopid))
+                  (connections db shopid)
+                  nil))
+        (concat (if (not (nil? custid))
+                  (connections db custid)
+                  nil)))))
+
+
+(defn connections-with-shop-cust [hiveids shopid custid db]
+  (if (not (nil? shopid)) @(d/transact conn [[:connections shopid]]))
+  (if (not (nil? custid)) @(d/transact conn [[:connections custid]]))
+  (conns (concat hiveids [shopid custid]) (d/db conn)))
+
