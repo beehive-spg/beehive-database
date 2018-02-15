@@ -2,7 +2,9 @@
   (:require [datomic.api :as d]
             [beehive-database.util :as util]
             [beehive-database.datomic.actions.rules :as rules]
-            [beehive-database.datomic.actions.data :refer :all]))
+            [beehive-database.datomic.actions.data :refer :all]
+            [datomic-schema.schema :as datomic-schema]))
+
 
 (defn all [table ids db]
   (if (empty? ids)
@@ -18,9 +20,7 @@
          db
          (get rules/fields table)
          (get rules/queries table)
-         (mapv
-           read-string
-           (vals ids)))))
+         ids)))
 
 (defn drones-for-hive [hiveid db]
   (d/q '[:find [(pull ?e [:db/id
@@ -62,7 +62,7 @@
   (d/q '[:find [(pull ?route subquery) ...]
          :in $ ?time1 ?time2 subquery
          :where
-         [?route :route/origin :origin/DISTRIBUTION]
+         [?route :route/origin :route.origin/DISTRIBUTION]
          [?hop :hop/route ?route]
          [?hop :hop/starttime ?starttime]
          (or-join [?starttime ?time1 ?time2]
@@ -87,14 +87,35 @@
        time
        (get rules/fields :hops)))
 
+(defn order-with-route [routeid db]
+  (d/q '[:find (pull ?order subquery) .
+         :in $ ?routeid subquery
+         :where [?order :order/route ?routeid]]
+       db
+       routeid
+       (get rules/fields :orders)))
+
+(defn conns [hiveids db]
+  (if (nil? hiveids)
+    (all :connections hiveids db)
+    (d/q '[:find [(pull ?conn subquery) ...]
+           :in $ [?hiveids ...] subquery
+           :where (or-join [?conn ?hiveids]
+                           [?conn :connection/start ?hiveids]
+                           [?conn :connection/end ?hiveids])]
+         db
+         hiveids
+         (get rules/fields :connections))))
+
+
 (defn is-reachable [p1 p2 db]
   (util/reachable p1 p2 (max-range db)))
 
 (defn reachable [buildingid db]
   (let [buildings (remove
                     #(= (:db/id %) buildingid)
-                    (all :hives [] db))
-        building (one :hives buildingid db)]
+                    (all :buildings [] db))
+        building (one :buildings buildingid db)]
     (filter
       #(is-reachable
          (util/position building)
@@ -102,34 +123,40 @@
          db)
       buildings)))
 
-(defn route [hops time db])
+(defn connections [db buildingid]
+  (mapv
+    (fn [building]
+      {:db/id               (d/tempid :db.part/user)
+       :connection/start    buildingid
+       :connection/end      (:db/id building)
+       :connection/distance (util/distance
+                              (util/position (one :buildings buildingid db))
+                              (util/position building))})
+    (reachable buildingid db)))
 
-(defn available-drones [hiveid time db]                     ;;not tested
-  (let [drones (drones-for-hive hiveid db)
-        droneids (map #(:db/id %) drones)
-        hops (hops-for-drones droneids db)]
-    (-
-      (count drones)
-      (count
-        (distinct
-          (map
-            #(:hop/drone %)
-            (filter
-              #(=
-                 -1
-                 (compare
-                   time
-                   (:hop/endtime %))
-                 hops))))))))
+(defn mkroute [db hops routeid time]
+  (let [speed (:dronetype/speed (default-drone-type db))]
+    (loop [result []
+           lhops hops
+           starttime time]
+      (if (empty? lhops)
+        result
+        (let [endtime (long (+ starttime
+                               (* 1000
+                                  (util/travel-time
+                                    (util/position (one :buildings (:from (first lhops)) db))
+                                    (util/position (one :buildings (:to (first lhops)) db))
+                                    speed))))]
+          (recur (conj result {:hop/route     routeid
+                               :hop/start     (:from (first lhops))
+                               :hop/end       (:to (first lhops))
+                               :hop/starttime starttime
+                               :hop/endtime   endtime})
+                 (drop 1 lhops)
+                 (+ endtime 3000)))))))
 
-(defn workload [hiveid time db]                             ;;not tested
-  (let [maxdrones (count (drones-for-hive hiveid db))
-        available (available-drones hiveid time db)
-        workload (*
-                   100
-                   (/
-                     (-
-                       maxdrones
-                       available)
-                     maxdrones))]
-    workload))
+(defn connections-with-shop-cust [hiveids shopid custid db]
+  (if (not (nil? shopid)) @(d/transact conn (connections db shopid)))
+  (if (not (nil? custid)) @(d/transact conn (connections (d/db conn) custid)))
+  (conns (concat hiveids [shopid custid]) (d/db conn)))
+
