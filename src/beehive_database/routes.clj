@@ -184,7 +184,7 @@
                                         (:xcoord post-shop)
                                         (:ycoord post-shop)
                                         (:name post-shop))]
-          (created (str "/one/hives/" id) (queries/one :shops id (data/db))))))
+          (created (str "/one/shops/" id) (queries/one :shops id (data/db))))))
 
     (context "/customers" []
       :tags ["Customers"]
@@ -202,7 +202,7 @@
                                             (:xcoord post-customer)
                                             (:ycoord post-customer)
                                             (:name post-customer))]
-          (created (str "/one/hives/" id) (queries/one :customers id (data/db))))))
+          (created (str "/one/customers/" id) (queries/one :customers id (data/db))))))
 
     (context "/routes" []
       :tags ["Routes"]
@@ -219,7 +219,7 @@
         (let [id (transactions/add-route (:hops post-route)
                                          (:origin post-route)
                                          (:time post-route))]
-          (created (str "/one/hives/" id) (queries/one :routes id (data/db))))))
+          (created (str "/one/routes/" id) (queries/one :routes id (data/db))))))
 
     (context "/orders" []
       :tags ["Orders"]
@@ -242,7 +242,7 @@
                                          (:customerid post-order)
                                          (:route post-order)
                                          (:source post-order))]
-          (created (str "/one/hives/" id) (queries/one :orders id (data/db))))))
+          (created (str "/one/orders/" id) (queries/one :orders id (data/db))))))
 
     (context "/drones" []
       :tags ["Drones"]
@@ -260,7 +260,7 @@
                                          (:name post-drone)
                                          (:dronetype post-drone)
                                          (:status post-drone))]
-          (created (str "/one/hives/" id) (queries/one :drones id (data/db))))))
+          (created (str "/one/drones/" id) (queries/one :drones id (data/db))))))
 
     (context "/types" []
       :tags ["Types"]
@@ -279,7 +279,7 @@
                                               (:speed post-dronetype)
                                               (:chargetime post-dronetype)
                                               (:default post-dronetype))]
-          (created (str "/one/hives/" id) (queries/one :dronetypes id (data/db))))))
+          (created (str "/one/types/" id) (queries/one :dronetypes id (data/db))))))
 
     (context "/one" []
       :tags ["One"]

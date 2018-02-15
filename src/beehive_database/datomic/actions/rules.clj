@@ -105,6 +105,7 @@
   {:hives       [:building/hive]
    :shops       [:building/shop]
    :customers   [:building/customer]
+   :buildings   [:building/xcoord]
    :drones      [:drone/name]
    :predictions [:prediction]
    :hops        [:hop/start]

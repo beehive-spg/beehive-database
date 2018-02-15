@@ -25,7 +25,7 @@
                                 :building/ycoord  y
                                 :building/hive    {:hive/name   name
                                                    :hive/demand -1}}])]
-    @(d/transact conn [[:connections id]])
+    @(d/transact conn (queries/connections (db) id))
     id))
 
 (defn add-shop [address x y name]
@@ -57,7 +57,7 @@
 
 (defn add-route [hops origin time]
   (let [id (transact->id conn [{:route/origin origin}])]
-    @(d/transact conn [[:mkroute hops id time]])
+    @(d/transact conn (queries/mkroute (db) hops id time))
     id))
 
 
@@ -76,7 +76,8 @@
                            :dronetype/range      range
                            :dronetype/speed      speed
                            :dronetype/chargetime chargetime
-                           :dronetype/default    default}])]))
+                           :dronetype/default    default}])]
+    id))
 
 (defn delete [id]
   @(d/transact conn
