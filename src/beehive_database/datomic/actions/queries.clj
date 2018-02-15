@@ -139,11 +139,6 @@
     (loop [result []
            lhops hops
            starttime time]
-      (println "aa")
-      (println result)
-      (println "aaa")
-      (println lhops)
-      (println "aaaa")
       (if (empty? lhops)
         result
         (let [endtime (long (+ starttime
