@@ -188,7 +188,9 @@
             cost (if (< free-at-time 1)
                    (* 3 percent-takeout)
                    percent-takeout)
-            mapped-cost (util/map-num cost 0 300 1 20)]
+            mapped-cost (if (= demand -1)
+                          1
+                          (util/map-num cost 0 300 1 20))]
         {:db/id               hiveid
          :hive/cost           mapped-cost}))
     (all :hives hiveids db)))
