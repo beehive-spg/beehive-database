@@ -63,7 +63,7 @@
 
 (s/defschema Drone
   {:db/id        Long
-   :drone/hive   {:db/id     Long}
+   :drone/hive   {:db/id Long}
    :drone/name   s/Str
    :drone/type   {:dronetype/name s/Str}
    :drone/status {:db/ident s/Keyword}})
@@ -75,6 +75,10 @@
    :dronetype/speed      Long
    :dronetype/chargetime Long
    :dronetype/default    Boolean})
+
+(s/defschema Cost
+  {:db/id     Long
+   :hive/cost s/Num})
 
 ;; POST input body Schemas
 
@@ -166,7 +170,12 @@
                                         (:xcoord post-hive)
                                         (:ycoord post-hive)
                                         (:name post-hive))]
-          (created (str "/one/hives/" id) (queries/one :hives id (data/db))))))
+          (created (str "/one/hives/" id) (queries/one :hives id (data/db)))))
+      (PUT "/:id/:demand" []
+        :path-params [id :- Long demand :- Long]
+        :return Long
+        :summary "Changes a hives demand"
+        (ok (transactions/set-demand id demand))))
 
     (context "/shops" []
       :tags ["Shops"]
@@ -312,4 +321,9 @@
         :path-params [time1 :- Long, time2 :- Long]
         :summary "Returns all distributions that took place between the specified times"
         :return [Route]
-        (ok (queries/distributions time1 time2 (data/db)))))))
+        (ok (queries/distributions time1 time2 (data/db))))
+      (GET "/hivecosts" []
+        :query-params [ids :- [Long] time :- Long]
+        :summary "Returns the cost factor of taking a drone from a selected hive"
+        :return [Cost]
+        (ok (queries/hivecosts ids time (data/db)))))))

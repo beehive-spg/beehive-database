@@ -36,3 +36,9 @@
       p1
       p2)
     speed))
+
+(defn map-num [num in-min in-max out-min out-max]
+  (+ (/ (* (- num in-min)
+           (- out-max out-min))
+        (- in-max in-min))
+     out-min))

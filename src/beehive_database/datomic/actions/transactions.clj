@@ -86,4 +86,5 @@
 (defn set-demand [hiveid demand]
   @(d/transact conn
                [{:db/id       hiveid
-                 :hive/demand demand}]))
+                 :hive/demand demand}])
+  demand)
