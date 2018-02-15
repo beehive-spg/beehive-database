@@ -1,0 +1,62 @@
+[
+ {:building/address "10., Braunspergengasse 30"
+  :building/xcoord  16.35447367415082
+  :building/ycoord  48.171314230306095
+  :building/shop    {:shop/name "Sozialmarkt Favoriten Sozialmarkt Wien, gemeinnütziger Verein"}}
+ {:building/address "11., Hauffgasse 4A"
+  :building/xcoord  16.41152828179707
+  :building/ycoord  48.17721746759803
+  :building/shop    {:shop/name "VinziMarkt, Vinzenzgemeinschaft"}}
+ {:building/address "7., Neustiftgasse 73-75"
+  :building/xcoord  16.347987782486744
+  :building/ycoord  48.20538135943008
+  :building/shop    {:shop/name "SOMA Sozialmarkt Wien Neubau, Wiener Hilfswerk, Verein"}}
+ {:building/address "16., Wilhelminenstraße 22"
+  :building/xcoord  16.31838601463539
+  :building/ycoord  48.216361286037476
+  :building/shop    {:shop/name "Sozialmarkt Wien, Verein"}}
+ {:building/address "21., Frömmlgasse 19-31"
+  :building/xcoord  16.394288415711152
+  :building/ycoord  48.25872352832321
+  :building/shop    {:shop/name "Samariterbund Sozialmarkt"}}
+ {:building/address "7., Neustiftgasse 73-75"
+  :building/xcoord  16.347987782486744
+  :building/ycoord  48.20538135943008
+  :building/shop    {:shop/name "Günstige PCs für Sozialmarkt-KundInnen"}}
+ {:building/address "12., Pohlgasse 13"
+  :building/xcoord  16.327381397377824
+  :building/ycoord  48.178240165941446
+  :building/shop    {:shop/name "Firma Gerhard Rammel GmbH"}}
+ {:building/address "15., Pillergasse 20"
+  :building/xcoord  16.326761698372987
+  :building/ycoord  48.18465228276494
+  :building/shop    {:shop/name "Samariterbund Sozialmarkt"}}
+ {:building/address "22., Ullreichgasse 13"
+  :building/xcoord  16.433630219473933
+  :building/ycoord  48.25315712173355
+  :building/shop    {:shop/name "Sozialmarkt Donaustadt Sozialmarkt Wien, gemeinnütziger Verein"}}
+ {:building/address "10., Gellertgasse 42-48"
+  :building/xcoord  16.381121763112425
+  :building/ycoord  48.17206230296411
+  :building/shop    {:shop/name "Samariterbund Sozialmarkt"}}
+ {:building/address "16., Hyrtlgasse 28"
+  :building/xcoord  16.326569078068676
+  :building/ycoord  48.20820544630291
+  :building/shop    {:shop/name "SOMA Sozialmarkt Wien Ottakring, Wiener Hilfswerk, Verein"}}
+ {:building/address "19., Heiligenstädter Straße 88"
+  :building/xcoord  16.364939406121632
+  :building/ycoord  48.25329382041822
+  :building/shop    {:shop/name "Verein Futterbox Österreich & Sozialtafel für Haustiere"}}
+ {:building/address "17., Hernalser Hauptstraße 116"
+  :building/xcoord  16.324682754831805
+  :building/ycoord  48.22045396937309
+  :building/shop    {:shop/name "START UP - Verein zur Unterstützung hilfsbedürftiger Menschen"}}
+ {:building/address "10., Herzgasse 4"
+  :building/xcoord  16.36730471075661
+  :building/ycoord  48.1791715401027
+  :building/shop    {:shop/name "Sozialmarkt, Allesverwerter & Verein für sozial Benachteiligte"}}
+ {:building/address "17., Hernalser Hauptstraße 116"
+  :building/xcoord  16.324682754831805
+  :building/ycoord  48.22045396937309
+  :building/shop    {:shop/name "Mobiler Foodpoint, Verein START UP Lebensmittelsammel- und ausgabestelle für Menschen mit geringem Einkommen"}}
+ ]

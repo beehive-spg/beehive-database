@@ -1,0 +1,137 @@
+[
+ {:building/address "3., Juchgasse 25"
+  :building/xcoord  16.390827972181082
+  :building/ycoord  48.196348761482355
+  :building/customer {:customer/name "Krankenanstalt Rudolfstiftung inklusive Standort Semmelweis Frauenklinik, Krankenhaus der Stadt Wien, Wiener Krankenanstaltenverbund"}}
+ {:building/address "9., Währinger Gürtel 18-20"
+  :building/xcoord  16.344330780505615
+  :building/ycoord  48.220184438513456
+  :building/customer {:customer/name "AKH, Allgemeines Krankenhaus der Stadt Wien - Medizinischer Universitätscampus, Wiener Krankenanstaltenverbund"}}
+ {:building/address "13., Wolkersbergenstraße 1"
+  :building/xcoord  16.27648215406489
+  :building/ycoord  48.17019410256844
+  :building/customer {:customer/name "Krankenhaus Hietzing mit Neurologischem Zentrum Rosenhügel, Krankenhaus der Stadt Wien STANDORT KH HIETZING, Wiener Krankenanstaltenverbund"}}
+ {:building/address "14., Baumgartner Höhe 1"
+  :building/xcoord  16.278564757374582
+  :building/ycoord  48.20741805176079
+  :building/customer {:customer/name "Sozialmedizinisches Zentrum - Baumgartner Höhe / Otto Wagner Spital und Pflegezentrum, Wiener Krankenanstaltenverbund"}}
+ {:building/address "16., Montleartstraße 37(WILHELMINENSPITAL)"
+  :building/xcoord  16.30417940882522
+  :building/ycoord  48.210773467645055
+  :building/customer {:customer/name "Wilhelminenspital, Krankenhaus der Stadt Wien, Wiener Krankenanstaltenverbund"}}
+ {:building/address "18., Bastiengasse 36-38"
+  :building/xcoord  16.320223878974517
+  :building/ycoord  48.234779524664575
+  :building/customer {:customer/name "Standort Semmelweis Frauenklinik der Krankenanstalt Rudolfstiftung, Wiener Krankenanstaltenverbund"}}
+ {:building/address "21., Hinaysgasse 1(KRANKENHAUS)"
+  :building/xcoord  16.406510149868307
+  :building/ycoord  48.253725517310016
+  :building/customer {:customer/name "Sozialmedizinisches Zentrum Floridsdorf, Krankenhaus der Stadt Wien, Wiener Krankenanstaltenverbund"}}
+ {:building/address "22., Langobardenstraße 122"
+  :building/xcoord  16.464207358277807
+  :building/ycoord  48.21900715284194
+  :building/customer {:customer/name "Donauspital, Sozialmedizinisches Zentrum Ost, Wiener Krankenanstaltenverbund"}}
+ {:building/address "9., Löblichgasse 14"
+  :building/xcoord  16.351667024791453
+  :building/ycoord  48.226433917696866
+  :building/customer {:customer/name "Hera, Sanatorium der Krankenfürsorgeanstalt der Bediensteten der Stadt Wien"}}
+ {:building/address "12., Kundratstraße 37-39"
+  :building/xcoord  16.34402738137263
+  :building/ycoord  48.17295219816738
+  :building/customer {:customer/name "Unfallkrankenhaus Meidling, AUVA"}}
+ {:building/address "12., Köglergasse 2A"
+  :building/xcoord  16.345183553858927
+  :building/ycoord  48.172331579077806
+  :building/customer {:customer/name "Rehabilitationszentrum Meidling, AUVA"}}
+ {:building/address "14., Heinrich-Collin-Straße 30"
+  :building/xcoord  16.29369424285207
+  :building/ycoord  48.19892606116514
+  :building/customer {:customer/name "Hanusch Krankenhaus, Wiener Gebietskrankenkasse"}}
+ {:building/address "20., Donaueschingenstraße 13"
+  :building/xcoord  16.383830375386882
+  :building/ycoord  48.23657830639497
+  :building/customer {:customer/name "Unfallkrankenhaus Lorenz Böhler, AUVA"}}
+ {:building/address "21., Brünner Straße 238"
+  :building/xcoord  16.418908823208824
+  :building/ycoord  48.293034977572646
+  :building/customer {:customer/name "Militär-Medizinisches Zentrum Heeresspital WIEN (Heeresfachambulatorium und Heereskrankenanstalt)"}}
+ {:building/address "18., Wielemansgasse 28"
+  :building/xcoord  16.322298710584075
+  :building/ycoord  48.22811587432908
+  :building/customer {:customer/name "Gersthof, Orthopädisches Krankenhaus, Wiener Krankenanstaltenverbund"}}
+ {:building/address "7., Apollogasse 19"
+  :building/xcoord  16.339941962724772
+  :building/ycoord  48.19815139075698
+  :building/customer {:customer/name "Sozialmedizinisches Zentrum Sophienspital der Stadt Wien, Krankenhaus der Stadt Wien, Wiener Krankenanstaltenverbund"}}
+ {:building/address "13., Riedelgasse 5"
+  :building/xcoord  16.28150053297733
+  :building/ycoord  48.16172172023489
+  :building/customer {:customer/name "Krankenhaus Hietzing mit Neurologischem Zentrum Rosenhügel, Krankenhaus der Stadt Wien STANDORT NEUROLOGISCHES ZENTRUM ROSENHÜGEL, Wiener Krankenanstaltenverbund"}}
+ {:building/address "10., Kundratstraße 3"
+  :building/xcoord  16.349889654160453
+  :building/ycoord  48.173653114097974
+  :building/customer {:customer/name "Sozialmedizinisches Zentrum Süd, Kaiser-Franz-Josef-Spital mit Gottfried von Preyer'schem Kinderspital, Wiener Krankenanstaltenverbund"}}
+ {:building/address "2., Johannes-von-Gott-Platz 1"
+  :building/xcoord  16.38220970449203
+  :building/ycoord  48.2157688216442
+  :building/customer {:customer/name "Krankenhaus der Barmherzigen Brüder Wien, Konvent der Barmherzigen Brüder Wien"}}
+ {:building/address "3., Baumgasse 20A"
+  :building/xcoord  16.398359772641356
+  :building/ycoord  48.19559849079674
+  :building/customer {:customer/name "Herz Jesu Krankenhaus GmbH, Vinzenz Gruppe Krankenhausbeteiligungs- und Management GmbH"}}
+ {:building/address "3., Landstraßer Hauptstraße 4A"
+  :building/xcoord  16.386586173621694
+  :building/ycoord  48.205298927214805
+  :building/customer {:customer/name "Franziskus Spital Landstraße GmbH (früher Krankenhaus St. Elisabeth GmbH)"}}
+ {:building/address "5., Nikolsdorfer Gasse 26"
+  :building/xcoord  16.361822759588804
+  :building/ycoord  48.187815380189235
+  :building/customer {:customer/name "Franziskus Spital Margareten GmbH (früher: Hartmannspital GmbH)"}}
+ {:building/address "6., Stumpergasse 13"
+  :building/xcoord  16.345953786359157
+  :building/ycoord  48.19242236344747
+  :building/customer {:customer/name "Krankenhaus Barmherzige Schwestern Wien, Betriebsgesellschaft mbH, Vinzenz Gruppe Krankenhausbeteiligungs- und Management GmbH"}}
+ {:building/address "8., Haspingergasse 4-6 / Skodagasse 32"
+  :building/xcoord  16.348635698323147
+  :building/ycoord  48.2141226560533
+  :building/customer {:customer/name "PremiQaMed Privatkliniken GmbH - Privatklinik Confraternität"}}
+ {:building/address "9., Lazarettgasse 16-18"
+  :building/xcoord  16.34702171771689
+  :building/ycoord  48.21754022410877
+  :building/customer {:customer/name "Goldenes Kreuz Privatklinik BetriebsGm.b.H"}}
+ {:building/address "9., Pelikangasse 15"
+  :building/xcoord  16.34799050821513
+  :building/ycoord  48.21710845577551
+  :building/customer {:customer/name "Wiener Privatklinik Betriebs-Ges.m.b.H. & Co.KG"}}
+ {:building/address "9., Kinderspitalgasse 6"
+  :building/xcoord  16.34433009463222
+  :building/ycoord  48.21593067314395
+  :building/customer {:customer/name "St.Anna Kinderspital GmbH"}}
+ {:building/address "13., Speisinger Straße 109"
+  :building/xcoord  16.28134218041379
+  :building/ycoord  48.1640001745172
+  :building/customer {:customer/name "Orthopädisches Spital Speising GmbH, Vinzenz Gruppe Krankenhausbeteiligungs- und Management GmbH"}}
+ {:building/address "13., Auhofstraße 189"
+  :building/xcoord  16.262936119675246
+  :building/ycoord  48.19437804311704
+  :building/customer {:customer/name "St. Josef Krankenhaus GmbH, Vinzenz Gruppe Krankenhausbeteiligungs- und Management GmbH"}}
+ {:building/address "18., Hans-Sachs-Gasse 10-12"
+  :building/xcoord  16.345704187193636
+  :building/ycoord  48.22412333335103
+  :building/customer {:customer/name "Evangelisches Krankenhaus Wien Gemeinnützige Betriebsgesellschaft m.b.H"}}
+ {:building/address "19., Heiligenstädter Straße 55-63"
+  :building/xcoord  16.35934477153527
+  :building/ycoord  48.239724476504314
+  :building/customer {:customer/name "Privatklinik Döbling, PremiQaMed Privatkliniken GmbH \u2013 Privatklinik Döbling"}}
+ {:building/address "19., Billrothstraße 78"
+  :building/xcoord  16.347377279497987
+  :building/ycoord  48.243305541865276
+  :building/customer {:customer/name "rudolfinerhaus privatklinik gmbh"}}
+ {:building/address "16., Kollburggasse 6-10"
+  :building/xcoord  16.30113458896247
+  :building/ycoord  48.21662713608298
+  :building/customer {:customer/name "Sanatorium Liebhartstal,  Formanek GmbH"}}
+ {:building/address "17., Dornbacher Straße 20-28"
+  :building/xcoord  16.304195837099535
+  :building/ycoord  48.227671619857986
+  :building/customer {:customer/name "Krankenhaus Göttlicher Heiland GmbH, Vinzenz Gruppe Krankenhausbeteiligungs- und Management GmbH"}}]

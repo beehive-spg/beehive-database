@@ -14,15 +14,32 @@
                            (datomic-schema/generate-schema schema/dbschema))))
 
 (defn- init-data []
-  (let [data (slurp (clojure.java.io/resource "beehive-database/data.edn"))]
+  (let [hives (slurp (clojure.java.io/resource "beehive-database/hives.edn"))
+        shops (slurp (clojure.java.io/resource "beehive-database/shops.edn"))
+        customers (slurp (clojure.java.io/resource "beehive-database/customers.edn"))]
     (transactions/add-drone-type "large" 5000 15 1800 true)
-    (doseq [hive (clojure.edn/read-string data)]
+    (doseq [hive (clojure.edn/read-string hives)]
       (transactions/add-hive
         (:building/address hive)
         (:building/xcoord hive)
         (:building/ycoord hive)
         (:hive/name
-          (:building/hive hive))))))
+          (:building/hive hive))))
+    (doseq [shop (clojure.edn/read-string shops)]
+      (transactions/add-shop
+        (:building/address shop)
+        (:building/xcoord shop)
+        (:building/ycoord shop)
+        (:shop/name
+          (:building/shop shop))))
+    (doseq [customer (clojure.edn/read-string customers)]
+      (transactions/add-customer
+        (:building/address customer)
+        (:building/xcoord customer)
+        (:building/ycoord customer)
+        (:customer/name
+          (:building/customer customer))))))
+
 
 (defn- init []
   (init-schema)
