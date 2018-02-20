@@ -186,7 +186,7 @@
         (ok (queries/all :shops ids (data/db))))
       (POST "/" []
         :responses {201 {:schema      Shop
-                         :description "Hive was created"}}
+                         :description "Shop was created"}}
         :body [post-shop PostShop]
         :summary "Saves a shop to the database"
         (let [id (transactions/add-shop (:address post-shop)
@@ -204,7 +204,7 @@
         (ok (queries/all :customers ids (data/db))))
       (POST "/" []
         :responses {201 {:schema      Customer
-                         :description "Hive was created"}}
+                         :description "Customer was created"}}
         :body [post-customer PostCustomer]
         :summary "Saves a customer to the database"
         (let [id (transactions/add-customer (:address post-customer)
@@ -222,7 +222,7 @@
         (ok (queries/all :routes ids (data/db))))
       (POST "/" []
         :responses {201 {:schema      Route
-                         :description "Hive was created"}}
+                         :description "Route was created"}}
         :body [post-route PostRoute]
         :summary "Saves a route to the database"
         (let [id (transactions/add-route (:hops post-route)
@@ -244,7 +244,7 @@
         (ok (queries/order-with-route routeid (data/db))))
       (POST "/" []
         :responses {201 {:schema      Order
-                         :description "Hive was created"}}
+                         :description "Order was created"}}
         :body [post-order PostOrder]
         :summary "Saves an order to the database"
         (let [id (transactions/add-order (:shopid post-order)
@@ -262,7 +262,7 @@
         (ok (queries/all :drones ids (data/db))))
       (POST "/" []
         :responses {201 {:schema      Drone
-                         :description "Hive was created"}}
+                         :description "Drone was created"}}
         :body [post-drone PostDrone]
         :summary "Saves a drone to the database"
         (let [id (transactions/add-drone (:hiveid post-drone)
@@ -280,7 +280,7 @@
         (ok (queries/all :dronetypes ids (data/db))))
       (POST "/" []
         :responses {201 {:schema      Dronetype
-                         :description "Hive was created"}}
+                         :description "Dronetype was created"}}
         :body [post-dronetype PostDronetype]
         :summary "Saves a drone type to the database"
         (let [id (transactions/add-drone-type (:name post-dronetype)
@@ -326,4 +326,13 @@
         :query-params [ids :- [Long] time :- Long]
         :summary "Returns the cost factor of taking a drone from a selected hive"
         :return [Cost]
-        (ok (queries/hivecosts ids time (data/db)))))))
+        (ok (queries/hivecosts ids time (data/db))))
+      (POST "/tryroute" []
+        :responses {201 {:schema      Route
+                         :description "Route was created"}}
+        :body [post-route PostRoute]
+        :summary "Gives data about a route as if it was saved to the database"
+        (let [route (transactions/tryroute (:hops post-route)
+                                           (:origin post-route)
+                                           (:time post-route))]
+          (ok route))))))

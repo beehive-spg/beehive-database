@@ -60,6 +60,16 @@
     @(d/transact conn (queries/mkroute (db) hops id time))
     id))
 
+(defn tryroute [hops origin time]
+  (let [id (d/tempid :db.part/user)
+        tx-route (d/with (db) [{:db/id        id
+                                :route/origin origin}])
+        db-route (:db-after tx-route)
+        tempids-route (:tempids tx-route)
+        real-id (d/resolve-tempid db-route tempids-route id)
+        tx (d/with db-route (queries/mkroute db-route hops real-id time))
+        db (:db-after tx)]
+    (queries/one :routes real-id db)))
 
 (defn add-order
   [shopid customerid routeid source]
