@@ -120,13 +120,16 @@
             charge-after-hop (- (:charge selected-drone) (util/used-charge (queries/one :dronetypes (:db/id (:drone/type selected-drone)) db) (:hop/distance hop)))]
         (d/transact conn [{:db/id         hopid
                            :hop/drone     (:db/id selected-drone)
-                           :hop/endcharge charge-after-hop}])))))
+                           :hop/endcharge charge-after-hop}])
+        (d/transact conn [{:db/id        (:db/id selected-drone)
+                           :drone/status :drone.status/flying}])))))
 
 (defn arrival [hopid]
   (let [db (d/db conn)
         hop (queries/one :hops hopid db)
         hiveid (:hop/end hop)
         droneid (:hop/drone hop)]
-    (d/transact conn [{:db/id      droneid
-                       :drone/hive hiveid}])))
+    (d/transact conn [{:db/id        droneid
+                       :drone/hive   hiveid
+                       :drone/status :drone.status/idle}])))
 

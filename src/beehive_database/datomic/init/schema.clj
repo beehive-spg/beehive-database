@@ -27,7 +27,7 @@
    (datomic-schema/schema drone
                           (datomic-schema/fields
                             [name :string]
-                            [status :enum [:idle :flying :charging]]
+                            [status :enum [:idle :flying]]
                             [type :ref]
                             [hive :ref]))
    (datomic-schema/schema prediction

@@ -177,8 +177,8 @@
                         (:db-after (d/with db (connections db shopid))))
         db-after-cust (if (nil? custid)
                         db-after-shop
-                        (:db-after (d/with db-after-shop (connections db-after-shop shopid))))]
-    (concat (conns hiveids db) (conns [shopid] db-after-shop) (conns [custid] db-after-cust))))
+                        (:db-after (d/with db-after-shop (connections db-after-shop custid))))]
+    (concat (conns hiveids db) (conns [shopid] db-after-cust) (conns [custid] db-after-cust))))
 
 
 (defn hivecosts [hiveids time db]
