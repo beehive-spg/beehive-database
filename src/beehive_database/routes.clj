@@ -307,7 +307,7 @@
         (no-content))
       (GET "/reachable" []
         :query-params [{ids :- [Long] nil}, {customerid :- Long nil}, {shopid :- Long nil}]
-        :summary "Returns all/selected connections"
+        :summary "Returns all/selected connections. Customer/shop ids need to be the building ids"
         (ok (queries/connections-with-shop-cust ids shopid customerid (data/db))))
       (GET "/reachable/:building1/:building2" []
         :path-params [building1 :- Long, building2 :- Long]
