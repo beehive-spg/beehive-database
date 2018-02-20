@@ -351,8 +351,14 @@
       (POST "/departure" []
         :body [hop-event HopEvent]
         :summary "Called on hop departure. Returns nothing"
-        (transactions/departure (:time hop-event)
-                                (:hop_id hop-event))
+        (if (nil? (transactions/departure (:time hop-event)
+                                          (:hop_id hop-event)))
+          (bad-request)
+          (no-content)))
+      (POST "/arrival" []
+        :body [hop-event HopEvent]
+        :summary "Called on hop arrival. Returns nothing"
+        (transactions/arrival (:hop_id hop-event))
         (no-content)))))
 
 
