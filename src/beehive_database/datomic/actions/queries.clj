@@ -123,7 +123,7 @@
 (defn reachable [buildingid db]
   (let [buildings (remove
                     #(= (:db/id %) buildingid)
-                    (all :buildings [] db))
+                    (all :hives [] db))
         building (one :buildings buildingid db)]
     (filter
       #(is-reachable
@@ -165,10 +165,13 @@
                  (+ endtime 3000)))))))
 
 (defn connections-with-shop-cust [hiveids shopid custid db]
-  (if (not (nil? shopid)) @(d/transact conn (connections db shopid)))
-  (if (not (nil? custid)) @(d/transact conn (connections (d/db conn) custid)))
-  (conns (concat hiveids [shopid custid]) (d/db conn)))
-
+  (let [db-after-shop (if (nil? shopid)
+                        db
+                        (:db-after (d/with db (connections db shopid))))
+        db-after-cust (if (nil? custid)
+                        db-after-shop
+                        (:db-after (d/with db-after-shop (connections shopid db-after-shop))))]
+    (concat (conns hiveids db) (conns [shopid] db-after-shop) (conns [custid] db-after-cust))))
 
 
 (defn hivecosts [hiveids time db]
@@ -191,6 +194,6 @@
             mapped-cost (if (= demand -1)
                           1
                           (util/map-num cost 0 300 1 20))]
-        {:db/id               hiveid
-         :hive/cost           mapped-cost}))
+        {:db/id     hiveid
+         :hive/cost mapped-cost}))
     (all :hives hiveids db)))
