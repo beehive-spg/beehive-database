@@ -1,7 +1,8 @@
 (ns beehive-database.datomic.actions.transactions
   (:require [datomic.api :as d]
             [beehive-database.datomic.actions.data :refer :all]
-            [beehive-database.datomic.actions.queries :as queries]))
+            [beehive-database.datomic.actions.queries :as queries]
+            [beehive-database.util :as util]))
 
 (defn transact->id [conn data]
   (let [id (d/tempid :db.part/user)
@@ -100,29 +101,24 @@
   demand)
 
 (defn departure [time hopid]
-  (let [hop (queries/one :hops hopid (d/db conn))
+  (let [db (d/db conn)
+        hop (queries/one :hops hopid db)
         hiveid (:hop/start hop)
-        drones (queries/drones-for-hive (:db/id hiveid) (d/db conn))
+        drones (queries/drones-for-hive (:db/id hiveid) db)
         drones-with-charge (map
-                             #(assoc %
-                                :charge (queries/charge-at-time (:db/id %)
-                                                                time
-                                                                (d/db conn)))
+                             #(assoc % :charge (queries/charge-at-time (:db/id %) time db))
                              drones)
         sorted-drones-with-charge (sort-by :charge drones-with-charge)
         sorted-capable-drones (filter
-                                #(> (queries/charge-at-time (:db/id %)
-                                                            time
-                                                            (d/db conn))
-                                    (* 100
-                                       (/ (:hop/distance hop)
-                                          (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type %)) (d/db conn))))))
+                                #(util/reachable-with-charge (:hop/distance hop)
+                                                             (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type %)) db))
+                                                             (:charge %))
                                 sorted-drones-with-charge)
         selected-drone (last sorted-capable-drones)
-        charge-after-hop (- (:charge selected-drone) (* 100
-                                                        (/ (:hop/distance hop)
-                                                           (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type selected-drone)) (d/db conn))))))
-        tx (d/transact conn [{:db/id         hopid
-                              :hop/drone     (:db/id selected-drone)
-                              :hop/endcharge charge-after-hop}])]
-    [charge-after-hop selected-drone hopid]))
+        charge-after-hop (- (:charge selected-drone) (util/used-charge (queries/one :dronetypes (:db/id (:drone/type selected-drone)) db) (:hop/distance hop)))]
+    (d/transact conn [{:db/id         hopid
+                       :hop/drone     (:db/id selected-drone)
+                       :hop/endcharge charge-after-hop}])))
+
+
+

@@ -43,6 +43,10 @@
         (- in-max in-min))
      out-min))
 
-(defn reachable-with-charge [p1 p2 max-range charge-percent]
+(defn reachable-with-charge [distance max-range charge-percent]
   (let [range (* max-range (/ charge-percent 100))]
-    (reachable p1 p2 range)))
+    (< distance range)))
+
+(defn used-charge [dronetype distance]
+  (let [max-range (:dronetype/range dronetype)]
+    (* 100 (/ distance max-range))))
