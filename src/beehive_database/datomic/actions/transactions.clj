@@ -98,3 +98,31 @@
                [{:db/id       hiveid
                  :hive/demand demand}])
   demand)
+
+(defn departure [time hopid]
+  (let [hop (queries/one :hops hopid (d/db conn))
+        hiveid (:hop/start hop)
+        drones (queries/drones-for-hive (:db/id hiveid) (d/db conn))
+        drones-with-charge (map
+                             #(assoc %
+                                :charge (queries/charge-at-time (:db/id %)
+                                                                time
+                                                                (d/db conn)))
+                             drones)
+        sorted-drones-with-charge (sort-by :charge drones-with-charge)
+        sorted-capable-drones (filter
+                                #(> (queries/charge-at-time (:db/id %)
+                                                            time
+                                                            (d/db conn))
+                                    (* 100
+                                       (/ (:hop/distance hop)
+                                          (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type %)) (d/db conn))))))
+                                sorted-drones-with-charge)
+        selected-drone (last sorted-capable-drones)
+        charge-after-hop (- (:charge selected-drone) (* 100
+                                                        (/ (:hop/distance hop)
+                                                           (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type selected-drone)) (d/db conn))))))
+        tx (d/transact conn [{:db/id         hopid
+                              :hop/drone     (:db/id selected-drone)
+                              :hop/endcharge charge-after-hop}])]
+    [charge-after-hop selected-drone hopid]))

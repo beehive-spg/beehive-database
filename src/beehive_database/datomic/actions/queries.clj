@@ -25,18 +25,20 @@
   (d/q '[:find [(pull ?e [:db/id
                           :drone/name
                           :drone/type
-                          :drone/status]) ...]
+                          :drone/status
+                          :drone/hive]) ...]
          :in $ ?hiveid
          :where [?e :drone/hive ?hiveid]]
        db
        hiveid))
 
-(defn hops-for-drones [droneids db]
-  (d/q '[:find [(pull ?hops [*]) ...]
-         :in $ [?droneids ...]
-         :where [?hops :hop/drone ?droneids]]
+(defn hops-for-drone [droneid db]
+  (d/q '[:find [(pull ?hops subquery ...)]
+         :in $ ?droneid subquery
+         :where [?hops :hop/drone ?droneid]]
        db
-       droneids))
+       droneid
+       (get rules/fields :hops)))
 
 (defn one [table id db]
   (d/q '[:find (pull ?id subquery) .
@@ -150,17 +152,22 @@
            starttime time]
       (if (empty? lhops)
         result
-        (let [endtime (long (+ starttime
+        (let [hop (first lhops)
+              distance (util/distance
+                         (util/position (one :buildings (:from hop) db))
+                         (util/position (one :buildings (:to hop) db)))
+              endtime (long (+ starttime
                                (* 1000
                                   (util/travel-time
-                                    (util/position (one :buildings (:from (first lhops)) db))
-                                    (util/position (one :buildings (:to (first lhops)) db))
+                                    (util/position (one :buildings (:from hop) db))
+                                    (util/position (one :buildings (:to hop) db))
                                     speed))))]
           (recur (conj result {:hop/route     routeid
-                               :hop/start     (:from (first lhops))
-                               :hop/end       (:to (first lhops))
+                               :hop/start     (:from hop)
+                               :hop/end       (:to hop)
                                :hop/starttime starttime
-                               :hop/endtime   endtime})
+                               :hop/endtime   endtime
+                               :hop/distance  distance})
                  (drop 1 lhops)
                  (+ endtime 3000)))))))
 
@@ -170,7 +177,7 @@
                         (:db-after (d/with db (connections db shopid))))
         db-after-cust (if (nil? custid)
                         db-after-shop
-                        (:db-after (d/with db-after-shop (connections shopid db-after-shop))))]
+                        (:db-after (d/with db-after-shop (connections db-after-shop shopid))))]
     (concat (conns hiveids db) (conns [shopid] db-after-shop) (conns [custid] db-after-cust))))
 
 
@@ -197,3 +204,20 @@
         {:db/id     hiveid
          :hive/cost mapped-cost}))
     (all :hives hiveids db)))
+
+(defn charge-at-time [droneid time db]
+  (let [db-as-of-time (d/as-of db (java.util.Date. time))
+        hops (sort-by :hop/endtime (hops-for-drone droneid db-as-of-time))]
+    (if (empty? hops)
+      100
+      (let [latest-hop (last hops)
+            drone (one :drones droneid db-as-of-time)
+            dronetype (:drone/type drone)
+            chargetime (:dronetype/chargetime dronetype)
+            charge-after-hop (:hop/endcharge latest-hop)
+            seconds-since-hop (/ 1000 (- time (:hop/endtime latest-hop)))
+            charged-since-hop (/ seconds-since-hop chargetime)
+            charge-now (+ charge-after-hop charged-since-hop)]
+        (if (> 100 charge-now)
+          100
+          charge-now)))))

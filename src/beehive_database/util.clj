@@ -42,3 +42,7 @@
            (- out-max out-min))
         (- in-max in-min))
      out-min))
+
+(defn reachable-with-charge [p1 p2 max-range charge-percent]
+  (let [range (* max-range (/ charge-percent 100))]
+    (reachable p1 p2 range)))

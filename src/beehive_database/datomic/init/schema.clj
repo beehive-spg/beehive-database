@@ -42,7 +42,8 @@
                             [starttime :long]
                             [endtime :long]
                             [distance :float]
-                            [route :ref]))
+                            [route :ref]
+                            [endcharge :float]))
    (datomic-schema/schema route
                           (datomic-schema/fields
                             [origin :enum [:order :distribution]]))

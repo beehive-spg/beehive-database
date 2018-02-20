@@ -58,5 +58,4 @@
  {:building/address "17., Hernalser Hauptstraße 116"
   :building/xcoord  16.324682754831805
   :building/ycoord  48.22045396937309
-  :building/shop    {:shop/name "Mobiler Foodpoint, Verein START UP Lebensmittelsammel- und ausgabestelle für Menschen mit geringem Einkommen"}}
- ]
+  :building/shop    {:shop/name "Mobiler Foodpoint, Verein START UP Lebensmittelsammel- und ausgabestelle für Menschen mit geringem Einkommen"}}]

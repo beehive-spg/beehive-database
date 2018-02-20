@@ -48,11 +48,14 @@
 (s/defschema Route
   {:db/id        Long
    :route/origin {:db/ident s/Keyword}
-   :hop/_route   [{:db/id         Long
-                   :hop/start     {:db/id Long}
-                   :hop/end       {:db/id Long}
-                   :hop/starttime Long
-                   :hop/endtime   Long}]})
+   :hop/_route   [{:db/id                          Long
+                   :hop/start                      {:db/id Long}
+                   :hop/end                        {:db/id Long}
+                   :hop/starttime                  Long
+                   :hop/endtime                    Long
+                   :hop/distance                   Float
+                   (s/optional-key :hop/drone)     Long
+                   (s/optional-key :hop/endcharge) Float}]})
 
 (s/defschema Order
   {:db/id          Long
@@ -123,6 +126,12 @@
    :speed      Long
    :chargetime Long
    :default    Boolean})
+
+(s/defschema HopEvent
+  {:type     s/Str
+   :time     Long
+   :hop_id   Long
+   :route_id Long})
 
 (def app
   (api
@@ -327,6 +336,9 @@
         :summary "Returns the cost factor of taking a drone from a selected hive"
         :return [Cost]
         (ok (queries/hivecosts ids time (data/db))))
+      (GET "/charge/:droneid/:time" []
+        :path-params [droneid :- Long time :- Long]
+        (ok (queries/charge-at-time droneid time (data/db))))
       (POST "/tryroute" []
         :responses {201 {:schema      Route
                          :description "Route was created"}}
@@ -335,4 +347,12 @@
         (let [route (transactions/tryroute (:hops post-route)
                                            (:origin post-route)
                                            (:time post-route))]
-          (ok route))))))
+          (ok route)))
+      (POST "/departure" []
+        :body [hop-event HopEvent]
+        :summary "Called on hop departure. Returns nothing"
+        (ok (transactions/departure (:time hop-event)
+                                    (:hop_id hop-event)))))))
+
+
+

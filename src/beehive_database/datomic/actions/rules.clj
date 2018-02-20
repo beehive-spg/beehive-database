@@ -56,7 +56,10 @@
    :hop/end
    :hop/starttime
    :hop/endtime
-   :hop/route])
+   :hop/route
+   :hop/distance
+   :hop/drone
+   :hop/endcharge])
 
 (def route-fields
   [:db/id
@@ -65,7 +68,10 @@
                  :hop/start
                  :hop/end
                  :hop/starttime
-                 :hop/endtime]}])
+                 :hop/endtime
+                 :hop/distance
+                 :hop/drone
+                 :hop/endcharge]}])
 
 (def order-fields
   [:db/id
