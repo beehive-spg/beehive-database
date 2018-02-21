@@ -49,7 +49,7 @@
        (get rules/fields table)))
 
 (defn component-to-building [id db]
-  (d/q '[:find (pull ?building subquery)
+  (d/q '[:find [(pull ?building subquery) ...]
          :in $ ?id subquery
          :where (or-join [?building ?id]
                          [?building :building/hive ?id]
