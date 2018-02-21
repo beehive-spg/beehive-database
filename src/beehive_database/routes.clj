@@ -359,7 +359,11 @@
         :body [hop-event HopEvent]
         :summary "Called on hop arrival. Returns nothing"
         (transactions/arrival (:hop_id hop-event))
-        (no-content)))))
+        (no-content))
+      (GET "/tobuilding/:id" []
+        :path-params [id :- Long]
+        :summary "Returns the building associated with the given hive/customer/shop id"
+        (ok (queries/component-to-building id (data/db)))))))
 
 
 

@@ -46,7 +46,18 @@
          :where [?id]]
        db
        id
-       (or (get rules/fields table) '[*])))
+       (get rules/fields table)))
+
+(defn component-to-building [id db]
+  (d/q '[:find (pull ?building subquery)
+         :in $ ?id subquery
+         :where (or-join [?building ?id]
+                         [?building :building/hive ?id]
+                         [?building :building/customer ?id]
+                         [?building :building/shop ?id])]
+       db
+       id
+       (get rules/fields :buildings)))
 
 (defn default-drone-type [db]
   (d/q '[:find (pull ?e subquery) .
