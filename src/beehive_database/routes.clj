@@ -366,6 +366,7 @@
         (ok (queries/component-to-building id (data/db))))
       (GET "/outgoing/:hiveid/:starttime/:endtime" []
         :path-params [hiveid :- Long starttime :- Long endtime :- Long]
+        :return s/Num
         :summary "Returns the number of outgoing hops in a timeframe"
         (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db)))))))
 

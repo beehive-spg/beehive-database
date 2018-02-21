@@ -234,11 +234,11 @@
           charge-now)))))
 
 (defn outgoing-timeframe [starttime endtime hiveid db]
-  (d/q '[:find (count ?hop)
-         :in $ ?starttime ?endtime ?hiveid
-         :where [?hop :hop/start ?hiveid] [?hop :hop/starttime ?hoptime] (or-join [?hoptime ?starttime ?endtime]
-                                                                                  (and [(< ?starttime ?hoptime)] [(> ?endtime ?hoptime)]))]
-       db
-       starttime
-       endtime
-       hiveid))
+  (or (d/q '[:find (count ?hop) .
+             :in $ ?starttime ?endtime ?hiveid
+             :where [?hop :hop/start ?hiveid] [?hop :hop/starttime ?hoptime] (or-join [?hoptime ?starttime ?endtime]
+                                                                                      (and [(< ?starttime ?hoptime)] [(> ?endtime ?hoptime)]))]
+           db
+           starttime
+           endtime
+           hiveid) 0))
