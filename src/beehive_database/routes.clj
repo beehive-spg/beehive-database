@@ -363,7 +363,11 @@
       (GET "/tobuilding/:id" []
         :path-params [id :- Long]
         :summary "Returns the building associated with the given hive/customer/shop id"
-        (ok (queries/component-to-building id (data/db)))))))
+        (ok (queries/component-to-building id (data/db))))
+      (GET "/outgoing/:hiveid/:starttime/:endtime" []
+        :path-params [hiveid :- Long starttime :- Long endtime :- Long]
+        :summary "Returns the number of outgoing hops in a timeframe"
+        (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db)))))))
 
 
 
