@@ -24,8 +24,8 @@
   (let [[id _] (transact->id conn [{:building/address address
                                     :building/xcoord  x
                                     :building/ycoord  y
-                                    :building/hive    {:hive/name name
-                                                       :hive/demand      -1}}])]
+                                    :building/hive    {:hive/name   name
+                                                       :hive/demand -1}}])]
     @(d/transact conn (queries/connections (db) id))
     id))
 
@@ -62,7 +62,7 @@
     [id newtx]))
 
 (defn tryroute [hops origin time]
-  (let [[id _] (d/tempid :db.part/user)
+  (let [id (d/tempid :db.part/user)
         tx-route (d/with (db) [{:db/id        id
                                 :route/origin origin}])
         db-route (:db-after tx-route)
