@@ -234,10 +234,10 @@
                          :description "Route was created"}}
         :body [post-route PostRoute]
         :summary "Saves a route to the database"
-        (let [id (transactions/add-route (:hops post-route)
-                                         (:origin post-route)
-                                         (:time post-route))]
-          (created (str "/one/routes/" id) (queries/one :routes id (data/db))))))
+        (let [[id tx] (transactions/add-route (:hops post-route)
+                                              (:origin post-route)
+                                              (:time post-route))]
+          (created (str "/one/routes/" id) (queries/one :routes id (:db-after tx))))))
 
     (context "/orders" []
       :tags ["Orders"]

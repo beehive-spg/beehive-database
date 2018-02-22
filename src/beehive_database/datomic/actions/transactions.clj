@@ -10,59 +10,59 @@
         db-after (:db-after tx)
         tempids (:tempids tx)
         real-id (d/resolve-tempid db-after tempids id)]
-    real-id))
+    [real-id tx]))
 
 
 (defn add-building [address x y]
-  (let [id (transact->id conn
-                         [{:building/address address
-                           :building/xcoord  x
-                           :building/ycoord  y}])]
+  (let [[id _] (transact->id conn
+                             [{:building/address address
+                               :building/xcoord  x
+                               :building/ycoord  y}])]
     id))
 
 (defn add-hive [address x y name]
-  (let [id (transact->id conn [{:building/address address
-                                :building/xcoord  x
-                                :building/ycoord  y
-                                :building/hive    {:hive/name   name
-                                                   :hive/demand -1}}])]
+  (let [[id _] (transact->id conn [{:building/address address
+                                    :building/xcoord  x
+                                    :building/ycoord  y
+                                    :building/hive    {:hive/name name}
+                                    :hive/demand      -1}])]
     @(d/transact conn (queries/connections (db) id))
     id))
 
 (defn add-shop [address x y name]
-  (let [id (transact->id conn
-                         [{:building/address address
-                           :building/xcoord  x
-                           :building/ycoord  y
-                           :building/shop    {:shop/name name}}])]
+  (let [[id _] (transact->id conn
+                             [{:building/address address
+                               :building/xcoord  x
+                               :building/ycoord  y
+                               :building/shop    {:shop/name name}}])]
     id))
 
 
 (defn add-customer [address x y name]
-  (let [id (transact->id conn
-                         [{:building/address  address
-                           :building/xcoord   x
-                           :building/ycoord   y
-                           :building/customer {:customer/name name}}])]
+  (let [[id _] (transact->id conn
+                             [{:building/address  address
+                               :building/xcoord   x
+                               :building/ycoord   y
+                               :building/customer {:customer/name name}}])]
     id))
 
 (defn add-drone [hiveid name type status]
-  (let [id (transact->id conn
-                         [{:drone/name   name
-                           :drone/type   (if (nil? type)
-                                           (:db/id (queries/default-drone-type (d/db conn)))
-                                           type)
-                           :drone/status status
-                           :drone/hive   hiveid}])]
+  (let [[id _] (transact->id conn
+                             [{:drone/name   name
+                               :drone/type   (if (nil? type)
+                                               (:db/id (queries/default-drone-type (d/db conn)))
+                                               type)
+                               :drone/status status
+                               :drone/hive   hiveid}])]
     id))
 
 (defn add-route [hops origin time]
-  (let [id (transact->id conn [{:route/origin origin}])]
-    @(d/transact conn (queries/mkroute (db) hops id time))
-    id))
+  (let [[id tx] (transact->id conn [{:route/origin origin}])
+        newtx @(d/transact conn (queries/mkroute (:db-after tx) hops id time))]
+    [id newtx]))
 
 (defn tryroute [hops origin time]
-  (let [id (d/tempid :db.part/user)
+  (let [[id _] (d/tempid :db.part/user)
         tx-route (d/with (db) [{:db/id        id
                                 :route/origin origin}])
         db-route (:db-after tx-route)
@@ -74,20 +74,20 @@
 
 (defn add-order
   [shopid customerid routeid source]
-  (let [id (transact->id conn
-                         [{:order/shop     shopid
-                           :order/customer customerid
-                           :order/route    routeid
-                           :order/source   source}])]
+  (let [[id _] (transact->id conn
+                             [{:order/shop     shopid
+                               :order/customer customerid
+                               :order/route    routeid
+                               :order/source   source}])]
     id))
 
 (defn add-drone-type [name range speed chargetime default]
-  (let [id (transact->id conn
-                         [{:dronetype/name       name
-                           :dronetype/range      range
-                           :dronetype/speed      speed
-                           :dronetype/chargetime chargetime
-                           :dronetype/default    default}])]
+  (let [[id _] (transact->id conn
+                             [{:dronetype/name       name
+                               :dronetype/range      range
+                               :dronetype/speed      speed
+                               :dronetype/chargetime chargetime
+                               :dronetype/default    default}])]
     id))
 
 (defn delete [id]
