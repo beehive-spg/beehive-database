@@ -24,8 +24,8 @@
   (let [[id _] (transact->id conn [{:building/address address
                                     :building/xcoord  x
                                     :building/ycoord  y
-                                    :building/hive    {:hive/name name}
-                                    :hive/demand      -1}])]
+                                    :building/hive    {:hive/name name
+                                                       :hive/demand      -1}}])]
     @(d/transact conn (queries/connections (db) id))
     id))
 
