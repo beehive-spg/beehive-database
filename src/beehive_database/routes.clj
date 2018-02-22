@@ -237,6 +237,11 @@
         (let [[id tx] (transactions/add-route (:hops post-route)
                                               (:origin post-route)
                                               (:time post-route))]
+          (if (nil? (queries/one :routes id (:db-after tx)))
+            (println "----------------------------------------------------------------------")
+            (println (queries/one :routes id (:db-after tx)))
+            (println id)
+            (println "----------------------------------------------------------------------"))
           (created (str "/one/routes/" id) (queries/one :routes id (:db-after tx))))))
 
     (context "/orders" []
