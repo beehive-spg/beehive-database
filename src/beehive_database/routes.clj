@@ -225,8 +225,8 @@
                          :description "Route was created"}}
         :body [post-route PostRoute]
         :summary "Saves a route to the database"
-        (let [[id tx] (transactions/add-route post-route)]
-          (created (str "/one/routes/" id) (queries/one :routes id (:db-after tx))))))
+        (let [{entity :entity} (transactions/add-route post-route)]
+          (created (str "/one/routes/" (:db/id entity)) entity))))
 
     (context "/orders" []
       :tags ["Orders"]
@@ -245,8 +245,8 @@
                          :description "Order was created"}}
         :body [post-order PostOrder]
         :summary "Saves an order to the database"
-        (let [id (transactions/add-order post-order)]
-          (created (str "/one/orders/" id) (queries/one :orders id (data/db))))))
+        (let [{entity :entity} (transactions/add-order post-order)]
+          (created (str "/one/orders/" (:db/id entity)) entity))))
 
     (context "/drones" []
       :tags ["Drones"]
@@ -260,8 +260,8 @@
                          :description "Drone was created"}}
         :body [post-drone PostDrone]
         :summary "Saves a drone to the database"
-        (let [id (transactions/add-drone post-drone)]
-          (created (str "/one/drones/" id) (queries/one :drones id (data/db))))))
+        (let [{entity :entity} (transactions/add-drone post-drone)]
+          (created (str "/one/drones/" (:db/id entity)) entity))))
 
     (context "/types" []
       :tags ["Types"]
@@ -275,8 +275,8 @@
                          :description "Dronetype was created"}}
         :body [post-dronetype PostDronetype]
         :summary "Saves a drone type to the database"
-        (let [id (transactions/add-drone-type post-dronetype)]
-          (created (str "/one/types/" id) (queries/one :dronetypes id (data/db))))))
+        (let [{entity :entity} (transactions/add-drone-type post-dronetype)]
+          (created (str "/one/types/" (:db/id entity)) entity))))
 
     (context "/one" []
       :tags ["One"]
@@ -346,6 +346,3 @@
         :return s/Num
         :summary "Returns the number of outgoing hops in a timeframe"
         (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db)))))))
-
-
-
