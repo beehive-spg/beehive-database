@@ -17,28 +17,28 @@
   (let [hives (slurp (clojure.java.io/resource "beehive-database/hives.edn"))
         shops (slurp (clojure.java.io/resource "beehive-database/shops.edn"))
         customers (slurp (clojure.java.io/resource "beehive-database/customers.edn"))]
-    (transactions/add-drone-type "large" 5000 15 1800 true)
+    (transactions/add-drone-type {:name "large" :range 5000 :speed 15 :chargetime 1800 :default true})
     (doseq [hive (clojure.edn/read-string hives)]
       (transactions/add-hive
-        (:building/address hive)
-        (:building/xcoord hive)
-        (:building/ycoord hive)
-        (:hive/name
-          (:building/hive hive))))
+        {:address (:building/address hive)
+         :xcoord  (:building/xcoord hive)
+         :ycoord  (:building/ycoord hive)
+         :name    (:hive/name
+                    (:building/hive hive))}))
     (doseq [shop (clojure.edn/read-string shops)]
       (transactions/add-shop
-        (:building/address shop)
-        (:building/xcoord shop)
-        (:building/ycoord shop)
-        (:shop/name
-          (:building/shop shop))))
+        {:address (:building/address shop)
+         :xcoord  (:building/xcoord shop)
+         :ycoord  (:building/ycoord shop)
+         :name    (:shop/name
+                    (:building/shop shop))}))
     (doseq [customer (clojure.edn/read-string customers)]
       (transactions/add-customer
-        (:building/address customer)
-        (:building/xcoord customer)
-        (:building/ycoord customer)
-        (:customer/name
-          (:building/customer customer))))))
+        {:address (:building/address customer)
+         :xcoord  (:building/xcoord customer)
+         :ycoord  (:building/ycoord customer)
+         :name    (:customer/name
+                    (:building/customer customer))}))))
 
 
 (defn- init []
