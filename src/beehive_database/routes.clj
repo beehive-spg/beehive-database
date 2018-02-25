@@ -226,6 +226,8 @@
         :body [post-route PostRoute]
         :summary "Saves a route to the database"
         (let [{entity :entity} (transactions/add-route post-route)]
+          (if (nil? entity)
+            (println "!!!!!"))
           (created (str "/one/routes/" (:db/id entity)) entity))))
 
     (context "/orders" []

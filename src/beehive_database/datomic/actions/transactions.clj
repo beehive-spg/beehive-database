@@ -32,7 +32,8 @@
                                  :hives)
         {entity :entity
          tx     :tx} result
-        tx @(d/transact conn (queries/connections (:db-after tx) (:db/id entity)))
+        id (:db/id entity)
+        tx @(d/transact conn (queries/connections (:db-after tx) id))
         result (assoc result :tx tx)]
     result))
 
