@@ -89,10 +89,10 @@
         db (:db-after tx)]
     (queries/one :routes real-id db)))
 
-(defn add-order [{:keys [shop customer route source]}]
+(defn add-order [{:keys [shopid customerid route source]}]
   (let [result (transact->entity conn
-                                 [{:order/shop     shop
-                                   :order/customer customer
+                                 [{:order/shop     shopid
+                                   :order/customer customerid
                                    :order/route    route
                                    :order/source   source}]
                                  :orders)]
