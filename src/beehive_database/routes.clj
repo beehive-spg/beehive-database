@@ -175,16 +175,13 @@
         :responses {201 {:schema      Hive
                          :description "Hive was created"}}
         :summary "Saves a hive to the database"
-        (let [id (transactions/add-hive (:address post-hive)
-                                        (:xcoord post-hive)
-                                        (:ycoord post-hive)
-                                        (:name post-hive))]
+        (let [id (transactions/add-hive post-hive)]
           (created (str "/one/hives/" id) (queries/one :hives id (data/db)))))
       (PUT "/:id/:demand" []
         :path-params [id :- Long demand :- Long]
         :return Long
         :summary "Changes a hives demand"
-        (ok (transactions/set-demand id demand))))
+        (ok (transactions/set-demand {:id id :demand demand}))))
 
     (context "/shops" []
       :tags ["Shops"]
@@ -198,10 +195,7 @@
                          :description "Shop was created"}}
         :body [post-shop PostShop]
         :summary "Saves a shop to the database"
-        (let [id (transactions/add-shop (:address post-shop)
-                                        (:xcoord post-shop)
-                                        (:ycoord post-shop)
-                                        (:name post-shop))]
+        (let [id (transactions/add-shop post-shop)]
           (created (str "/one/shops/" id) (queries/one :shops id (data/db))))))
 
     (context "/customers" []
@@ -216,10 +210,7 @@
                          :description "Customer was created"}}
         :body [post-customer PostCustomer]
         :summary "Saves a customer to the database"
-        (let [id (transactions/add-customer (:address post-customer)
-                                            (:xcoord post-customer)
-                                            (:ycoord post-customer)
-                                            (:name post-customer))]
+        (let [id (transactions/add-customer post-customer)]
           (created (str "/one/customers/" id) (queries/one :customers id (data/db))))))
 
     (context "/routes" []
@@ -234,15 +225,8 @@
                          :description "Route was created"}}
         :body [post-route PostRoute]
         :summary "Saves a route to the database"
-        (let [[id tx] (transactions/add-route (:hops post-route)
-                                              (:origin post-route)
-                                              (:time post-route))]
-          (if (nil? (queries/one :routes id (:db-after tx)))
-            ((println "----------------------------------------------------------------------")
-             (println (queries/one :routes id (:db-after tx)))
-             (println id)
-             (println "----------------------------------------------------------------------")))
-          (created (str "/one/routes/" id) (queries/one :routes id (:db-after tx))))))
+        (let [{entity :entity} (transactions/add-route post-route)]
+          (created (str "/one/routes/" (:db/id entity)) entity))))
 
     (context "/orders" []
       :tags ["Orders"]
@@ -261,11 +245,8 @@
                          :description "Order was created"}}
         :body [post-order PostOrder]
         :summary "Saves an order to the database"
-        (let [id (transactions/add-order (:shopid post-order)
-                                         (:customerid post-order)
-                                         (:route post-order)
-                                         (:source post-order))]
-          (created (str "/one/orders/" id) (queries/one :orders id (data/db))))))
+        (let [{entity :entity} (transactions/add-order post-order)]
+          (created (str "/one/orders/" (:db/id entity)) entity))))
 
     (context "/drones" []
       :tags ["Drones"]
@@ -279,11 +260,8 @@
                          :description "Drone was created"}}
         :body [post-drone PostDrone]
         :summary "Saves a drone to the database"
-        (let [id (transactions/add-drone (:hiveid post-drone)
-                                         (:name post-drone)
-                                         (:dronetype post-drone)
-                                         (:status post-drone))]
-          (created (str "/one/drones/" id) (queries/one :drones id (data/db))))))
+        (let [{entity :entity} (transactions/add-drone post-drone)]
+          (created (str "/one/drones/" (:db/id entity)) entity))))
 
     (context "/types" []
       :tags ["Types"]
@@ -297,12 +275,8 @@
                          :description "Dronetype was created"}}
         :body [post-dronetype PostDronetype]
         :summary "Saves a drone type to the database"
-        (let [id (transactions/add-drone-type (:name post-dronetype)
-                                              (:range post-dronetype)
-                                              (:speed post-dronetype)
-                                              (:chargetime post-dronetype)
-                                              (:default post-dronetype))]
-          (created (str "/one/types/" id) (queries/one :dronetypes id (data/db))))))
+        (let [{entity :entity} (transactions/add-drone-type post-dronetype)]
+          (created (str "/one/types/" (:db/id entity)) entity))))
 
     (context "/one" []
       :tags ["One"]
@@ -349,9 +323,7 @@
                          :description "Route was created"}}
         :body [post-route PostRoute]
         :summary "Gives data about a route as if it was saved to the database"
-        (let [route (transactions/tryroute (:hops post-route)
-                                           (:origin post-route)
-                                           (:time post-route))]
+        (let [route (transactions/tryroute post-route)]
           (ok route)))
       (POST "/departure" []
         :body [hop-event HopEvent]
@@ -374,6 +346,3 @@
         :return s/Num
         :summary "Returns the number of outgoing hops in a timeframe"
         (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db)))))))
-
-
-
