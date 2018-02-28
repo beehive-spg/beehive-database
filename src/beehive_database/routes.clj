@@ -211,7 +211,7 @@
         :body [post-customer PostCustomer]
         :summary "Saves a customer to the database"
         (let [{entity :entity} (transactions/add-customer post-customer)]
-          (created (str ("/one/customers/" (:db/id entity)) entity)))))
+          (created (str "/one/customers/" (:db/id entity)) entity))))
 
     (context "/routes" []
       :tags ["Routes"]
