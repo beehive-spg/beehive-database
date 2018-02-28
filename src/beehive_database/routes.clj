@@ -175,8 +175,8 @@
         :responses {201 {:schema      Hive
                          :description "Hive was created"}}
         :summary "Saves a hive to the database"
-        (let [id (transactions/add-hive post-hive)]
-          (created (str "/one/hives/" id) (queries/one :hives id (data/db)))))
+        (let [{entity :entity} (transactions/add-hive post-hive)]
+          (created (str "/one/hives/" (:db/id entity)) entity)))
       (PUT "/:id/:demand" []
         :path-params [id :- Long demand :- Long]
         :return Long
@@ -195,8 +195,8 @@
                          :description "Shop was created"}}
         :body [post-shop PostShop]
         :summary "Saves a shop to the database"
-        (let [id (transactions/add-shop post-shop)]
-          (created (str "/one/shops/" id) (queries/one :shops id (data/db))))))
+        (let [{entity :entity} (transactions/add-shop post-shop)]
+          (created (str "/one/shops/" (:db/id entity)) entity))))
 
     (context "/customers" []
       :tags ["Customers"]
@@ -210,8 +210,8 @@
                          :description "Customer was created"}}
         :body [post-customer PostCustomer]
         :summary "Saves a customer to the database"
-        (let [id (transactions/add-customer post-customer)]
-          (created (str "/one/customers/" id) (queries/one :customers id (data/db))))))
+        (let [{entity :entity} (transactions/add-customer post-customer)]
+          (created (str ("/one/customers/" (:db/id entity)) entity)))))
 
     (context "/routes" []
       :tags ["Routes"]
