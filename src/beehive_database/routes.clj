@@ -211,7 +211,7 @@
         :body [post-customer PostCustomer]
         :summary "Saves a customer to the database"
         (let [{entity :entity} (transactions/add-customer post-customer)]
-          (created (str "/one/customers/" (:db/id entity)) entity))))
+          (created (str ("/one/customers/" (:db/id entity)) entity)))))
 
     (context "/routes" []
       :tags ["Routes"]
@@ -318,6 +318,11 @@
       (GET "/charge/:droneid/:time" []
         :path-params [droneid :- Long time :- Long]
         (ok (queries/charge-at-time droneid time (data/db))))
+      (GET "/ongoing-routes/:time" []
+        :path-params [time :- Long]  
+        :summary "Returns all ongoing routes at a certain point in time"
+        :return [Order]
+        (ok (queries/ongoing-routes time (data/db))))
       (POST "/tryroute" []
         :responses {201 {:schema      Route
                          :description "Route was created"}}

@@ -242,3 +242,14 @@
            starttime
            endtime
            hiveid) 0))
+
+
+(defn ongoing-routes [time db]
+  (d/q '[:find [(pull ?route subquery) ...]
+         :in $ ?time subquery
+         :where [?hop :hop/route ?route] [?hop :hop/starttime ?starttime] [?hop :hop/endtime ?endtime] (or-join [?time ?starttime ?endtime]
+                                                                                                                (and [(< ?time ?endtime)]
+                                                                                                                     [(> ?time ?starttime)]))]
+       db
+       time
+       (get rules/fields :routes)))
