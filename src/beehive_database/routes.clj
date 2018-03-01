@@ -349,6 +349,12 @@
         :path-params [hiveid :- Long starttime :- Long endtime :- Long]
         :return s/Num
         :summary "Returns the number of outgoing hops in a timeframe"
-        (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db)))))))
+        (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db))))
+      (GET "/distance/:building1/:building2" []
+           :path-params [building1 :- Long, building2 :- Long]
+           :summary "Returns the distance between two buldings"
+           :return s/Num
+           (ok (util/distance (util/position (queries/one :buildings building1 (data/db)))
+                              (util/position (queries/one :buildings building2 (data/db)))))))))
 
 
