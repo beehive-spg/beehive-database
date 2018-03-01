@@ -211,8 +211,7 @@
         :body [post-customer PostCustomer]
         :summary "Saves a customer to the database"
         (let [{entity :entity} (transactions/add-customer post-customer)]
-          (created (str "/one/customers/" (:db/id entity)) entity)))))
-
+          (created (str "/one/customers/" (:db/id entity)) entity))))
     (context "/routes" []
       :tags ["Routes"]
       (GET "/" []
@@ -322,7 +321,7 @@
         :path-params [time :- Long]
         :summary "Returns all ongoing routes at a certain point in time"
         :return [Order]
-        (ok (queries/ongoing-orders time (data/db))))
+        (ok (queries/ongoing-routes time (data/db))))
       (POST "/tryroute" []
         :responses {201 {:schema      Route
                          :description "Route was created"}}
@@ -350,4 +349,6 @@
         :path-params [hiveid :- Long starttime :- Long endtime :- Long]
         :return s/Num
         :summary "Returns the number of outgoing hops in a timeframe"
-        (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db))))))
+        (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db)))))))
+
+
