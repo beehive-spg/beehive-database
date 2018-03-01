@@ -319,10 +319,10 @@
         :path-params [droneid :- Long time :- Long]
         (ok (queries/charge-at-time droneid time (data/db))))
       (GET "/ongoing-routes/:time" []
-        :path-params [time :- Long]  
+        :path-params [time :- Long]
         :summary "Returns all ongoing routes at a certain point in time"
         :return [Order]
-        (ok (queries/ongoing-routes time (data/db))))
+        (ok (queries/ongoing-orders time (data/db))))
       (POST "/tryroute" []
         :responses {201 {:schema      Route
                          :description "Route was created"}}
@@ -350,4 +350,4 @@
         :path-params [hiveid :- Long starttime :- Long endtime :- Long]
         :return s/Num
         :summary "Returns the number of outgoing hops in a timeframe"
-        (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db)))))))
+        (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db))))))
