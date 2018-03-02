@@ -320,7 +320,7 @@
       (GET "/ongoing-routes/:time" []
         :path-params [time :- Long]
         :summary "Returns all ongoing routes at a certain point in time"
-        :return [Order]
+        :return [Route]
         (ok (queries/ongoing-routes time (data/db))))
       (POST "/tryroute" []
         :responses {201 {:schema      Route
