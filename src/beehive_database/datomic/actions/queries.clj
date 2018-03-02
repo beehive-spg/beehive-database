@@ -117,7 +117,7 @@
        routeid
        (get rules/fields :orders)))
 
-(defn conns [hiveids db]
+(defn saved-connections [hiveids db]
   (if (nil? hiveids)
     (all :connections hiveids db)
     (d/q '[:find [(pull ?conn subquery) ...]
@@ -133,10 +133,15 @@
 (defn is-reachable [p1 p2 db]
   (util/reachable p1 p2 (max-range db)))
 
-(defn reachable [buildingid db]
+(defn reachable [buildingid db extra-buildingids]
   (let [buildings (remove
                     #(= (:db/id %) buildingid)
                     (all :hives [] db))
+        nila (println buildings)
+        buildings (if (empty? extra-buildingids)
+                    buildings
+                    (concat buildings (all :buildings extra-buildingids db)))
+        nild (println buildings)
         building (one :buildings buildingid db)]
     (filter
       #(is-reachable
@@ -145,7 +150,7 @@
          db)
       buildings)))
 
-(defn connections [db buildingid]
+(defn gen-connections [db buildingid & extra-buildingids]
   (mapv
     (fn [building]
       {:db/id               (d/tempid :db.part/user)
@@ -154,7 +159,7 @@
        :connection/distance (util/distance
                               (util/position (one :buildings buildingid db))
                               (util/position building))})
-    (reachable buildingid db)))
+    (reachable buildingid db extra-buildingids)))
 
 (defn mkroute [db hops routeid time]
   (let [speed (:dronetype/speed (default-drone-type db))]
@@ -185,11 +190,11 @@
 (defn connections-with-shop-cust [hiveids shopid custid db]
   (let [db-after-shop (if (nil? shopid)
                         db
-                        (:db-after (d/with db (connections db shopid))))
+                        (:db-after (d/with db (gen-connections db shopid))))
         db-after-cust (if (nil? custid)
                         db-after-shop
-                        (:db-after (d/with db-after-shop (connections db-after-shop custid))))]
-    (concat (conns hiveids db) (conns [shopid] db-after-cust) (conns [custid] db-after-cust))))
+                        (:db-after (d/with db-after-shop (gen-connections db-after-shop custid shopid))))]
+    (concat (saved-connections hiveids db) (saved-connections [shopid] db-after-cust) (saved-connections [custid] db-after-cust))))
 
 
 (defn hivecosts [hiveids time db]

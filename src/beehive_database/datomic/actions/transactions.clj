@@ -33,7 +33,7 @@
         {entity :entity
          tx     :tx} result
         id (:db/id entity)
-        tx @(d/transact conn (queries/connections (:db-after tx) id))
+        tx @(d/transact conn (queries/gen-connections (:db-after tx) id))
         result (assoc result :tx tx)]
     result))
 
