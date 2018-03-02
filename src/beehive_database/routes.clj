@@ -355,6 +355,12 @@
            :summary "Returns the distance between two buldings"
            :return s/Num
            (ok (util/distance (util/position (queries/one :buildings building1 (data/db)))
-                              (util/position (queries/one :buildings building2 (data/db)))))))))
+                              (util/position (queries/one :buildings building2 (data/db))))))
+      (GET "/statistics/:hiveid/:time" []
+           :path-params [hiveid :- Long, time :- Long]
+           :summary "Returns workload statistics for a hive"
+           :return [{:time Long
+                     :value Long}]
+           (ok (queries/hive-statistics hiveid time (data/db)))))))
 
 

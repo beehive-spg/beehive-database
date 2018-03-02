@@ -4,7 +4,6 @@
             [beehive-database.datomic.actions.rules :as rules]
             [beehive-database.datomic.actions.data :refer :all]))
 
-
 (defn all [table ids db]
   (if (empty? ids)
     (d/q '[:find [(pull ?e subquery) ...]
@@ -108,7 +107,6 @@
        time
        (get rules/fields :hops)))
 
-
 (defn order-with-route [routeid db]
   (d/q '[:find (pull ?order subquery) .
          :in $ ?routeid subquery
@@ -129,7 +127,6 @@
          hiveids
          (get rules/fields :connections))))
 
-
 (defn is-reachable [p1 p2 db]
   (util/reachable p1 p2 (max-range db)))
 
@@ -137,11 +134,9 @@
   (let [buildings (remove
                     #(= (:db/id %) buildingid)
                     (all :hives [] db))
-        nila (println buildings)
         buildings (if (empty? extra-buildingids)
                     buildings
                     (concat buildings (all :buildings extra-buildingids db)))
-        nild (println buildings)
         building (one :buildings buildingid db)]
     (filter
       #(is-reachable
@@ -196,7 +191,6 @@
                         (:db-after (d/with db-after-shop (gen-connections db-after-shop custid shopid))))]
     (concat (saved-connections hiveids db) (saved-connections [shopid] db-after-cust) (saved-connections [custid] db-after-cust))))
 
-
 (defn hivecosts [hiveids time db]
   (mapv
     (fn [hive]
@@ -248,7 +242,6 @@
            endtime
            hiveid) 0))
 
-
 (defn ongoing-routes [time db]
   (d/q '[:find [(pull ?route subquery) ...]
          :in $ ?time subquery
@@ -258,3 +251,27 @@
        db
        time
        (get rules/fields :routes)))
+
+(defn hive-statistics [hiveid time db]
+  (let [incoming (incoming-hops-after hiveid time db)
+        outgoing (outgoing-hops-after hiveid time db)
+        incoming-annotated (map #(assoc % :type "incoming") incoming)
+        outgoing-annotated (map #(assoc % :type "outgoing") outgoing)
+        hops (concat incoming-annotated outgoing-annotated)]
+    (sort-by :time
+      (loop [values [{:time  time
+                      :value 0}]
+             hops hops
+             lastval 0]
+        (if (empty? hops)
+          values
+          (let [hop (first hops)
+                incoming? (= "incoming" (:type hop))
+                [modifier hoptime] (if incoming?
+                                     [1 (:hop/endtime hop)]
+                                     [-1 (:hop/starttime hop)])
+                newval (+ lastval modifier)]
+            (recur (conj values {:time  hoptime
+                                 :value newval})
+                   (drop 1 hops)
+                   newval)))))))
