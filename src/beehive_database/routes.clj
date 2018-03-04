@@ -359,8 +359,8 @@
       (GET "/statistics/:hiveid/:time" []
            :path-params [hiveid :- Long, time :- Long]
            :summary "Returns workload statistics for a hive"
-           :return [{:time Long
-                     :value Long}]
+           :return [{:time s/Num
+                     :value s/Num}]
            (ok (queries/hive-statistics hiveid time (data/db)))))))
 
 

@@ -253,14 +253,15 @@
        (get rules/fields :routes)))
 
 (defn hive-statistics [hiveid time db]
-  (let [incoming (incoming-hops-after hiveid time db)
+  (let [drones-at-time (count (drones-for-hive hiveid (d/as-of db (java.util.Date. time))))
+        incoming (incoming-hops-after hiveid time db)
         outgoing (outgoing-hops-after hiveid time db)
         incoming-annotated (map #(assoc % :type "incoming") incoming)
         outgoing-annotated (map #(assoc % :type "outgoing") outgoing)
         hops (concat incoming-annotated outgoing-annotated)]
     (sort-by :time
       (loop [values [{:time  time
-                      :value 0}]
+                      :value drones-at-time}]
              hops hops
              lastval 0]
         (if (empty? hops)

@@ -57,14 +57,14 @@
                                  :customers)]
     result))
 
-(defn add-drone [{:keys [hive name type status]}]
+(defn add-drone [{:keys [hiveid name type status]}]
   (let [result (transact->entity conn
                                  [{:drone/name   name
                                    :drone/type   (if (nil? type)
                                                    (:db/id (queries/default-drone-type (d/db conn)))
                                                    type)
                                    :drone/status status
-                                   :drone/hive   hive}]
+                                   :drone/hive   hiveid}]
                                  :drones)]
     result))
 
