@@ -5,7 +5,8 @@
             [beehive-database.datomic.actions.queries :as queries]
             [beehive-database.datomic.actions.data :as data]
             [beehive-database.datomic.actions.transactions :as transactions]
-            [beehive-database.util :as util])
+            [beehive-database.util :as util]
+            [datomic.api :as d])
   (:gen-class))
 
 ;; Error 400 Schema
@@ -361,6 +362,11 @@
            :summary "Returns workload statistics for a hive"
            :return [{:time s/Num
                      :value s/Num}]
-           (ok (queries/hive-statistics hiveid time (data/db)))))))
+           (ok (queries/hive-statistics hiveid time (data/db))))
+      (POST "/givedrones/:amount" []
+            :path-params [amount :- Long]
+            :summary "Adds as many drones to all hives as amount specifies"
+            (transactions/give-drones amount (data/db))
+            (no-content)))))
 
 

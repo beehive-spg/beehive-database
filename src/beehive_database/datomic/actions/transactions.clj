@@ -152,3 +152,11 @@
                        :drone/hive   hiveid
                        :drone/status :drone.status/idle}])))
 
+(defn give-drones [num-drones db]
+  (let [hiveids (mapv #(:db/id %) (queries/all :hives [] db))]
+    (doseq [i hiveids]
+      (dotimes [n num-drones]
+        (add-drone {:hiveid i
+                    :name   (str "init-drone-" i "-" n)
+                    :type   nil
+                    :status :drone.status/idle})))))

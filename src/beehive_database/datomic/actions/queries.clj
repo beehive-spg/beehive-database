@@ -21,15 +21,12 @@
          ids)))
 
 (defn drones-for-hive [hiveid db]
-  (d/q '[:find [(pull ?e [:db/id
-                          :drone/name
-                          :drone/type
-                          :drone/status
-                          :drone/hive]) ...]
-         :in $ ?hiveid
+  (d/q '[:find [(pull ?e subquery) ...]
+         :in $ ?hiveid subquery
          :where [?e :drone/hive ?hiveid]]
        db
-       hiveid))
+       hiveid
+       (get rules/fields :drones)))
 
 (defn hops-for-drone [droneid db]
   (d/q '[:find [(pull ?hops subquery ...)]
