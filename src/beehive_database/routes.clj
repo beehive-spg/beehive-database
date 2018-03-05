@@ -69,7 +69,8 @@
   {:db/id        Long
    :drone/hive   {:db/id Long}
    :drone/name   s/Str
-   :drone/type   {:dronetype/name s/Str}
+   :drone/type   {:db/id Long
+                  :dronetype/name s/Str}
    :drone/status {:db/ident s/Keyword}})
 
 (s/defschema Dronetype

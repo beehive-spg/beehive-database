@@ -42,7 +42,8 @@
   [:db/id
    :drone/hive
    :drone/name
-   {:drone/type [:dronetype/name]}
+   {:drone/type [:db/id
+                 :dronetype/name]}
    {:drone/status [:db/ident]}])
 
 (def prediction-fields
