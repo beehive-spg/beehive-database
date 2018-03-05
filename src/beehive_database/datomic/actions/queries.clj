@@ -260,7 +260,7 @@
       (loop [values [{:time  time
                       :value drones-at-time}]
              hops hops
-             lastval 0]
+             lastval drones-at-time]
         (if (empty? hops)
           values
           (let [hop (first hops)
