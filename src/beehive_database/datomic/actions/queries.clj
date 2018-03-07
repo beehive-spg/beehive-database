@@ -219,10 +219,11 @@
       100
       (let [latest-hop (last hops)
             drone (one :drones droneid db-as-of-time)
-            dronetype (:drone/type drone)
+            dronetype (one :dronetypes (:db/id (:drone/type drone)) db)
             chargetime (:dronetype/chargetime dronetype)
             charge-after-hop (:hop/endcharge latest-hop)
             seconds-since-hop (/ 1000 (- time (:hop/endtime latest-hop)))
+            asd (println seconds-since-hop chargetime)
             charged-since-hop (/ seconds-since-hop chargetime)
             charge-now (+ charge-after-hop charged-since-hop)]
         (if (> 100 charge-now)
