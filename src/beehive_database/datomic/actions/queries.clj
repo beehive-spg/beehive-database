@@ -223,7 +223,6 @@
             chargetime (:dronetype/chargetime dronetype)
             charge-after-hop (:hop/endcharge latest-hop)
             seconds-since-hop (/ 1000 (- time (:hop/endtime latest-hop)))
-            asd (println seconds-since-hop chargetime)
             charged-since-hop (/ seconds-since-hop chargetime)
             charge-now (+ charge-after-hop charged-since-hop)]
         (if (> 100 charge-now)

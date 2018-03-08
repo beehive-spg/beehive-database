@@ -123,9 +123,7 @@
   (let [db (d/db conn)
         hop (queries/one :hops hopid db)
         hiveid (:hop/start hop)
-        asdasd (println "saddddddddsadsadsadasdsadasdsa" hiveid)
         drones (queries/drones-for-hive (:db/id hiveid) db)
-        asddas (println drones)
         drones-with-charge (map
                              #(assoc % :charge (queries/charge-at-time (:db/id %) time db))
                              drones)
@@ -138,7 +136,6 @@
     (if (empty? sorted-capable-drones)
       nil
       (let [selected-drone (last sorted-capable-drones)
-            abc (println selected-drone)
             charge-after-hop (- (:charge selected-drone) (util/used-charge (queries/one :dronetypes (:db/id (:drone/type selected-drone)) db) (:hop/distance hop)))]
         (d/transact conn [{:db/id         hopid
                            :hop/drone     (:db/id selected-drone)
@@ -151,7 +148,6 @@
         hop (queries/one :hops hopid db)
         hiveid (:hop/end hop)
         droneid (:db/id (:hop/drone hop))]
-    (println hop "_" hiveid "_" droneid)
     (d/transact conn [{:db/id        droneid
                        :drone/hive   hiveid
                        :drone/status :drone.status/idle}])))
