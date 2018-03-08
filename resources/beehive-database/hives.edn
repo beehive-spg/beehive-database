@@ -64,27 +64,31 @@
   :building/hive {:hive/name "Bruno Bettelheim Haus"}}
  {:building/address "Museum",
   :building/xcoord 16.347037799999953,
-  :building/ycoord 48.1987534,
+  :building/ycoord 48.1987534
   :building/hive {:hive/name "Museum"}}
  {:building/address "Schäffergasse",
   :building/xcoord 16.364232700000002,
-  :building/ycoord 48.1940856,
+  :building/ycoord 48.1940856
   :building/hive {:hive/name "Schäffergasse"}}
  {:building/address "Matzleinsdorferplatz",
   :building/xcoord 16.358833000000004,
-  :building/ycoord 48.18084899999999,
+  :building/ycoord 48.18084899999999
   :building/hive {:hive/name "Matzleinsdorferplatz"}}
  {:building/address "Hauptbahnhof",
-  :building/xcoord 16.38095469999996,
-  :building/ycoord 48.1915585,
+  :building/xcoord 16.37307820000001,
+  :building/ycoord 48.1861815
   :building/hive {:hive/name "Hauptbahnhof"}}
+ {:building/address "Belvedere",
+  :building/xcoord 16.38095469999996,
+  :building/ycoord 48.1915585
+  :building/hive {:hive/name "Belvedere"}}
  {:building/address "Universität Musik/Kunst",
   :building/xcoord 16.385261799999967,
-  :building/ycoord 48.20193860000001,
+  :building/ycoord 48.20193860000001
   :building/hive {:hive/name "Universität Musik/Kunst"}}
  {:building/address "Hunderwasserhaus",
   :building/xcoord 16.39416700000004,
-  :building/ycoord 48.20722199999999,
+  :building/ycoord 48.20722199999999
   :building/hive {:hive/name "Hunderwasserhaus"}}
  {:building/address "UKH Meidling",
   :building/xcoord 16.34433039,
