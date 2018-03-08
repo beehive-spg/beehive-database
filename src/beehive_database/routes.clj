@@ -55,7 +55,7 @@
                    :hop/starttime                  Long
                    :hop/endtime                    Long
                    :hop/distance                   Float
-                   (s/optional-key :hop/drone)     Long
+                   (s/optional-key :hop/drone)     {:db/id Long}
                    (s/optional-key :hop/endcharge) Float}]})
 
 (s/defschema Order
