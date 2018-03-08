@@ -98,10 +98,30 @@
 (defn incoming-hops-until [hiveid time db]
   (d/q '[:find [(pull ?hop subquery) ...]
          :in $ ?hiveid ?time subquery
-         :where [(missing? $ ?hop :hop/drone)] [?hop :hop/start ?hiveid] [?hop :hop/starttime ?starttime] [(> ?time ?starttime)]]
+         :where [(missing? $ ?hop :hop/drone)] [?hop :hop/end ?hiveid] [?hop :hop/starttime ?starttime] [(> ?time ?starttime)]]
        db
        hiveid
        time
+       (get rules/fields :hops)))
+
+(defn incoming-hops-timeframe [hiveid starttimeframe endtimeframe db]
+  (d/q '[:find [(pull ?hop subquery) ...]
+         :in $ ?hiveid ?stattimeframe ?endtimeframe subquery
+         :where [?hop :hop/end ?hiveid] [?hop :hop/endtime ?endtime] [(< ?endtime ?endtimeframe)] [(> ?endtime ?stattimeframe)]]
+       db
+       hiveid
+       starttimeframe
+       endtimeframe
+       (get rules/fields :hops)))
+
+(defn outgoing-hops-timeframe [hiveid starttimeframe endtimeframe db]
+  (d/q '[:find [(pull ?hop subquery) ...]
+         :in $ ?hiveid ?stattimeframe ?endtimeframe subquery
+         :where [?hop :hop/start ?hiveid] [?hop :hop/starttime ?starttime] [(< ?starttime ?endtimeframe)] [(> ?starttime ?stattimeframe)]]
+       db
+       hiveid
+       starttimeframe
+       endtimeframe
        (get rules/fields :hops)))
 
 (defn order-with-route [routeid db]
@@ -249,27 +269,25 @@
        time
        (get rules/fields :routes)))
 
-(defn hive-statistics [hiveid time db]
-  (let [drones-at-time (count (drones-for-hive hiveid (d/as-of db (java.util.Date. time))))
-        incoming (incoming-hops-after hiveid time db)
-        outgoing (outgoing-hops-after hiveid time db)
-        incoming-annotated (map #(assoc % :type "incoming") incoming)
-        outgoing-annotated (map #(assoc % :type "outgoing") outgoing)
-        hops (concat incoming-annotated outgoing-annotated)]
+(defn hive-statistics-timeframe [hiveid starttime endtime db]
+  (let [drones-at-time (count (drones-for-hive hiveid (d/as-of db (java.util.Date. starttime))))
+        incoming (incoming-hops-timeframe hiveid starttime endtime db)
+        outgoing (outgoing-hops-timeframe hiveid starttime endtime db)
+        incoming-annotated (map #(identity {:mod 1 :time (:hop/endtime %)}) incoming)
+        outgoing-annotated (map #(identity {:mod -1 :time (:hop/starttime %)}) outgoing)
+        hops (concat incoming-annotated outgoing-annotated)
+        sorted-hops (sort-by :time hops)]
     (sort-by :time
-      (loop [values [{:time  time
-                      :value drones-at-time}]
-             hops hops
-             lastval drones-at-time]
-        (if (empty? hops)
-          values
-          (let [hop (first hops)
-                incoming? (= "incoming" (:type hop))
-                [modifier hoptime] (if incoming?
-                                     [1 (:hop/endtime hop)]
-                                     [-1 (:hop/starttime hop)])
-                newval (+ lastval modifier)]
-            (recur (conj values {:time  hoptime
-                                 :value newval})
-                   (drop 1 hops)
-                   newval)))))))
+             (loop [values [{:time  starttime
+                             :value drones-at-time}]
+                    lhops sorted-hops
+                    lastval drones-at-time]
+               (if (empty? lhops)
+                 (conj values {:time  endtime
+                               :value lastval})
+                 (let [lhop (first lhops)
+                       newval (+ lastval (:mod lhop))]
+                   (recur (conj values {:time  (:time lhop)
+                                        :value newval})
+                          (rest lhops)
+                          newval)))))))

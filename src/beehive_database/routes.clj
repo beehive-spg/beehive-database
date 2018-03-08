@@ -69,7 +69,7 @@
   {:db/id        Long
    :drone/hive   {:db/id Long}
    :drone/name   s/Str
-   :drone/type   {:db/id Long
+   :drone/type   {:db/id          Long
                   :dronetype/name s/Str}
    :drone/status {:db/ident s/Keyword}})
 
@@ -353,21 +353,19 @@
         :summary "Returns the number of outgoing hops in a timeframe"
         (ok (queries/outgoing-timeframe starttime endtime hiveid (data/db))))
       (GET "/distance/:building1/:building2" []
-           :path-params [building1 :- Long, building2 :- Long]
-           :summary "Returns the distance between two buldings"
-           :return s/Num
-           (ok (util/distance (util/position (queries/one :buildings building1 (data/db)))
-                              (util/position (queries/one :buildings building2 (data/db))))))
-      (GET "/statistics/:hiveid/:time" []
-           :path-params [hiveid :- Long, time :- Long]
-           :summary "Returns workload statistics for a hive"
-           :return [{:time s/Num
-                     :value s/Num}]
-           (ok (queries/hive-statistics hiveid time (data/db))))
+        :path-params [building1 :- Long, building2 :- Long]
+        :summary "Returns the distance between two buldings"
+        :return s/Num
+        (ok (util/distance (util/position (queries/one :buildings building1 (data/db)))
+                           (util/position (queries/one :buildings building2 (data/db))))))
+      (GET "/statistics/:hiveid/:starttime/:endtime" []
+        :path-params [hiveid :- Long, starttime :- Long, endtime :- Long]
+        :summary "Returns workload statistics for a hive in a timeframe"
+        (ok (queries/hive-statistics-timeframe hiveid starttime endtime (data/db))))
       (POST "/givedrones/:amount" []
-            :path-params [amount :- Long]
-            :summary "Adds as many drones to all hives as amount specifies"
-            (transactions/give-drones amount (data/db))
-            (no-content)))))
+        :path-params [amount :- Long]
+        :summary "Adds as many drones to all hives as amount specifies"
+        (transactions/give-drones amount (data/db))
+        (no-content)))))
 
 
