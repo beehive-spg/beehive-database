@@ -1,92 +1,140 @@
-[{:building/address "Spengergasse",
+ [{:building/address "Spengergasse",
   :building/xcoord 16.3568,
-  :building/ycoord 48.1857
+  :building/ycoord 48.1857,
   :building/hive {:hive/name "Spengergasse"}}
  {:building/address "Hofburg",
   :building/xcoord 16.36605380000003,
-  :building/ycoord 48.2076579
+  :building/ycoord 48.2076579,
   :building/hive {:hive/name "Hofburg"}}
  {:building/address "Stephansplatz",
   :building/xcoord 16.373213299999975,
-  :building/ycoord 48.2089816
+  :building/ycoord 48.2089816,
   :building/hive {:hive/name "Stephansplatz"}}
  {:building/address "Flex Café",
   :building/xcoord 16.37105329999997,
-  :building/ycoord 48.21770540000001
+  :building/ycoord 48.21770540000001,
   :building/hive {:hive/name "Flex Café"}}
  {:building/address "Hard Rock Café",
   :building/xcoord 16.37574159999997,
-  :building/ycoord 48.2114105
+  :building/ycoord 48.2114105,
   :building/hive {:hive/name "Hard Rock Café"}}
  {:building/address "MAK",
   :building/xcoord 16.38160330000005,
-  :building/ycoord 48.2075967
+  :building/ycoord 48.2075967,
   :building/hive {:hive/name "MAK"}}
  {:building/address "Karlsplatz",
   :building/xcoord 16.37054790000002,
-  :building/ycoord 48.2004387
+  :building/ycoord 48.2004387,
   :building/hive {:hive/name "Karlsplatz"}}
  {:building/address "Cineplex Apollo Kino",
   :building/xcoord 16.35389310000005,
-  :building/ycoord 48.19746199999999
+  :building/ycoord 48.19746199999999,
   :building/hive {:hive/name "Cineplex Apollo Kino"}}
  {:building/address "Krankenhaus",
   :building/xcoord 16.344824700000004,
-  :building/ycoord 48.1924122
+  :building/ycoord 48.1924122,
   :building/hive {:hive/name "Krankenhaus"}}
  {:building/address "Westbahnhof",
   :building/xcoord 16.337701899999956,
-  :building/ycoord 48.19679909999999
+  :building/ycoord 48.19679909999999,
   :building/hive {:hive/name "Westbahnhof"}}
  {:building/address "Stadthalle",
   :building/xcoord 16.33289590000004,
-  :building/ycoord 48.202361
+  :building/ycoord 48.202361,
   :building/hive {:hive/name "Stadthalle"}}
  {:building/address "Rathaus",
   :building/xcoord 16.357248600000048,
-  :building/ycoord 48.21086849999999
+  :building/ycoord 48.21086849999999,
   :building/hive {:hive/name "Rathaus"}}
  {:building/address "Votivkirche",
   :building/xcoord 16.359082100000023,
-  :building/ycoord 48.21540119999999
+  :building/ycoord 48.21540119999999,
   :building/hive {:hive/name "Votivkirche"}}
  {:building/address "AKH",
   :building/xcoord 16.346866099999943,
-  :building/ycoord 48.2206898
+  :building/ycoord 48.2206898,
   :building/hive {:hive/name "AKH"}}
  {:building/address "Uni Campus",
   :building/xcoord 16.35318159999997,
-  :building/ycoord 48.218511
+  :building/ycoord 48.218511,
   :building/hive {:hive/name "Uni Campus"}}
  {:building/address "Bruno Bettelheim Haus",
   :building/xcoord 16.349361499999986,
-  :building/ycoord 48.2033958
+  :building/ycoord 48.2033958,
   :building/hive {:hive/name "Bruno Bettelheim Haus"}}
  {:building/address "Museum",
   :building/xcoord 16.347037799999953,
-  :building/ycoord 48.1987534
+  :building/ycoord 48.1987534,
   :building/hive {:hive/name "Museum"}}
  {:building/address "Schäffergasse",
   :building/xcoord 16.364232700000002,
-  :building/ycoord 48.1940856
+  :building/ycoord 48.1940856,
   :building/hive {:hive/name "Schäffergasse"}}
  {:building/address "Matzleinsdorferplatz",
   :building/xcoord 16.358833000000004,
-  :building/ycoord 48.18084899999999
+  :building/ycoord 48.18084899999999,
   :building/hive {:hive/name "Matzleinsdorferplatz"}}
  {:building/address "Hauptbahnhof",
-  :building/xcoord 16.37307820000001,
-  :building/ycoord 48.1861815
-  :building/hive {:hive/name "Hauptbahnhof"}}
- {:building/address "Belvedere",
   :building/xcoord 16.38095469999996,
-  :building/ycoord 48.1915585
-  :building/hive {:hive/name "Belvedere"}}
+  :building/ycoord 48.1915585,
+  :building/hive {:hive/name "Hauptbahnhof"}}
  {:building/address "Universität Musik/Kunst",
   :building/xcoord 16.385261799999967,
-  :building/ycoord 48.20193860000001
+  :building/ycoord 48.20193860000001,
   :building/hive {:hive/name "Universität Musik/Kunst"}}
  {:building/address "Hunderwasserhaus",
   :building/xcoord 16.39416700000004,
-  :building/ycoord 48.20722199999999
-  :building/hive {:hive/name "Hunderwasserhaus"}}]
+  :building/ycoord 48.20722199999999,
+  :building/hive {:hive/name "Hunderwasserhaus"}}
+ {:building/address "UKH Meidling",
+  :building/xcoord 16.34433039,
+  :building/ycoord 48.1728938,
+  :building/hive {:hive/name "UKH Meidling"}}
+ {:building/address "Reumannplatz",
+  :building/xcoord 16.3786159,
+  :building/ycoord 48.1739176,
+  :building/hive {:hive/name "Reumannplatz"}}
+ {:building/address "Troststraße",
+  :building/xcoord 16.36595169,
+  :building/ycoord 48.1696028,
+  :building/hive {:hive/name "Troststraße"}}
+ {:building/address "Wienerberg",
+  :building/xcoord 16.3462976,
+  :building/ycoord 48.16521119,
+  :building/hive {:hive/name "Wienerberg"}}
+ {:building/address "Altes Landgut",
+  :building/xcoord 16.382956,
+  :building/ycoord 48.1635576,
+  :building/hive {:hive/name "Altes Landgut"}}
+ {:building/address "Böhmischer Prater",
+  :building/xcoord 16.39929219,
+  :building/ycoord 48.1672516,
+  :building/hive {:hive/name "Böhmischer Prater"}}
+ {:building/address "Simmering",
+  :building/xcoord 16.4217332,
+  :building/ycoord 48.1690647,
+  :building/hive {:hive/name "Simmering"}}
+ {:building/address "Gasometer",
+  :building/xcoord 16.34433039,
+  :building/ycoord 16.4176297,
+  :building/hive {:hive/name "Gasometer"}}
+ {:building/address "Marx Halle",
+  :building/xcoord 16.40459379,
+  :building/ycoord 48.18785829,
+  :building/hive {:hive/name "Marx Halle"}}
+ {:building/address "Herz Jesu Krankenhaus",
+  :building/xcoord 16.3983799,
+  :building/ycoord 48.1956093,
+  :building/hive {:hive/name "Herz Jesu Krankenhaus"}}
+ {:building/address "Praterstern",
+  :building/xcoord 16.3917731,
+  :building/ycoord 48.2170357999,
+  :building/hive {:hive/name "Praterstern"}}
+ {:building/address "Augarten",
+  :building/xcoord 16.373948299,
+  :building/ycoord 48.2242944,
+  :building/hive {:hive/name "Augarten"}}
+ {:building/address "Krankenhaus Barmherzige Brüder",
+  :building/xcoord 16.382053899,
+  :building/ycoord 48.215493,
+  :building/hive {:hive/name "Krankenhaus Barmherzige Brüder"}}]
