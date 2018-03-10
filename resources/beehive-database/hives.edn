@@ -54,10 +54,10 @@
   :building/xcoord 16.346866099999943,
   :building/ycoord 48.2206898,
   :building/hive {:hive/name "AKH"}}
- {:building/address "Uni Campus",
-  :building/xcoord 16.35318159999997,
-  :building/ycoord 48.218511,
-  :building/hive {:hive/name "Uni Campus"}}
+ {:building/address "Wilhelminenspital",
+  :building/xcoord 16.30186430,
+  :building/ycoord 48.2109312,
+  :building/hive {:hive/name "Wilhelminenspital"}}
  {:building/address "Bruno Bettelheim Haus",
   :building/xcoord 16.349361499999986,
   :building/ycoord 48.2033958,
@@ -119,8 +119,8 @@
   :building/ycoord 48.1690647,
   :building/hive {:hive/name "Simmering"}}
  {:building/address "Gasometer",
-  :building/xcoord 16.34433039,
-  :building/ycoord 16.4176297,
+  :building/xcoord 16.41762970,
+  :building/ycoord 48.1853465,
   :building/hive {:hive/name "Gasometer"}}
  {:building/address "Marx Halle",
   :building/xcoord 16.40459379,
@@ -141,4 +141,104 @@
  {:building/address "Krankenhaus Barmherzige Brüder",
   :building/xcoord 16.382053899,
   :building/ycoord 48.215493,
-  :building/hive {:hive/name "Krankenhaus Barmherzige Brüder"}}]
+  :building/hive {:hive/name "Krankenhaus Barmherzige Brüder"}}
+ {:building/address "FH Technikum Wien",
+  :building/xcoord 16.377522799,
+  :building/ycoord 48.2390534,
+  :building/hive {:hive/name "FH Technikum Wien"}}
+ {:building/address "Wasserturm",
+  :building/xcoord 16.393913900,
+  :building/ycoord 48.2289648,
+  :building/hive {:hive/name "Wasserturm"}}
+ {:building/address "WU Wien",
+  :building/xcoord 16.4084665000,
+  :building/ycoord 48.2134274999,
+  :building/hive {:hive/name "WU Wien"}}
+ {:building/address "Alser Straße",
+  :building/xcoord 16.341456600,
+  :building/ycoord 48.2160804,
+  :building/hive {:hive/name "Alser Straße"}}
+ {:building/address "Ernst Happel Stadion",
+  :building/xcoord 16.4209846999,
+  :building/ycoord 48.20720779999,
+  :building/hive {:hive/name "Ernst Happel Stadion"}}
+ {:building/address "TU Atominstitut",
+  :building/xcoord 16.412458399,
+  :building/ycoord 48.1965174,
+  :building/hive {:hive/name "TU Atominstitut"}}
+ {:building/address "Haydnpark",
+  :building/xcoord 16.34754010,
+  :building/ycoord 48.1814179,
+  :building/hive {:hive/name "Haydnpark"}}
+  {:building/address "Niederhofstraße",
+  :building/xcoord 16.33094280,
+  :building/ycoord 48.18067749,
+  :building/hive {:hive/name "Niederhofstraße"}}
+ {:building/address "Tivoligasse",
+  :building/xcoord 16.324789099,
+  :building/ycoord 48.1803667,
+  :building/hive {:hive/name "Tivoligasse"}}
+ {:building/address "Maria Theresien Kaserne",
+  :building/xcoord 16.30400370,
+  :building/ycoord 48.1714887,
+  :building/hive {:hive/name "Maria Theresien Kaserne"}}
+ {:building/address "Schönbrunn",
+  :building/xcoord 16.312428500,
+  :building/ycoord 48.1859161,
+  :building/hive {:hive/name "Schönbrunn"}}
+ {:building/address "Heiligenstadt",
+  :building/xcoord 16.36261680,
+  :building/ycoord 48.246135,
+  :building/hive {:hive/name "Heiligenstadt"}}
+ {:building/address "BOKU Wien",
+  :building/xcoord 16.33757900,
+  :building/ycoord 48.2365448,
+  :building/hive {:hive/name "BOKU Wien"}}
+ {:building/address "Spittelau",
+  :building/xcoord 16.35859559,
+  :building/ycoord 48.2388615,
+  :building/hive {:hive/name "Spittelau"}}
+ {:building/address "Floridsdorf",
+  :building/xcoord 16.3985146,
+  :building/ycoord 48.2574446000,
+  :building/hive {:hive/name "Floridsdorf"}}
+ {:building/address "Krankenhaus Hietzing",
+  :building/xcoord 16.27743229,
+  :building/ycoord 48.16795219,
+  :building/hive {:hive/name "Krankenhaus Hietzing"}}
+ {:building/address "Altmannsdorf",
+  :building/xcoord 16.31707549,
+  :building/ycoord 48.16507319,
+  :building/hive {:hive/name "Altmannsdorf"}}
+ {:building/address "Tech Park",
+  :building/xcoord 16.33541979,
+  :building/ycoord 48.1561129,
+  :building/hive {:hive/name "Tech Park"}}
+ {:building/address "Alterlaa",
+  :building/xcoord 16.3168560,
+  :building/ycoord 48.150503,
+  :building/hive {:hive/name "Alterlaa"}}
+ {:building/address "Breitensee",
+  :building/xcoord 16.30544529,
+  :building/ycoord 48.19811989,
+  :building/hive {:hive/name "Breitensee"}}
+ {:building/address "Hernals",
+  :building/xcoord 16.3150435,
+  :building/ycoord 48.2232312,
+  :building/hive {:hive/name "Hernals"}}
+ {:building/address "Vet Uni",
+  :building/xcoord 16.43015179,
+  :building/ycoord 48.2541733,
+  :building/hive {:hive/name "Vet Uni"}}
+ {:building/address "Donau City",
+  :building/xcoord 16.43499029,
+  :building/ycoord 48.2423608,
+  :building/hive {:hive/name "Donau City"}}
+ {:building/address "Tech Gate",
+  :building/xcoord 16.41381350,
+  :building/ycoord 48.23250350,
+  :building/hive {:hive/name "Tech Gate"}}
+ {:building/address "Donaustadtbrücke",
+  :building/xcoord 16.44173339,
+  :building/ycoord 48.2129614,
+  :building/hive {:hive/name "Donaustadtbrücke"}}]
