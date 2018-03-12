@@ -180,8 +180,8 @@
         (let [{entity :entity} (transactions/add-hive post-hive)]
           (created (str "/one/hives/" (:db/id entity)) entity)))
       (PUT "/:id/:demand" []
-        :path-params [id :- Long demand :- Long]
-        :return Long
+        :path-params [id :- Long demand :- Double]
+        :return s/Num
         :summary "Changes a hives demand"
         (ok (transactions/set-demand {:id id :demand demand}))))
 

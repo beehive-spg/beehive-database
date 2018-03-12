@@ -17,7 +17,7 @@
    (datomic-schema/schema hive
                           (datomic-schema/fields
                             [name :string]
-                            [demand :long]))
+                            [demand :float]))
    (datomic-schema/schema shop
                           (datomic-schema/fields
                             [name :string]))
