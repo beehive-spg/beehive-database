@@ -1,4 +1,4 @@
-FROM clojure:lein-2.8.1-alpine
+FROM clojure:lein-2.8.1-alpine as build
 
 WORKDIR /app
 
@@ -14,5 +14,9 @@ COPY ./resources ./resources
 
 RUN lein uberjar
 
-ENTRYPOINT java -jar ./target/beehive-database-*-standalone.jar
 
+FROM openjdk:jre-alpine
+
+COPY --from=build /app/target/beehive-database-*-standalone.jar /database.jar
+
+ENTRYPOINT java -jar ./database.jar
