@@ -12,8 +12,8 @@ COPY ./project.clj .
 
 RUN lein install
 
-COPY ./src ./src
 COPY ./resources ./resources
+COPY ./src ./src
 
 RUN lein uberjar
 
