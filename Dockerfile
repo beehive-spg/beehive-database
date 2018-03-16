@@ -10,7 +10,7 @@ ENV PASSWORD=$password
 
 COPY ./project.clj .
 
-RUN lein install
+RUN lein deps
 
 COPY ./resources ./resources
 COPY ./src ./src
