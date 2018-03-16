@@ -9,6 +9,9 @@ ENV USERNAME=$username
 ENV PASSWORD=$password
 
 COPY ./project.clj .
+
+RUN lein install
+
 COPY ./src ./src
 COPY ./resources ./resources
 
