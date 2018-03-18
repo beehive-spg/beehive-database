@@ -29,7 +29,7 @@
                                    :building/xcoord  xcoord
                                    :building/ycoord  ycoord
                                    :building/hive    {:hive/name   name
-                                                      :hive/demand 5.0s}}]
+                                                      :hive/demand 5.0}}]
                                  :hives)
         {entity :entity
          tx     :tx} result
