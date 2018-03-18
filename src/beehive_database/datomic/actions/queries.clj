@@ -220,7 +220,7 @@
             drones-at-time (+ (- numdrones (count outgoing-now)) (count incoming-until-time))
             free-at-time (- drones-at-time demand)
             percent-takeout (if (= 0 drones-at-time)
-                              100000
+                              101
                               (* 100 (/ 1 drones-at-time)))
             cost (if (< free-at-time 1)
                    (* 3 percent-takeout)
