@@ -127,6 +127,7 @@
         drones-with-charge (map
                              #(assoc % :charge (queries/charge-at-time (:db/id %) time db))
                              drones)
+        as (println (map #(:drone/type %) drones-with-charge))
         sorted-drones-with-charge (sort-by :charge drones-with-charge)
         sorted-capable-drones (filter
                                 #(util/reachable-with-charge (:hop/distance hop)
