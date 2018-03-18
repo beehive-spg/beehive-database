@@ -130,9 +130,11 @@
         as (println (map #(:drone/type %) drones-with-charge))
         sorted-drones-with-charge (sort-by :charge drones-with-charge)
         sorted-capable-drones (filter
-                                #(util/reachable-with-charge (:hop/distance hop)
-                                                             (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type %)) db))
-                                                             (:charge %))
+                                #(do
+                                   (println "AAAAA" %)
+                                   (util/reachable-with-charge (:hop/distance hop)
+                                                               (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type %)) db))
+                                                               (:charge %)))
                                 sorted-drones-with-charge)]
     (if (empty? sorted-capable-drones)
       nil
