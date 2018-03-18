@@ -5,8 +5,7 @@
             [beehive-database.util :as util]))
 
 (defn transact->entity [conn data table]
-  (let [sa (println data)
-        id (d/tempid :db.part/user)
+  (let [id (d/tempid :db.part/user)
         tx @(d/transact conn [(assoc (first data) :db/id id)])
         db-after (:db-after tx)
         tempids (:tempids tx)
@@ -128,11 +127,9 @@
         drones-with-charge (map
                              #(assoc % :charge (queries/charge-at-time (:db/id %) time db))
                              drones)
-        as (println (map #(:drone/type %) drones-with-charge))
         sorted-drones-with-charge (sort-by :charge drones-with-charge)
         sorted-capable-drones (filter
                                 #(do
-                                   (println "AAAAA" %)
                                    (util/reachable-with-charge (:hop/distance hop)
                                                                (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type %)) db))
                                                                (:charge %)))
@@ -152,9 +149,12 @@
         hop (queries/one :hops hopid db)
         hiveid (:hop/end hop)
         droneid (:db/id (:hop/drone hop))]
-    (d/transact conn [{:db/id        droneid
-                       :drone/hive   hiveid
-                       :drone/status :drone.status/idle}])))
+    (println (queries/one :drones droneid db))
+    (let [tx @(d/transact conn [{:db/id droneid
+                                 :drone/hive hiveid
+                                 :drone/status :drone.status/idle}])
+          db-after (:db-after tx)]
+      (println (queries/one :drones droneid db-after)))))
 
 (defn give-drones [num-drones db]
   (let [hiveids (mapv #(:db/id %) (queries/all :hives [] db))]
