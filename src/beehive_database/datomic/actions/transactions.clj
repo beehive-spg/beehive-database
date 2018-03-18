@@ -5,7 +5,8 @@
             [beehive-database.util :as util]))
 
 (defn transact->entity [conn data table]
-  (let [id (d/tempid :db.part/user)
+  (let [sa (println data)
+        id (d/tempid :db.part/user)
         tx @(d/transact conn [(assoc (first data) :db/id id)])
         db-after (:db-after tx)
         tempids (:tempids tx)
