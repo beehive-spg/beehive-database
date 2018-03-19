@@ -248,8 +248,8 @@
                                                           :charge
                                                           (charge-at-time (:db/id %)
                                                                           (:hop/starttime hop)
-                                                                          db)))
-                                          satisfying-drones))]
+                                                                          db))
+                                                       satisfying-drones)))]
           (recur (drop 1 hops)
                  (remove #(= (:db/id %) (:db/id lowest-drone)) drones)))))))
 
