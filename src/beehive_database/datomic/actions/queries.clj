@@ -449,8 +449,7 @@
                           newval)))))))
 
 (defn drone-ids-at-time [buildingid time db]
-  (let [droneids (drone-ids buildingid db)
-        outgoing]))
+  (let [droneids (drone-ids buildingid db)]))
 
 (defn find-drone-and-time [buildingid time distance db]
   (let [droneids (drone-ids buildingid db)]))
