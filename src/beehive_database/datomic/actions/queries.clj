@@ -20,6 +20,13 @@
          (get rules/queries table)
          ids)))
 
+(defn all-ids [table db]
+  (d/q '[:find [?id ...]
+         :in $ ?ref
+         :where [?id ?ref _]]
+       db
+       (get rules/fields table)))
+
 (defn drones-for-hive [hiveid db]
   (d/q '[:find [(pull ?e subquery) ...]
          :in $ ?hiveid subquery
@@ -28,6 +35,13 @@
        hiveid
        (get rules/fields :drones)))
 
+(defn drone-ids [buildingid db]
+  (d/q '[:find ?id
+         :in $ ?buildingid
+         :where [?id :drone/hive ?buildingid]]
+       db
+       buildingid))
+
 (defn hops-for-drone [droneid db]
   (d/q '[:find [(pull ?hops subquery ...)]
          :in $ ?droneid subquery
@@ -35,6 +49,11 @@
        db
        droneid
        (get rules/fields :hops)))
+
+(defn hop-ids [droneid db]
+  (d/q '[:find [?id ...]
+         :in $ ?droneid
+         :where [?id :hop/drone ?droneid]]))
 
 (defn one [table id db]
   (d/q '[:find (pull ?id subquery) .
@@ -61,10 +80,16 @@
          :where [?e :dronetype/default true]]
        db (get rules/fields :dronetypes)))
 
+(defn default-drone-type-id [db]
+  (d/q '[:find ?id .
+         :in $
+         :where [?id :dronetype/default true]]
+       db))
+
 (defn max-range [db]
   (d/q '[:find (max ?e) .
-         :where
-         [_ :dronetype/range ?e]] db))
+         :where [_ :dronetype/range ?e]]
+       db))
 
 (defn distributions [time1 time2 db]
   (d/q '[:find [(pull ?route subquery) ...]
@@ -86,6 +111,14 @@
        time
        (get rules/fields :hops)))
 
+(defn incoming-hop-ids-after [hiveid time db]
+  (d/q '[:find [?id ...]
+         :in $ ?hiveid ?time
+         :where [?id :hop/end ?hiveid] [?id :hop/endtime ?endtime] [(< ?time ?endtime)]]
+       db
+       hiveid
+       time))
+
 (defn outgoing-hops-after [hiveid time db]
   (d/q '[:find [(pull ?hop subquery) ...]
          :in $ ?hiveid ?time subquery
@@ -95,6 +128,14 @@
        time
        (get rules/fields :hops)))
 
+(defn outgoing-hop-ids-after [hiveid time db]
+  (d/q '[:find [?id ...]
+         :in $ ?hiveid ?time
+         :where [?id :hop/start ?hiveid] [?id :hop/starttime ?starttime] [(< ?time ?starttime)]]
+       db
+       hiveid
+       time))
+
 (defn incoming-hops-until [hiveid time db]
   (d/q '[:find [(pull ?hop subquery) ...]
          :in $ ?hiveid ?time subquery
@@ -103,6 +144,14 @@
        hiveid
        time
        (get rules/fields :hops)))
+
+(defn incoming-hop-ids-until [hiveid time db]
+  (d/q '[:find [?id ...]
+         :in $ ?hiveid ?time
+         :where [?id :hop/end ?hiveid] [?id :hop/starttime ?starttime] [(> ?time ?starttime)]]
+       db
+       hiveid
+       time))
 
 (defn incoming-hops-timeframe [hiveid starttimeframe endtimeframe db]
   (d/q '[:find [(pull ?hop subquery) ...]
@@ -114,6 +163,15 @@
        endtimeframe
        (get rules/fields :hops)))
 
+(defn incoming-hop-ids-timeframe [hiveid start end db]
+  (d/q '[:find [?id ...]
+         :in $ ?hiveid ?start ?end
+         :where [?id :hop/end ?hiveid] [?hop :hop/endtime ?endtime] [(< ?endtime ?end)] [(> ?endtime ?start)]]
+       db
+       hiveid
+       start
+       end))
+
 (defn outgoing-hops-timeframe [hiveid starttimeframe endtimeframe db]
   (d/q '[:find [(pull ?hop subquery) ...]
          :in $ ?hiveid ?stattimeframe ?endtimeframe subquery
@@ -124,6 +182,15 @@
        endtimeframe
        (get rules/fields :hops)))
 
+(defn outgoing-hop-ids-timeframe [hiveid start end db]
+  (d/q '[:find [?id ...]
+         :in $ ?hiveid ?start ?end
+         :where [?id :hop/start ?hiveid] [?hop :hop/starttime ?starttime] [(< ?starttime ?end)] [(> ?starttime ?start)]]
+       db
+       hiveid
+       start
+       end))
+
 (defn order-with-route [routeid db]
   (d/q '[:find (pull ?order subquery) .
          :in $ ?routeid subquery
@@ -131,6 +198,13 @@
        db
        routeid
        (get rules/fields :orders)))
+
+(defn order-id [routeid db]
+  (d/q '[:find ?id .
+         :in $ ?routeid
+         :where [?id :order/route ?routeid]]
+       db
+       routeid))
 
 (defn saved-connections [hiveids db]
   (if (nil? hiveids)
@@ -144,8 +218,44 @@
          hiveids
          (get rules/fields :connections))))
 
+(defn connection-ids
+  ([db]
+   (all-ids :connections db))
+  ([hiveids db]
+   (d/q '[:find [?id ...]
+          :in $ [?hiveids ...]
+          :where (or-join [?id ?hiveids]
+                          [?id :connection/start ?hiveids]
+                          [?id :connection/end ?hiveids])]
+        db
+        hiveids)))
+
+(defn drone-speed [droneid db]
+  (d/q '[:find ?speed .
+         :in $ ?droneid
+         :where [?droneid :drone/type ?dronetype] [?dronetype :dronetype/speed ?speed]]))
+
 (defn is-reachable [p1 p2 db]
   (util/reachable p1 p2 (max-range db)))
+
+(defn building-position [buildingid db]
+  (let [{x :building/xcoord
+         y :building/ycoord} (d/pull db [:building/xcoord :building/ycoord] buildingid)]
+    [x y]))
+
+(defn distance [buildingid1 buildingid2 db]
+  (util/distance (building-position buildingid1 db)
+                 (building-position buildingid2 db)))
+
+(defn travel-time [buildingid1 buildingid2 droneid db]
+  (util/travel-time (building-position buildingid1 db)
+                    (building-position buildingid2 db)
+                    (drone-speed droneid db)))
+
+(defn is-reachable2 [buildingid1 buildingid2 db]
+  (util/reachable (building-position buildingid1 db)
+                  (building-position buildingid2 db)
+                  (max-range db)))
 
 (defn reachable [buildingid db extra-buildingids]
   (let [buildings (remove
@@ -161,6 +271,11 @@
          (util/position %)
          db)
       buildings)))
+
+(defn reachable-ids [buildingid db extra-buildingids]
+  (->> (all-ids :hives db)
+       (concat (d/pull-many db [:db/id] extra-buildingids))
+       (filter #(is-reachable2 buildingid % db))))
 
 (defn gen-connections [db buildingid & extra-buildingids]
   (mapv
@@ -332,3 +447,12 @@
                                         :value newval})
                           (rest lhops)
                           newval)))))))
+
+(defn drone-ids-at-time [buildingid time db]
+  (let [droneids (drone-ids buildingid db)
+        outgoing]))
+
+(defn find-drone-and-time [buildingid time distance db]
+  (let [droneids (drone-ids buildingid db)]))
+
+
