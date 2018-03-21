@@ -131,13 +131,13 @@
         sorted-capable-drones (filter
                                 #(do
                                    (util/reachable-with-charge (:hop/distance hop)
-                                                               (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type %)) db))
+                                                               (queries/max-range db)
                                                                (:charge %)))
                                 sorted-drones-with-charge)]
     (if (empty? sorted-capable-drones)
       nil
       (let [selected-drone (last sorted-capable-drones)
-            charge-after-hop (- (:charge selected-drone) (util/used-charge (queries/one :dronetypes (:db/id (:drone/type selected-drone)) db) (:hop/distance hop)))]
+            charge-after-hop (- (:charge selected-drone) (util/used-charge (queries/default-drone-type db) (:hop/distance hop)))]
         (d/transact conn [{:db/id         hopid
                            :hop/drone     (:db/id selected-drone)
                            :hop/endcharge charge-after-hop}])
@@ -150,8 +150,8 @@
         hiveid (:hop/end hop)
         droneid (:db/id (:hop/drone hop))]
     (println (queries/one :drones droneid db))
-    (let [tx @(d/transact conn [{:db/id droneid
-                                 :drone/hive hiveid
+    (let [tx @(d/transact conn [{:db/id        droneid
+                                 :drone/hive   hiveid
                                  :drone/status :drone.status/idle}])
           db-after (:db-after tx)]
       (println (queries/one :drones droneid db-after)))))
