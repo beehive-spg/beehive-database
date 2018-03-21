@@ -208,6 +208,30 @@
                         (:db-after (d/with db-after-shop (gen-connections db-after-shop custid shopid))))]
     (concat (saved-connections hiveids db) (saved-connections [shopid] db-after-cust) (saved-connections [custid] db-after-cust))))
 
+(defn hivecosts [hiveids time db]
+  (mapv
+    (fn [hive]
+      (let [hiveid (:db/id hive)
+            demand (:hive/demand (:building/hive hive))
+            drones (drones-for-hive hiveid db)
+            numdrones (count drones)
+            outgoing-now (outgoing-hops-after hiveid (.getTime (java.util.Date.)) db)
+            incoming-until-time (incoming-hops-until hiveid time db)
+            drones-at-time (+ (- numdrones (count outgoing-now)) (count incoming-until-time))
+            free-at-time (- drones-at-time demand)
+            percent-takeout (if (= 0 drones-at-time)
+                              101
+                              (* 100 (/ 1 drones-at-time)))
+            cost (if (< free-at-time 1)
+                   (* 3 percent-takeout)
+                   percent-takeout)
+            mapped-cost (if (= demand -1)
+                          1
+                          (util/map-num cost 0 300 1 20))]
+        {:db/id     hiveid
+         :hive/cost mapped-cost}))
+    (all :hives hiveids db)))
+
 (defn charge-at-time [droneid time db]
   (let [db-as-of-time (d/as-of db (java.util.Date. time))
         hops (sort-by :hop/endtime (hops-for-drone droneid db-as-of-time))]
@@ -224,70 +248,6 @@
         (if (> 100 charge-now)
           100
           charge-now)))))
-
-(defn assoc-charge [drones time db]
-  (map
-    #(assoc % :charge (charge-at-time (:db/id %) time db))
-    drones))
-
-(defn dissoc-needed [outgoing-after-now drones db]
-  (loop [hops outgoing-after-now
-         drones drones]
-    (if (empty? hops)
-      drones
-      (if (empty? drones)
-        nil
-        (let [hop (first hops)
-              satisfying-drones (filter #(util/reachable-with-charge (:hop/distance hop)
-                                                                     5000
-                                                                     (charge-at-time (:db/id %)
-                                                                                     (:hop/starttime hop)
-                                                                                     db))
-                                        drones)
-              lowest-drone (last (sort-by :charge (map #(assoc %
-                                                          :charge
-                                                          (charge-at-time (:db/id %)
-                                                                          (:hop/starttime hop)
-                                                                          db)))
-                                          satisfying-drones))
-              (recur (drop 1 hops)
-                     (remove #(= (:db/id %) (:db/id lowest-drone)) drones))])))))
-
-(defn leftover-drones [hiveid time db]
-  (let [drones (drones-for-hive hiveid db)
-        outgoing-after-now (outgoing-hops-after hiveid (.getTime (java.util.Date.)) db)
-        incoming-until-time (incoming-hops-until hiveid time db)
-        drones-of-incoming (mapv #(one :drones (:hop/drone %) db) incoming-until-time)
-        drones (concat drones drones-of-incoming)]
-    (dissoc-needed outgoing-after-now drones db)))
-
-
-(defn hivecosts [hiveids time db]
-  (mapv
-    (fn [hive]
-      (let [hiveid (:db/id hive)]
-        (if (nil? (leftover-drones hiveid time db))
-          (identity {:db/id hiveid
-                     :hive/cost 21})
-          (let [demand (:hive/demand (:building/hive hive))
-                drones (drones-for-hive hiveid db)
-                numdrones (count drones)
-                outgoing-now (outgoing-hops-after hiveid (.getTime (java.util.Date.)) db)
-                incoming-until-time (incoming-hops-until hiveid time db)
-                drones-at-time (+ (- numdrones (count outgoing-now)) (count incoming-until-time))
-                free-at-time (- drones-at-time demand)
-                percent-takeout (if (= 0 drones-at-time)
-                                  101
-                                  (* 100 (/ 1 drones-at-time)))
-                cost (if (< free-at-time 1)
-                       (* 3 percent-takeout)
-                       percent-takeout)
-                mapped-cost (if (= demand -1)
-                              1
-                              (util/map-num cost 0 300 1 20))]
-            {:db/id     hiveid
-             :hive/cost mapped-cost}))))
-    (all :hives hiveids db)))
 
 (defn outgoing-timeframe [starttime endtime hiveid db]
   (or (d/q '[:find (count ?hop) .
