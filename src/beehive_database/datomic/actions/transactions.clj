@@ -149,8 +149,8 @@
         hop (queries/one :hops hopid db)
         hiveid (:hop/end hop)
         droneid (:db/id (:hop/drone hop))]
-    (println (queries/one :drones droneid db))
     (let [tx @(d/transact conn [{:db/id        droneid
+                                 :drone/type   (:db/id (queries/default-drone-type db))
                                  :drone/hive   hiveid
                                  :drone/status :drone.status/idle}])
           db-after (:db-after tx)]
