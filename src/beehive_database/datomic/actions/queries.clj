@@ -258,7 +258,7 @@
   (let [drones (drones-for-hive hiveid db)
         outgoing-after-now (outgoing-hops-after hiveid (.getTime (java.util.Date.)) db)
         incoming-until-time (incoming-hops-until hiveid time db)
-        drones-of-incoming (mapv #(one :drones (:db/id (:hop/drone %)) db) incoming-until-time)
+        drones-of-incoming (mapv #(one :drones (:hop/drone %) db) incoming-until-time)
         drones (concat drones drones-of-incoming)]
     (dissoc-needed outgoing-after-now drones db)))
 
