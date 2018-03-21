@@ -249,10 +249,9 @@
                                                           (charge-at-time (:db/id %)
                                                                           (:hop/starttime hop)
                                                                           db)))
-                                          satisfying-drones))]
-          (recur (drop 1 hops)
-                 (remove #(= (:db/id %) (:db/id lowest-drone)) drones)))))))
-
+                                          satisfying-drones))
+              (recur (drop 1 hops)
+                     (remove #(= (:db/id %) (:db/id lowest-drone)) drones))])))))
 
 (defn leftover-drones [hiveid time db]
   (let [drones (drones-for-hive hiveid db)
@@ -268,7 +267,7 @@
     (fn [hive]
       (let [hiveid (:db/id hive)]
         (if (nil? (leftover-drones hiveid time db))
-          (identity {:db/id     hiveid
+          (identity {:db/id hiveid
                      :hive/cost 21})
           (let [demand (:hive/demand (:building/hive hive))
                 drones (drones-for-hive hiveid db)
