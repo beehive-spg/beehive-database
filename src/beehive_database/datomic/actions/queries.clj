@@ -252,6 +252,7 @@
                  (building-position buildingid2 db)))
 
 (defn travel-time [buildingid1 buildingid2 droneid db]
+  (println buildingid1 " " buildingid2 " " droneid)
   (util/travel-time (building-position buildingid1 db)
                     (building-position buildingid2 db)
                     (drone-speed droneid db)))
