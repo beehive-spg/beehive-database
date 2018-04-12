@@ -28,6 +28,7 @@
             from-hive (if (nil? from-hive)
                         (:building/customer (queries/one :buildings from db))
                         from-hive)
+            a (println from-hive " -- " from)
             distance (queries/distance from to db)
             {starttime :starttime
              droneid   :droneid} (queries/find-drone-and-time (:db/id from-hive) starttime distance db)
