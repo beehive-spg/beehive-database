@@ -18,6 +18,7 @@
          starttime time
          last-droneid 0
          result []]
+    (println hops)
     (if (empty? hops)
       result
       (let [{from :from
