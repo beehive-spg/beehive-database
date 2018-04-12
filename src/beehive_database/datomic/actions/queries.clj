@@ -457,7 +457,6 @@
         hops-with-times (all :hops hops db)
         sorted (sort-by :hop/endtime hops-with-times)
         last-hop (last sorted)]
-    (println last-hop)
     last-hop))
 
 
@@ -484,12 +483,14 @@
 (defn find-drone-and-time [buildingid time distance db]
   (let [droneids (drone-ids-at-time buildingid time db)]
     (loop [ids droneids
-           earliest 100000000000000]
+           earliest {:starttime 100000000000000
+                     :droneid 0}]
       (if (empty? ids)
         earliest
         (if (> earliest (time-capable (first ids) time distance db))
           (recur (drop 1 ids)
-                 (time-capable (first ids) time distance db))
+                 {:starttime (time-capable (first ids) time distance db)
+                  :droneid (first ids)})
           (recur (drop 1 ids)
                  earliest))))))
 
