@@ -235,7 +235,9 @@
 (defn drone-speed [droneid db]
   (d/q '[:find ?speed .
          :in $ ?droneid
-         :where [?droneid :drone/type ?dronetype] [?dronetype :dronetype/speed ?speed]]))
+         :where [?droneid :drone/type ?dronetype] [?dronetype :dronetype/speed ?speed]]
+       db
+       droneid))
 
 (defn is-reachable [p1 p2 db]
   (util/reachable p1 p2 (max-range db)))
