@@ -22,7 +22,7 @@
 
 (defn all-ids [table db]
   (d/q '[:find [?id ...]
-         :in $ ?ref
+         :in $ [?ref ...]
          :where [?id ?ref _]]
        db
        (get rules/fields table)))
