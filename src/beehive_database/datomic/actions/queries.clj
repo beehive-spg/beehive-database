@@ -458,8 +458,8 @@
 
 (defn drone-ids-at-time [buildingid time db]
   (let [droneids (all-ids :drones db)
-        drones-at-hive (filter #(and (> time (:hop/endtime (drone-end-hop (:db/id %) db)))
-                                     (= (:hop/end (drone-end-hop (:db/id %) db))
+        drones-at-hive (filter #(and (> time (:hop/endtime (drone-end-hop % db)))
+                                     (= (:hop/end (drone-end-hop % db))
                                         buildingid))
                                droneids)]
     drones-at-hive))
