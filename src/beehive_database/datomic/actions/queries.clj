@@ -251,10 +251,10 @@
   (util/distance (building-position buildingid1 db)
                  (building-position buildingid2 db)))
 
-(defn travel-time [buildingid1 buildingid2 droneid db]
+(defn travel-time [buildingid1 buildingid2 db]
   (util/travel-time (building-position buildingid1 db)
                     (building-position buildingid2 db)
-                    (drone-speed droneid db)))
+                    5000))
 
 (defn is-reachable2 [buildingid1 buildingid2 db]
   (util/reachable (building-position buildingid1 db)

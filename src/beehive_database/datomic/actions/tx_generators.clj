@@ -24,7 +24,7 @@
       (let [{from :from
              to   :to} hop
             a (println (queries/one :buildings from db))
-            from-hive (queries/one :hives from db)
+            from-hive (:building/hive (queries/one :buildings from db))
             distance (queries/distance from to db)
             a (println from-hive)
             a (println distance)
@@ -34,7 +34,7 @@
                                    {:starttime starttime
                                     :droneid   last-droneid}
                                    (queries/find-drone-and-time (:db/id (first from-hive)) starttime distance db))
-            traveltime (queries/travel-time from to droneid db)
+            traveltime (queries/travel-time from to db)
             endtime (+ starttime traveltime)
             new-hops (drop 1 hops)
             gen-hop {:hop/route     routeid
