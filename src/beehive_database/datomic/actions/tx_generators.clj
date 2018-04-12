@@ -23,6 +23,7 @@
       result
       (let [{from :from
              to   :to} hop
+            a (println (queries/one :buildings from db))
             from-hive (:building/hive (queries/one :buildings from db))
             distance (queries/distance from to db)
             a (println from-hive)
