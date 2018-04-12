@@ -30,7 +30,7 @@
                         from-hive)
             distance (queries/distance from to db)
             {starttime :starttime
-             droneid   :droneid} (queries/find-drone-and-time from-hive starttime distance db)
+             droneid   :droneid} (queries/find-drone-and-time (:db/id from-hive) starttime distance db)
             traveltime (queries/travel-time from to droneid db)
             endtime (+ starttime traveltime)
             new-hops (drop 1 hops)
