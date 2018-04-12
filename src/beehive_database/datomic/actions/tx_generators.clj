@@ -24,6 +24,7 @@
              to   :to} hop
             from-hive (:building/hive (queries/one :buildings from db))
             distance (queries/distance from to db)
+            a (println from-hive)
             {starttime :starttime
              droneid   :droneid} (if (nil? from-hive)
                                    {:starttime starttime
