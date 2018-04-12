@@ -21,9 +21,16 @@
       result
       (let [{from :from
              to   :to} hop
+            from-hive (:building/hive (queries/one :buildings from db))
+            from-hive (if (nil? from-hive)
+                        (:building/shop (queries/one :buildings from db))
+                        from-hive)
+            from-hive (if (nil? from-hive)
+                        (:building/customer (queries/one :buildings from db))
+                        from-hive)
             distance (queries/distance from to db)
             {starttime :starttime
-             droneid   :droneid} (queries/find-drone-and-time from starttime distance db)
+             droneid   :droneid} (queries/find-drone-and-time from-hive starttime distance db)
             traveltime (queries/travel-time from to droneid db)
             endtime (+ starttime traveltime)
             new-hops (drop 1 hops)
