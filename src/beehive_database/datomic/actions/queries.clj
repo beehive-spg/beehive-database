@@ -25,7 +25,7 @@
          :in $ [?ref ...]
          :where [?id ?ref _]]
        db
-       (get rules/fields table)))
+       (get rules/queries table)))
 
 (defn drones-for-hive [hiveid db]
   (d/q '[:find [(pull ?e subquery) ...]
