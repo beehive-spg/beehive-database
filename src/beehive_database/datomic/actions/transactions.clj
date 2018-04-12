@@ -72,7 +72,7 @@
   (let [result (transact->entity conn [{:route/origin origin}] :routes)
         {entity :entity
          tx     :tx} result
-        tx @(d/transact conn (gen/gen-hops (:db-after tx) hops (:db/id entity) time))
+        tx @(d/transact conn (gen/gen-hops hops (:db/id entity) time (:db-after tx)))
         entity (queries/one :routes (:db/id entity) (:db-after tx))
         result (assoc result :tx tx)
         result (assoc result :entity entity)]
@@ -85,7 +85,7 @@
         db-route (:db-after tx-route)
         tempids-route (:tempids tx-route)
         real-id (d/resolve-tempid db-route tempids-route id)
-        tx (d/with db-route (gen/gen-hops db-route hops real-id time))
+        tx (d/with db-route (gen/gen-hops hops real-id time db-route))
         db (:db-after tx)]
     (queries/one :routes real-id db)))
 
