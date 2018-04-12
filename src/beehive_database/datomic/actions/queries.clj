@@ -461,11 +461,9 @@
 
 
 (defn drone-ids-at-time [buildingid time db]
-  (println buildingid)
-  (println (map #(:drone/hive %) (all :drones (all-ids :drones db) db)))
   (let [droneids (all-ids :drones db)
         drones-at-hive (filter #(if (nil? (drone-end-hop % db))
-                                  (= buildingid (:drone/hive (one :drones % db)))
+                                  (= buildingid (:db/id (:drone/hive (one :drones % db))))
                                   (and (> time (:hop/endtime (drone-end-hop % db)))
                                        (= (:hop/end (drone-end-hop % db)) buildingid)))
                                droneids)]
