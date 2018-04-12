@@ -469,9 +469,6 @@
                                droneids)]
     drones-at-hive))
 
-(defn drone-ids-at-time [buildingid time db]
-  (drone-ids buildingid db))
-
 (defn time-capable [droneid starttime distance db]
   (let [dronetype (:drone/type (one :drones droneid db))
         req-charge (util/used-charge dronetype distance)

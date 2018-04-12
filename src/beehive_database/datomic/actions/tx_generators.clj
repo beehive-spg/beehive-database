@@ -16,22 +16,19 @@
   (loop [hops hops
          hop (first hops)
          starttime time
+         last-droneid 0
          result []]
     (if (empty? hops)
       result
       (let [{from :from
              to   :to} hop
             from-hive (:building/hive (queries/one :buildings from db))
-            from-hive (if (nil? from-hive)
-                        (:building/shop (queries/one :buildings from db))
-                        from-hive)
-            from-hive (if (nil? from-hive)
-                        (:building/customer (queries/one :buildings from db))
-                        from-hive)
-            a (println from-hive " -- " from)
             distance (queries/distance from to db)
             {starttime :starttime
-             droneid   :droneid} (queries/find-drone-and-time (:db/id (first from-hive)) starttime distance db)
+             droneid   :droneid} (if (nil? from-hive)
+                                   {:starttime starttime
+                                    :droneid   last-droneid}
+                                   (queries/find-drone-and-time (:db/id (first from-hive)) starttime distance db))
             traveltime (queries/travel-time from to droneid db)
             endtime (+ starttime traveltime)
             new-hops (drop 1 hops)
@@ -45,5 +42,6 @@
         (recur new-hops
                (first new-hops)
                endtime
+               droneid
                (conj result gen-hop))))))
 
