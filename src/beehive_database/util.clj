@@ -50,3 +50,6 @@
 (defn used-charge [dronetype distance]
   (let [max-range (:dronetype/range dronetype)]
     (* 100 (/ distance max-range))))
+
+(defn used-charge2 [distance]
+  (* 100 (/ distance 5000)))

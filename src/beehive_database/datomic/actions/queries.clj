@@ -448,10 +448,44 @@
                           (rest lhops)
                           newval)))))))
 
+(defn drone-end-hop [droneid db]
+  (let [hops (hop-ids droneid db)
+        hops-with-times (all :hops hops db)
+        sorted (sort-by :hop/endtime hops-with-times)
+        last-hop (last sorted)]
+    last-hop))
+
+
 (defn drone-ids-at-time [buildingid time db]
-  (let [droneids (drone-ids buildingid db)]))
+  (let [droneids (all-ids :drones db)
+        drones-at-hive (filter #(and (> time (:hop/endtime (drone-end-hop (:db/id %) db)))
+                                     (= (:hop/end (drone-end-hop (:db/id %) db))
+                                        buildingid))
+                               droneids)]
+    drones-at-hive))
+
+(defn time-capable [droneid starttime distance db]
+  (let [dronetype (:drone/type (one :drones droneid db))
+        req-charge (util/used-charge dronetype distance)
+        charge (charge-at-time droneid starttime db)
+        diff (- req-charge charge)]
+    (if (> 0 diff)
+      starttime
+      (* (:dronetype/chargetime dronetype) (/ diff 1000)))))
+
+
 
 (defn find-drone-and-time [buildingid time distance db]
-  (let [droneids (drone-ids buildingid db)]))
+  (let [droneids (drone-ids-at-time buildingid time db)]
+    (loop [ids droneids
+           earliest 100000000000000]
+      (if (empty? ids)
+        earliest
+        (if (> earliest (time-capable (first ids) time distance db))
+          (recur (drop 1 ids)
+                 (time-capable (first ids) time distance db))
+          (recur (drop 1 ids)
+                 earliest))))))
+
 
 

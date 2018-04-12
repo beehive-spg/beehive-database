@@ -142,19 +142,15 @@
                            :hop/drone     (:db/id selected-drone)
                            :hop/endcharge charge-after-hop}])
         (d/transact conn [{:db/id        (:db/id selected-drone)
+                           :drone/hive   (:hop/end hop)
                            :drone/status :drone.status/flying}])))))
 
 (defn arrival [hopid]
   (let [db (d/db conn)
         hop (queries/one :hops hopid db)
-        hiveid (:hop/end hop)
         droneid (:db/id (:hop/drone hop))]
-    (println (queries/one :drones droneid db))
-    (let [tx @(d/transact conn [{:db/id droneid
-                                 :drone/hive hiveid
-                                 :drone/status :drone.status/idle}])
-          db-after (:db-after tx)]
-      (println (queries/one :drones droneid db-after)))))
+    @(d/transact conn [{:db/id        droneid
+                        :drone/status :drone.status/idle}])))
 
 (defn give-drones [num-drones db]
   (let [hiveids (mapv #(:db/id %) (queries/all :hives [] db))]
@@ -164,3 +160,4 @@
                     :name   (str "init-drone-" i "-" n)
                     :type   nil
                     :status :drone.status/idle})))))
+
