@@ -53,7 +53,9 @@
 (defn hop-ids [droneid db]
   (d/q '[:find [?id ...]
          :in $ ?droneid
-         :where [?id :hop/drone ?droneid]]))
+         :where [?id :hop/drone ?droneid]]
+       db
+       droneid))
 
 (defn one [table id db]
   (d/q '[:find (pull ?id subquery) .
