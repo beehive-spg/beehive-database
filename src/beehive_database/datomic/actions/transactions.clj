@@ -72,7 +72,7 @@
   (let [result (transact->entity conn [{:route/origin origin}] :routes)
         {entity :entity
          tx     :tx} result
-        tx @(d/transact conn (queries/mkroute (:db-after tx) hops (:db/id entity) time))
+        tx @(d/transact conn (beehive-database.datomic.actions.tx-generators/gen-hops (:db-after tx) hops (:db/id entity) time))
         entity (queries/one :routes (:db/id entity) (:db-after tx))
         result (assoc result :tx tx)
         result (assoc result :entity entity)]
@@ -85,7 +85,7 @@
         db-route (:db-after tx-route)
         tempids-route (:tempids tx-route)
         real-id (d/resolve-tempid db-route tempids-route id)
-        tx (d/with db-route (queries/mkroute db-route hops real-id time))
+        tx (d/with db-route (beehive-database.datomic.actions.tx-generators/gen-hops db-route hops real-id time))
         db (:db-after tx)]
     (queries/one :routes real-id db)))
 
@@ -121,29 +121,10 @@
 
 (defn departure [time hopid]
   (let [db (d/db conn)
-        hop (queries/one :hops hopid db)
-        hiveid (:hop/start hop)
-        drones (queries/drones-for-hive (:db/id hiveid) db)
-        drones-with-charge (map
-                             #(assoc % :charge (queries/charge-at-time (:db/id %) time db))
-                             drones)
-        sorted-drones-with-charge (sort-by :charge drones-with-charge)
-        sorted-capable-drones (filter
-                                #(do
-                                   (util/reachable-with-charge (:hop/distance hop)
-                                                               (:dronetype/range (queries/one :dronetypes (:db/id (:drone/type %)) db))
-                                                               (:charge %)))
-                                sorted-drones-with-charge)]
-    (if (empty? sorted-capable-drones)
-      nil
-      (let [selected-drone (last sorted-capable-drones)
-            charge-after-hop (- (:charge selected-drone) (util/used-charge (queries/one :dronetypes (:db/id (:drone/type selected-drone)) db) (:hop/distance hop)))]
-        (d/transact conn [{:db/id         hopid
-                           :hop/drone     (:db/id selected-drone)
-                           :hop/endcharge charge-after-hop}])
-        (d/transact conn [{:db/id        (:db/id selected-drone)
-                           :drone/hive   (:hop/end hop)
-                           :drone/status :drone.status/flying}])))))
+        hop (queries/one :hops hopid db)]
+    (d/transact conn [{:db/id        (:hop/drone hop)
+                       :drone/hive   (:hop/end hop)
+                       :drone/status :drone.status/flyings}])))
 
 (defn arrival [hopid]
   (let [db (d/db conn)
