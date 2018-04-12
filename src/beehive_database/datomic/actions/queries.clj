@@ -252,7 +252,6 @@
                  (building-position buildingid2 db)))
 
 (defn travel-time [buildingid1 buildingid2 droneid db]
-  (println buildingid1 " " buildingid2 " " droneid)
   (util/travel-time (building-position buildingid1 db)
                     (building-position buildingid2 db)
                     (drone-speed droneid db)))
@@ -483,6 +482,7 @@
 
 (defn find-drone-and-time [buildingid time distance db]
   (let [droneids (drone-ids-at-time buildingid time db)]
+    (println droneids)
     (loop [ids droneids
            earliest {:starttime 100000000000000
                      :droneid 0}]
