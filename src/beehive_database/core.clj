@@ -18,6 +18,9 @@
         shops (slurp (clojure.java.io/resource "beehive-database/shops.edn"))
         customers (slurp (clojure.java.io/resource "beehive-database/customers.edn"))]
     (transactions/add-drone-type {:name "large" :range 5000 :speed 30 :chargetime 1800 :default true})
+    (d/transact data/conn [{:settings/distribution 0
+                            :settings/routing 0
+                            :settings/drones 0}])
     (doseq [hive (clojure.edn/read-string hives)]
       (transactions/add-hive
         {:address (:building/address hive)

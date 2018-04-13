@@ -64,5 +64,10 @@
                             [name :string]
                             [speed :long]
                             [chargetime :long]
-                            [default :boolean]))])
+                            [default :boolean]))
+   (datomic-schema/schema settings
+                          (datomic-schema/fields
+                            [distribution :long]
+                            [routing :long]
+                            [drones :long]))])
 

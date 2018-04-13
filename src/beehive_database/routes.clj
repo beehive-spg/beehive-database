@@ -366,6 +366,23 @@
         :path-params [amount :- Long]
         :summary "Adds as many drones to all hives as amount specifies"
         (transactions/give-drones amount (data/db))
+        (no-content)))
+    (context "/settings" []
+      :tags ["Settings"]
+      (GET "/" []
+        :summary "Returns the current settings"
+        (ok (d/pull (data/db) [:settings/distribution
+                               :settings/routing
+                               :settings/drones] (queries/find-settings (data/db)))))
+      (POST "/routing" []
+        :body [routing {:value s/Num}]
+        (transactions/change-settings :settings/routing (:value routing) (data/db))
+        (no-content))
+      (POST "/distribution" []
+        :body [routing {:value s/Num}]
+        (transactions/change-settings :settings/distribution (:value routing) (data/db))
+        (no-content))
+      (POST "/drones" []
+        :body [routing {:value s/Num}]
+        (transactions/change-settings :settings/drones (:value routing) (data/db))
         (no-content)))))
-
-

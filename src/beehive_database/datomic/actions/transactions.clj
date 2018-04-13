@@ -162,3 +162,7 @@
                     :name   (str "init-drone-" i "-" n)
                     :type   nil
                     :status :drone.status/idle})))))
+
+(defn change-settings [col value db]
+  (d/transact conn [{:db/id (queries/find-settings db)
+                     col    value}]))

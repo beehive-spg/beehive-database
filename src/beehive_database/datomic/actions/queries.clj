@@ -291,3 +291,7 @@
                                         :value newval})
                           (rest lhops)
                           newval)))))))
+
+(defn find-settings [db]
+  (d/q '[:find ?id .
+         :where [?id :settings/distribution _]]))
