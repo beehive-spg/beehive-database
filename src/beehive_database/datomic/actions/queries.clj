@@ -294,4 +294,5 @@
 
 (defn find-settings [db]
   (d/q '[:find ?id .
-         :where [?id :settings/distribution _]]))
+         :where [?id :settings/distribution _]]
+       db))
